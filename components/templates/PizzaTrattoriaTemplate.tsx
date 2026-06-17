@@ -30,18 +30,19 @@ const PAPER_TEXTURE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2
 //  SELLO DE TINTA — "Fatto con Amore" — circular, ligeramente rotado
 //  Como un sello de caucho aplicado a mano. Imperfecto a propósito.
 // ─────────────────────────────────────────────────────────────────────────────
-function FattoConAmoreStamp({ rotation = -14 }: { rotation?: number }) {
+function FattoConAmoreStamp({ rotation = -14, size = 148 }: { rotation?: number; size?: number }) {
   return (
     <div aria-hidden style={{
       position: "absolute",
-      bottom: "-38px",
-      right: "24px",
+      bottom: "1.2rem",
+      right: "1.5rem",
       zIndex: 30,
       transform: `rotate(${rotation}deg)`,
       pointerEvents: "none",
-      filter: "drop-shadow(0 3px 8px rgba(0,0,0,0.35))",
+      filter: "drop-shadow(0 4px 14px rgba(0,0,0,0.5))",
+      width: size, height: size,
     }}>
-      <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+      <svg width={size} height={size} viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
         <defs>
           {/* El radio del círculo de texto */}
           <path id="stamp-circle-outer"
@@ -368,7 +369,7 @@ function VintageHero({
         `,
         padding: "3.5rem 4rem 4.5rem",
         textAlign: "center",
-        overflow: "hidden",
+        overflow: "visible",
       }}>
 
         {/* Textura de líneas finas sobre el bloque rojo */}
@@ -485,7 +486,7 @@ function VintageHero({
         )}
 
         {/* ── SELLO DE IMPRENTA — rompe la simetría intencionalmente ── */}
-        <FattoConAmoreStamp rotation={-14} />
+        <FattoConAmoreStamp rotation={-16} size={155} />
 
         {/* ── CINTA "Since 1984" — fuera del grid, rotada ── */}
         <ArtisanalRibbon />
