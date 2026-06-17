@@ -1,4 +1,4 @@
-import type { ThemeConfig } from "@/types/project";
+import type { ThemeConfig, BrandingConfig, HeroConfig } from "@/types/project";
 import type { ExportOptions } from "@/types/export";
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -14,13 +14,24 @@ export const DEFAULT_THEME: ThemeConfig = {
 };
 
 export const DEFAULT_EXPORT_OPTIONS: ExportOptions = {
-  format: "pdf",
-  quality: "high",
-  languages: ["es"],
-  includeBleed: false,
-  bleedMm: 3,
-  colorProfile: "rgb",
-  dpi: 300,
+  formatId: "a4-portrait",
+  quality: "print",
+  showLogo: true,
+  showFooter: true,
+};
+
+export const DEFAULT_BRANDING: BrandingConfig = {
+  showLogo: false,
+  showRestaurantName: true,
+  logoPosition: "top",
+};
+
+export const DEFAULT_HERO: HeroConfig = {
+  showHero: false,
+  title: {},
+  showSubtitle: false,
+  subtitle: {},
+  showChefMessage: false,
 };
 
 export const CURRENCIES = ["EUR", "USD", "GBP", "MXN", "ARS", "COP", "CLP"] as const;

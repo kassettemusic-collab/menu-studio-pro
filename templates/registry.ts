@@ -1,6 +1,35 @@
 import { ProjectType } from "@/types/project";
 import { DEFAULT_THEME } from "@/constants/defaults";
-import type { TemplateConfig } from "@/types/template";
+import type { TemplateCapabilities, TemplateConfig } from "@/types/template";
+
+// ── Shared capability presets ───────────────────────────────────────────────
+// Reuse across entries to keep the registry DRY.
+
+const CAPS_BASIC: TemplateCapabilities = {
+  supportsImages: false,
+  supportsHeroSection: false,
+  supportsChefMessage: false,
+  supportsBackgroundTexture: false,
+  supportsSocialLinks: false,
+  supportsWelcomeMessage: true,
+  supportsLogo: true,
+  supportsFooter: true,
+  supportsMultipleColumns: false,
+};
+
+const CAPS_RICH: TemplateCapabilities = {
+  supportsImages: true,
+  supportsHeroSection: true,
+  supportsChefMessage: true,
+  supportsBackgroundTexture: true,
+  supportsSocialLinks: true,
+  supportsWelcomeMessage: true,
+  supportsLogo: true,
+  supportsFooter: true,
+  supportsMultipleColumns: true,
+};
+
+// ── Registry ────────────────────────────────────────────────────────────────
 
 export const TEMPLATE_REGISTRY: TemplateConfig[] = [
   {
@@ -18,6 +47,11 @@ export const TEMPLATE_REGISTRY: TemplateConfig[] = [
       { id: "categories", type: "category", label: "Categorías", required: true },
       { id: "footer", type: "footer", label: "Pie de página", required: false },
     ],
+    capabilities: {
+      ...CAPS_BASIC,
+      supportsChefMessage: true,
+      supportsBackgroundTexture: true,
+    },
   },
   {
     id: "wine-list",
@@ -38,6 +72,12 @@ export const TEMPLATE_REGISTRY: TemplateConfig[] = [
       { id: "header", type: "header", label: "Cabecera", required: true },
       { id: "wines", type: "category", label: "Vinos", required: true },
     ],
+    capabilities: {
+      ...CAPS_BASIC,
+      supportsChefMessage: true,
+      supportsBackgroundTexture: true,
+      supportsMultipleColumns: true,
+    },
   },
   {
     id: "daily-menu",
@@ -55,6 +95,7 @@ export const TEMPLATE_REGISTRY: TemplateConfig[] = [
       { id: "desserts", type: "category", label: "Postres", required: false },
       { id: "price", type: "text", label: "Precio menú", required: true },
     ],
+    capabilities: CAPS_BASIC,
   },
   {
     id: "promo-flyer",
@@ -70,6 +111,12 @@ export const TEMPLATE_REGISTRY: TemplateConfig[] = [
       { id: "headline", type: "text", label: "Titular", required: true },
       { id: "body", type: "text", label: "Cuerpo", required: false },
     ],
+    capabilities: {
+      ...CAPS_RICH,
+      supportsChefMessage: false,
+      supportsWelcomeMessage: false,
+      supportsMultipleColumns: false,
+    },
   },
   {
     id: "event-poster",
@@ -85,6 +132,12 @@ export const TEMPLATE_REGISTRY: TemplateConfig[] = [
       { id: "headline", type: "text", label: "Titular", required: true },
       { id: "details", type: "text", label: "Detalles", required: false },
     ],
+    capabilities: {
+      ...CAPS_RICH,
+      supportsChefMessage: false,
+      supportsWelcomeMessage: false,
+      supportsSocialLinks: true,
+    },
   },
 ];
 
