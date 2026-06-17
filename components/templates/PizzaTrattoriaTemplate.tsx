@@ -517,93 +517,85 @@ function VintageHero({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  SEPARADOR ORNAMENTAL — flourish impreso entre categorías
+//  REGLA TIPOGRÁFICA — borde ornamental superior/inferior de categoría
+// ─────────────────────────────────────────────────────────────────────────────
+function TypographicRule({ accent }: { accent: string }) {
+  return (
+    <svg width="100%" height="28" viewBox="0 0 500 28" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+      {/* Línea gruesa */}
+      <line x1="0" y1="14" x2="500" y2="14" stroke={accent} strokeWidth="3"/>
+      {/* Línea fina dorada encima */}
+      <line x1="0" y1="10" x2="500" y2="10" stroke={GOLD} strokeWidth="0.8" opacity="0.6"/>
+      {/* Línea fina dorada debajo */}
+      <line x1="0" y1="18" x2="500" y2="18" stroke={GOLD} strokeWidth="0.8" opacity="0.6"/>
+      {/* Rombo ornamental izquierdo */}
+      <path d="M 24 14 L 32 8 L 40 14 L 32 20 Z" fill={accent}/>
+      <path d="M 26 14 L 32 10 L 38 14 L 32 18 Z" fill={GOLD} opacity="0.7"/>
+      {/* Rombo central */}
+      <path d="M 242 14 L 250 5  L 258 14 L 250 23 Z" fill={accent}/>
+      <path d="M 244 14 L 250 8  L 256 14 L 250 20 Z" fill={GOLD} opacity="0.8"/>
+      <circle cx="250" cy="14" r="3" fill={PARCHMENT}/>
+      {/* Rombo ornamental derecho */}
+      <path d="M 460 14 L 468 8 L 476 14 L 468 20 Z" fill={accent}/>
+      <path d="M 462 14 L 468 10 L 474 14 L 468 18 Z" fill={GOLD} opacity="0.7"/>
+      {/* Puntos decorativos flanqueando el centro */}
+      <circle cx="220" cy="14" r="3" fill={accent} opacity="0.7"/>
+      <circle cx="210" cy="14" r="2" fill={accent} opacity="0.4"/>
+      <circle cx="280" cy="14" r="3" fill={accent} opacity="0.7"/>
+      <circle cx="290" cy="14" r="2" fill={accent} opacity="0.4"/>
+    </svg>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  SEPARADOR ENTRE CATEGORÍAS — pausa visual de peso tipográfico real
 // ─────────────────────────────────────────────────────────────────────────────
 function OrnamentalDivider({ index }: { index: number }) {
-  const color = index % 2 === 0 ? R : G;
-  // Notas manuscritas que alternan, ligeramente fuera de la cuadrícula
   const notes = ["— la vera cucina —", "— ingredienti freschi —", "— fatto a mano —"];
-  const note = notes[index % notes.length];
+  const note  = notes[index % notes.length];
+  const c1    = index % 2 === 0 ? R : G;
+  const c2    = index % 2 === 0 ? G : R;
   return (
-    <div aria-hidden style={{ padding: "2rem 0", textAlign: "center", position: "relative" }}>
-      {/* Nota manuscrita — rotada y ligeramente desplazada */}
-      <div style={{
-        position: "absolute",
-        top: "6px",
-        right: "18px",
-        transform: "rotate(4.5deg)",
-        pointerEvents: "none",
+    <div style={{
+      position: "relative",
+      padding: "3rem 0",
+      display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem",
+    }}>
+      {/* Nota manuscrita rotada — fuera de cuadrícula */}
+      <div aria-hidden style={{
+        position: "absolute", top: "10px", right: "10px",
+        transform: "rotate(5deg)", pointerEvents: "none",
       }}>
         <span style={{
-          fontFamily: "Palatino, Georgia, serif",
-          fontStyle: "italic",
-          fontSize: "0.72rem",
-          color,
-          opacity: 0.55,
-          letterSpacing: "0.04em",
-        }}>
-          {note}
-        </span>
+          fontFamily: "Palatino, Georgia, serif", fontStyle: "italic",
+          fontSize: "0.7rem", color: c1, opacity: 0.5, letterSpacing: "0.04em",
+        }}>{note}</span>
       </div>
-      <svg width="440" height="52" viewBox="0 0 440 52"
-        xmlns="http://www.w3.org/2000/svg" style={{ display: "inline-block" }}>
 
-        {/* Líneas base */}
-        <line x1="0"   y1="26" x2="440" y2="26" stroke={PARCHMENT2} strokeWidth="1"/>
-        <line x1="0"   y1="24" x2="440" y2="24" stroke={color} strokeWidth="0.6" opacity="0.3"/>
-        <line x1="0"   y1="28" x2="440" y2="28" stroke={color} strokeWidth="0.6" opacity="0.3"/>
+      {/* Triple regla coloreada */}
+      <div style={{ width: "100%", height: "2px", background: `linear-gradient(to right, transparent, ${c1} 15%, ${c1} 85%, transparent)` }}/>
+      <div style={{ width: "70%",  height: "1px", background: `linear-gradient(to right, transparent, ${GOLD}80, transparent)` }}/>
+      <div style={{ width: "100%", height: "2px", background: `linear-gradient(to right, transparent, ${c2} 15%, ${c2} 85%, transparent)` }}/>
 
-        {/* Rama izquierda */}
-        <path d="M 0 26 C 40 24 80 20 130 24 C 160 26 178 26 196 26"
-          stroke={G} strokeWidth="2" fill="none" opacity="0.8"/>
-        {/* Hojas izquierda */}
-        {[[30,23],[58,21],[86,21],[114,22],[145,23],[172,24]].map(([x,y],i) => (
-          <g key={i}>
-            <ellipse cx={x} cy={y-2} rx={11-i*0.8} ry={3.2-i*0.25}
-              transform={`rotate(-10 ${x} ${y-2})`} fill={G} opacity={0.72-i*0.07}/>
-            <ellipse cx={x+2} cy={y+4} rx={10-i*0.8} ry={3-i*0.2}
-              transform={`rotate(10 ${x+2} ${y+4})`} fill={G} opacity={0.68-i*0.07}/>
-          </g>
-        ))}
-
-        {/* Ornamento central */}
-        <circle cx="220" cy="26" r="13" fill={color} opacity="0.15"/>
-        <circle cx="220" cy="26" r="10" fill={color}/>
-        <circle cx="220" cy="26" r="7"  fill={GOLD}/>
-        <circle cx="220" cy="26" r="4"  fill={color}/>
-        <circle cx="220" cy="26" r="2"  fill="#fff" opacity="0.9"/>
-        {/* flancos del ornamento */}
-        <circle cx="200" cy="26" r="3.5" fill={GOLD} opacity="0.8"/>
-        <circle cx="240" cy="26" r="3.5" fill={GOLD} opacity="0.8"/>
-        <circle cx="192" cy="26" r="2"   fill={color} opacity="0.6"/>
-        <circle cx="248" cy="26" r="2"   fill={color} opacity="0.6"/>
-
-        {/* Rama derecha espejo */}
-        <path d="M 440 26 C 400 24 360 20 310 24 C 280 26 262 26 244 26"
-          stroke={G} strokeWidth="2" fill="none" opacity="0.8"/>
-        {[[410,23],[382,21],[354,21],[326,22],[295,23],[268,24]].map(([x,y],i) => (
-          <g key={i}>
-            <ellipse cx={x} cy={y-2} rx={11-i*0.8} ry={3.2-i*0.25}
-              transform={`rotate(10 ${x} ${y-2})`} fill={G} opacity={0.72-i*0.07}/>
-            <ellipse cx={x-2} cy={y+4} rx={10-i*0.8} ry={3-i*0.2}
-              transform={`rotate(-10 ${x-2} ${y+4})`} fill={G} opacity={0.68-i*0.07}/>
-          </g>
-        ))}
-
-        {/* Detalles rojos — tomates/bayas */}
-        <circle cx="60"  cy="16" r="7" fill={R} opacity="0.7"/>
-        <circle cx="60"  cy="16" r="4" fill={R2} opacity="0.8"/>
-        <path d="M 58 9 Q 60 6 62 9" stroke={G} strokeWidth="1.5" fill="none"/>
-        <circle cx="380" cy="16" r="7" fill={R} opacity="0.7"/>
-        <circle cx="380" cy="16" r="4" fill={R2} opacity="0.8"/>
-        <path d="M 378 9 Q 380 6 382 9" stroke={G} strokeWidth="1.5" fill="none"/>
-      </svg>
+      {/* Ornamento central grande */}
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
+        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="28" fill={PARCHMENT}/>
+          <circle cx="30" cy="30" r="26" fill="none" stroke={c1} strokeWidth="2"/>
+          <circle cx="30" cy="30" r="20" fill={c1}/>
+          <circle cx="30" cy="30" r="14" fill={GOLD}/>
+          <circle cx="30" cy="30" r="9"  fill={c2}/>
+          <circle cx="30" cy="30" r="5"  fill={PARCHMENT2}/>
+          <circle cx="30" cy="30" r="2"  fill={GOLD}/>
+        </svg>
+      </div>
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  BLOQUE DE CATEGORÍA — contenedor visual propio, papel dentro de papel
+//  BLOQUE DE CATEGORÍA — carta italiana premium: visible a varios metros
 // ─────────────────────────────────────────────────────────────────────────────
 function CategoryBlock({
   index, label, title, description,
@@ -615,72 +607,81 @@ function CategoryBlock({
   children: React.ReactNode;
 }) {
   const isEven = index % 2 === 0;
-  const accent = isEven ? G : R;
+  const accent  = isEven ? G  : R;
   const accent2 = isEven ? G2 : R2;
+  const bgBlock = isEven ? "#e8f2e8" : "#f2e8e8";
 
   return (
     <div style={{
-      // Contenedor con borde lateral izquierdo del color de la categoría
       position: "relative",
-      borderLeft: `5px solid ${accent}`,
-      background: `linear-gradient(to right, ${isEven ? "#eef5ee" : "#f5eeee"}60, ${PARCHMENT}00)`,
+      background: bgBlock,
+      border: `1.5px solid ${accent}30`,
+      boxShadow: `0 4px 24px ${accent}18, inset 0 0 0 4px ${PARCHMENT}`,
       marginBottom: "0.5rem",
     }}>
 
-      {/* Número de capítulo — fuera del grid, rotado */}
+      {/* ── Regla tipográfica superior ── */}
+      <TypographicRule accent={accent} />
+
+      {/* ── Número de capítulo rotado — fuera de cuadrícula ── */}
       <div aria-hidden style={{
-        position: "absolute",
-        top: "-18px",
-        right: "12px",
-        transform: "rotate(7deg)",
-        pointerEvents: "none",
-        zIndex: 5,
+        position: "absolute", top: "28px", right: "16px",
+        transform: "rotate(8deg)", zIndex: 5, pointerEvents: "none",
       }}>
-        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="24" cy="24" r="22" fill={accent} opacity="0.12"/>
-          <circle cx="24" cy="24" r="20" fill="none" stroke={accent} strokeWidth="1" opacity="0.35" strokeDasharray="3,2"/>
-          <text x="24" y="29" textAnchor="middle"
-            fontFamily="Palatino, Georgia, serif"
-            fontSize="16" fontWeight="700"
-            fill={accent} opacity="0.55">
+        <svg width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="27" cy="27" r="25" fill={PARCHMENT}/>
+          <circle cx="27" cy="27" r="23" fill="none" stroke={accent} strokeWidth="1.5" strokeDasharray="4,2" opacity="0.6"/>
+          <circle cx="27" cy="27" r="18" fill={accent} opacity="0.12"/>
+          <text x="27" y="32" textAnchor="middle"
+            fontFamily="Palatino, Georgia, serif" fontSize="18" fontWeight="700"
+            fill={accent} opacity="0.65">
             {String(index + 1).padStart(2, "0")}
           </text>
         </svg>
       </div>
 
-      {/* Etiqueta de sección — banda ancha de color */}
+      {/* ── Banda de etiqueta — ALTA y protagonista ── */}
       <div style={{
-        background: `linear-gradient(90deg, ${accent} 0%, ${accent2} 40%, ${accent2} 60%, ${accent} 100%)`,
-        padding: "0.85rem 2.5rem",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.25rem",
-        marginLeft: "-5px", // cubrir el borde izquierdo
+        background: `linear-gradient(135deg, ${accent} 0%, ${accent2} 40%, ${accent2} 60%, ${accent} 100%)`,
+        padding: "1.4rem 4rem",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem",
+        borderTop: `1px solid ${GOLD}55`,
+        borderBottom: `1px solid ${GOLD}55`,
       }}>
-        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.4)" }}/>
+        {/* Rombo decorativo izquierdo */}
+        <svg width="14" height="14" viewBox="0 0 14 14" style={{ flexShrink: 0 }}>
+          <path d="M 7 0 L 14 7 L 7 14 L 0 7 Z" fill={GOLD} opacity="0.75"/>
+          <path d="M 7 3 L 11 7 L 7 11 L 3 7 Z" fill={PARCHMENT} opacity="0.4"/>
+        </svg>
+        <div style={{ flex: 1, height: "1.5px", background: "rgba(255,255,255,0.35)" }}/>
         <span style={{
-          fontFamily: bodyFont, fontSize: "0.6rem", fontWeight: 800,
-          letterSpacing: "0.65em", textTransform: "uppercase",
-          color: "#ffffff",
+          fontFamily: bodyFont, fontSize: "0.68rem", fontWeight: 900,
+          letterSpacing: "0.72em", textTransform: "uppercase",
+          color: "#ffffff", whiteSpace: "nowrap",
+          textShadow: "0 1px 6px rgba(0,0,0,0.4)",
         }}>
           {label}
         </span>
-        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.4)" }}/>
+        <div style={{ flex: 1, height: "1.5px", background: "rgba(255,255,255,0.35)" }}/>
+        {/* Rombo decorativo derecho */}
+        <svg width="14" height="14" viewBox="0 0 14 14" style={{ flexShrink: 0 }}>
+          <path d="M 7 0 L 14 7 L 7 14 L 0 7 Z" fill={GOLD} opacity="0.75"/>
+          <path d="M 7 3 L 11 7 L 7 11 L 3 7 Z" fill={PARCHMENT} opacity="0.4"/>
+        </svg>
       </div>
 
-      {/* Nombre de categoría — grande, fuera del flujo de lista */}
-      <div style={{
-        textAlign: "center",
-        padding: "2.25rem 2rem 1rem",
-      }}>
+      {/* ── NOMBRE — el más grande de la carta, visible desde lejos ── */}
+      <div style={{ textAlign: "center", padding: "3rem 2rem 1.5rem" }}>
         <h2 style={{
           fontFamily: headingFont,
-          fontSize: "5.5rem",
+          fontSize: "7rem",
           fontWeight: 300,
           fontStyle: "italic",
           color: INK,
-          margin: 0, lineHeight: 0.92,
-          letterSpacing: "-0.025em",
-          // Efecto de sombra que simula letterpress
-          textShadow: `1px 1px 0 ${accent}22, 2px 2px 0 ${accent}10`,
+          margin: 0,
+          lineHeight: 0.88,
+          letterSpacing: "-0.03em",
+          textShadow: `2px 2px 0 ${accent}20, 4px 4px 0 ${accent}0c`,
         }}>
           {title}
         </h2>
@@ -688,30 +689,39 @@ function CategoryBlock({
         {description && (
           <p style={{
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.83rem", color: INK, opacity: 0.44,
-            margin: "0.9rem 0 0", lineHeight: 1.85,
+            fontSize: "0.88rem", color: INK, opacity: 0.48,
+            margin: "1.1rem 0 0", lineHeight: 1.85,
             maxWidth: "22rem", marginLeft: "auto", marginRight: "auto",
           }}>
             {description}
           </p>
         )}
 
-        {/* Minibandera debajo */}
+        {/* Minibandera tricolor */}
         <div style={{
-          display: "flex", justifyContent: "center",
-          margin: "1.5rem auto 0",
-          width: "4rem", borderRadius: "1px", overflow: "hidden",
+          display: "flex", justifyContent: "center", alignItems: "stretch",
+          margin: "2rem auto 0", width: "5rem", height: "4px",
+          borderRadius: "2px", overflow: "hidden",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
         }}>
-          <div style={{ flex: 1, height: "3px", background: G }}/>
-          <div style={{ flex: 1, height: "3px", background: PARCHMENT2 }}/>
-          <div style={{ flex: 1, height: "3px", background: R }}/>
+          <div style={{ flex: 1, background: G }}/>
+          <div style={{ flex: 1, background: PARCHMENT2 }}/>
+          <div style={{ flex: 1, background: R }}/>
         </div>
       </div>
 
-      {/* Lista de ítems — dentro del contenedor */}
-      <div style={{ padding: "0.25rem 2.5rem 2rem" }}>
+      {/* ── Regla tipográfica inferior — antes de los ítems ── */}
+      <div style={{ padding: "0.5rem 0" }}>
+        <TypographicRule accent={accent} />
+      </div>
+
+      {/* ── Lista de ítems — generosa, aireada ── */}
+      <div style={{ padding: "0.5rem 3rem 3rem" }}>
         {children}
       </div>
+
+      {/* ── Regla tipográfica de cierre ── */}
+      <TypographicRule accent={accent} />
 
     </div>
   );
