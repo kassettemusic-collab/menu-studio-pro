@@ -8,88 +8,137 @@ import { resolveTypography } from "@/types/template";
 import type { Allergen } from "@/types/menu";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PALETA — colores de la bandera italiana + dorado de imprenta
+//  PALETA DE IMPRENTA
 // ─────────────────────────────────────────────────────────────────────────────
-
-const G  = "#1a5c1a";   // verde Italia
-const G2 = "#2a7a2a";   // verde medio
-const R  = "#8b1a1a";   // rojo profundo
-const R2 = "#a82020";   // rojo medio
-const AU = "#c9a96e";   // dorado
-const CR = "#faf3e8";   // crema papel
-const IN = "#1e0a02";   // tinta oscura
+const G    = "#1a5c1a";   // verde bandera
+const G2   = "#2e7d2e";
+const R    = "#7a1515";   // rojo profundo
+const R2   = "#9e1f1f";
+const GOLD = "#b8933a";   // dorado oxidado
+const GOLD2= "#d4aa55";
+const INK  = "#180800";   // tinta casi negra
+const PARCHMENT = "#f3e8cf"; // papel envejecido
+const PARCHMENT2 = "#ede0b8";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MARCO TRICOLOR — borde completo como póster impreso
+//  TEXTURA DE PAPEL — SVG inline como background-image
 // ─────────────────────────────────────────────────────────────────────────────
+// Grain muy sutil + manchas de tinta envejecida
+const PAPER_TEXTURE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E")`;
 
-function PosterFrame() {
+// ─────────────────────────────────────────────────────────────────────────────
+//  MARCO ORNAMENTAL — todo el documento, tipo menú impreso victoriano
+// ─────────────────────────────────────────────────────────────────────────────
+function OrnateFrame() {
+  // Margen desde el borde del papel
+  const M = 14;
+  const W = "calc(100% - 28px)";
+  const H = "calc(100% - 28px)";
+
   return (
-    <>
-      {/* Borde exterior verde */}
-      <div aria-hidden style={{
-        position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none",
-        boxShadow: `inset 0 0 0 10px ${G}`,
-      }}/>
-      {/* Línea dorada interior */}
-      <div aria-hidden style={{
-        position: "absolute", inset: "10px", zIndex: 20, pointerEvents: "none",
-        boxShadow: `inset 0 0 0 2px ${AU}55`,
-      }}/>
-      {/* Borde rojo más interior */}
-      <div aria-hidden style={{
-        position: "absolute", inset: "14px", zIndex: 20, pointerEvents: "none",
-        boxShadow: `inset 0 0 0 6px ${R}`,
-      }}/>
-      {/* Línea dorada final */}
-      <div aria-hidden style={{
-        position: "absolute", inset: "20px", zIndex: 20, pointerEvents: "none",
-        boxShadow: `inset 0 0 0 1px ${AU}40`,
-      }}/>
-    </>
+    <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}>
+      <svg
+        style={{ position: "absolute", top: M, left: M, width: W, height: H }}
+        viewBox="0 0 600 860" preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Capa exterior verde */}
+        <rect x="0"  y="0"  width="600" height="860" fill="none" stroke={G}    strokeWidth="10"/>
+        {/* Línea dorada fina */}
+        <rect x="6"  y="6"  width="588" height="848" fill="none" stroke={GOLD} strokeWidth="1.5"/>
+        {/* Capa roja */}
+        <rect x="10" y="10" width="580" height="840" fill="none" stroke={R}    strokeWidth="7"/>
+        {/* Línea dorada interior */}
+        <rect x="16" y="16" width="568" height="828" fill="none" stroke={GOLD} strokeWidth="1"/>
+        {/* Línea negra de cierre */}
+        <rect x="20" y="20" width="560" height="820" fill="none" stroke={INK}  strokeWidth="0.5" opacity="0.3"/>
+
+        {/* ── Ornamentos en las 4 esquinas ── */}
+        {/* SUPERIOR IZQUIERDA */}
+        <g transform="translate(0,0)">
+          <circle cx="10" cy="10" r="9"  fill={G}/>
+          <circle cx="10" cy="10" r="6"  fill={R}/>
+          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
+          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
+          {/* flores decorativas */}
+          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
+          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
+          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
+          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
+          {/* pequeñas hojas de laurel */}
+          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
+          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
+        </g>
+        {/* SUPERIOR DERECHA */}
+        <g transform="translate(600,0) scale(-1,1)">
+          <circle cx="10" cy="10" r="9"  fill={G}/>
+          <circle cx="10" cy="10" r="6"  fill={R}/>
+          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
+          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
+          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
+          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
+          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
+          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
+          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
+          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
+        </g>
+        {/* INFERIOR IZQUIERDA */}
+        <g transform="translate(0,860) scale(1,-1)">
+          <circle cx="10" cy="10" r="9"  fill={G}/>
+          <circle cx="10" cy="10" r="6"  fill={R}/>
+          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
+          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
+          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
+          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
+          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
+          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
+          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
+          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
+        </g>
+        {/* INFERIOR DERECHA */}
+        <g transform="translate(600,860) scale(-1,-1)">
+          <circle cx="10" cy="10" r="9"  fill={G}/>
+          <circle cx="10" cy="10" r="6"  fill={R}/>
+          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
+          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
+          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
+          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
+          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
+          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
+          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
+          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
+        </g>
+
+        {/* ── Medallones centrales en los bordes laterales ── */}
+        <g transform="translate(0,430)">
+          <circle cx="10" cy="0" r="7" fill={G}/>
+          <circle cx="10" cy="0" r="4" fill={GOLD}/>
+          <circle cx="10" cy="0" r="2" fill={R}/>
+        </g>
+        <g transform="translate(600,430) scale(-1,1)">
+          <circle cx="10" cy="0" r="7" fill={G}/>
+          <circle cx="10" cy="0" r="4" fill={GOLD}/>
+          <circle cx="10" cy="0" r="2" fill={R}/>
+        </g>
+        <g transform="translate(300,0)">
+          <circle cx="0" cy="10" r="7" fill={G}/>
+          <circle cx="0" cy="10" r="4" fill={GOLD}/>
+          <circle cx="0" cy="10" r="2" fill={R}/>
+        </g>
+        <g transform="translate(300,860) scale(1,-1)">
+          <circle cx="0" cy="10" r="7" fill={G}/>
+          <circle cx="0" cy="10" r="4" fill={GOLD}/>
+          <circle cx="0" cy="10" r="2" fill={R}/>
+        </g>
+      </svg>
+    </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ORNAMENTO DE ESQUINA — esquinas decorativas en SVG
+//  CABECERA — bloque tipo cartel vintage. Impreso sobre papel. No web.
 // ─────────────────────────────────────────────────────────────────────────────
-
-function CornerOrnament({ flipX = false, flipY = false }) {
-  return (
-    <svg width="90" height="90" viewBox="0 0 90 90"
-      xmlns="http://www.w3.org/2000/svg" aria-hidden
-      style={{
-        display: "block",
-        transform: `scale(${flipX ? -1 : 1}, ${flipY ? -1 : 1})`,
-      }}>
-      <g opacity="0.9">
-        {/* L-shape base */}
-        <rect x="0" y="0" width="90" height="8"  fill={G}/>
-        <rect x="0" y="0" width="8"  height="90" fill={G}/>
-        <rect x="2" y="10" width="4" height="76" fill={AU} opacity="0.5"/>
-        <rect x="10" y="2" width="76" height="4" fill={AU} opacity="0.5"/>
-        {/* Corner circle ornament */}
-        <circle cx="4" cy="4" r="10" fill={G}/>
-        <circle cx="4" cy="4" r="7"  fill={R}/>
-        <circle cx="4" cy="4" r="4"  fill={AU}/>
-        <circle cx="4" cy="4" r="2"  fill="#fff" opacity="0.8"/>
-        {/* Decorative sprigs */}
-        <path d="M 20 8 Q 28 4 36 8"  stroke={AU} strokeWidth="1.2" fill="none" opacity="0.7"/>
-        <path d="M 8 20 Q 4 28 8 36"  stroke={AU} strokeWidth="1.2" fill="none" opacity="0.7"/>
-        <circle cx="22" cy="6"  r="2" fill={AU} opacity="0.6"/>
-        <circle cx="34" cy="6"  r="2" fill={AU} opacity="0.6"/>
-        <circle cx="6"  cy="22" r="2" fill={AU} opacity="0.6"/>
-        <circle cx="6"  cy="34" r="2" fill={AU} opacity="0.6"/>
-      </g>
-    </svg>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CABECERA PRINCIPAL — póster vintage, tipografía enorme
-// ─────────────────────────────────────────────────────────────────────────────
-
-function PosterHero({
+function VintageHero({
   logo, logoAlt, name, tagline, welcomeMessage, chefMessage,
   showLogo, showWelcomeMessage, showChefMessage,
   headingFont, bodyFont,
@@ -102,106 +151,132 @@ function PosterHero({
   return (
     <div style={{ position: "relative" }}>
 
-      {/* ── BANDA SUPERIOR TRICOLOR ─────────────────────────── */}
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ height: "28px", background: `linear-gradient(to right, ${G}, ${G2}, ${G})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.42rem", letterSpacing: "0.8em", fontFamily: bodyFont, textTransform: "uppercase" }}>
-            ristorante autentico italiano
+      {/* ── BANDA TRICOLOR SUPERIOR — ancha, visible ── */}
+      <div>
+        <div style={{
+          height: "34px",
+          background: `linear-gradient(90deg, ${G} 0%, ${G2} 50%, ${G} 100%)`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <span style={{
+            color: "rgba(255,255,255,0.82)", fontSize: "0.42rem",
+            letterSpacing: "0.85em", fontFamily: bodyFont,
+            textTransform: "uppercase", fontWeight: 400,
+          }}>
+            &nbsp;&nbsp;&nbsp;ristorante autentico italiano
           </span>
         </div>
-        <div style={{ height: "12px", background: "#f7f0e6", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: "80%", height: "1px", background: `linear-gradient(to right, transparent, ${AU}60, transparent)` }}/>
-        </div>
-        <div style={{ height: "28px", background: `linear-gradient(to right, ${R}, ${R2}, ${R})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.42rem", letterSpacing: "0.8em", fontFamily: bodyFont, textTransform: "uppercase" }}>
-            cucina tradizionale dal 1984
-          </span>
-        </div>
+        <div style={{ height: "8px", background: PARCHMENT2 }}/>
+        <div style={{
+          height: "20px",
+          background: `linear-gradient(90deg, ${R} 0%, ${R2} 50%, ${R} 100%)`,
+        }}/>
       </div>
 
-      {/* ── BLOQUE ROJO CENTRAL — nombre del restaurante ───── */}
+      {/* ── CUERPO PRINCIPAL DEL HERO — bermellón profundo ── */}
       <div style={{
-        background: `radial-gradient(ellipse at 50% 40%, #7a1010 0%, #5c0c0c 60%, #3d0808 100%)`,
-        padding: "4.5rem 5rem 5rem",
-        textAlign: "center",
         position: "relative",
+        background: `
+          radial-gradient(ellipse at 50% 30%, #6a0f0f 0%, #4a0808 45%, #2e0404 100%)
+        `,
+        padding: "3.5rem 4rem 4.5rem",
+        textAlign: "center",
         overflow: "hidden",
       }}>
 
-        {/* Textura de fondo — líneas finas */}
+        {/* Textura de líneas finas sobre el bloque rojo */}
         <div aria-hidden style={{
-          position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.06,
-          backgroundImage: `repeating-linear-gradient(0deg, ${AU} 0px, ${AU} 1px, transparent 1px, transparent 18px)`,
+          position: "absolute", inset: 0, pointerEvents: "none",
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.018) 0px,
+            rgba(255,255,255,0.018) 1px,
+            transparent 1px,
+            transparent 14px
+          )`,
         }}/>
 
-        {/* Ornamentos de esquina dentro del hero */}
-        <div style={{ position: "absolute", top: "12px", left: "12px"  }}><CornerOrnament /></div>
-        <div style={{ position: "absolute", top: "12px", right: "12px" }}><CornerOrnament flipX /></div>
-        <div style={{ position: "absolute", bottom: "12px", left: "12px"  }}><CornerOrnament flipY /></div>
-        <div style={{ position: "absolute", bottom: "12px", right: "12px" }}><CornerOrnament flipX flipY /></div>
+        {/* Vignette lateral */}
+        <div aria-hidden style={{
+          position: "absolute", inset: 0, pointerEvents: "none",
+          background: "radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.35) 100%)",
+        }}/>
+
+        {/* Marco dorado interior del hero */}
+        <div aria-hidden style={{
+          position: "absolute", inset: "12px", pointerEvents: "none",
+          border: `1px solid ${GOLD}45`,
+          boxShadow: `inset 0 0 0 4px ${GOLD}18`,
+        }}/>
 
         {/* Logo */}
         {showLogo && logo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={logo} alt={logoAlt ?? name} style={{
-            height: "7rem", objectFit: "contain", marginBottom: "2rem",
-            filter: "brightness(0) invert(1)", opacity: 0.9,
+            height: "7rem", objectFit: "contain",
+            marginBottom: "1.75rem", position: "relative",
+            filter: "brightness(0) invert(1) sepia(0.2)", opacity: 0.92,
           }}/>
         )}
 
-        {/* Estrellitas doradas */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
-          <div style={{ height: "1px", width: "3rem", background: `linear-gradient(to right, transparent, ${AU})` }}/>
-          <span style={{ color: AU, fontSize: "0.55rem", letterSpacing: "0.4em" }}>★ ★ ★ ★ ★</span>
-          <div style={{ height: "1px", width: "3rem", background: `linear-gradient(to left, transparent, ${AU})` }}/>
+        {/* Ornamento superior de estrellas */}
+        <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.75rem" }}>
+          <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}80)` }}/>
+          <span style={{ color: GOLD2, fontSize: "0.55rem", letterSpacing: "0.5em" }}>★ ★ ★ ★ ★</span>
+          <div style={{ flex: 1, height: "1px", background: `linear-gradient(to left, transparent, ${GOLD2}80)` }}/>
         </div>
 
-        {/* NOMBRE — 7rem, el corazón del póster */}
+        {/* NOMBRE — 7rem, tipografía de póster */}
         <h1 style={{
+          position: "relative",
           fontFamily: headingFont,
           fontSize: "7rem",
           fontWeight: 700,
           color: "#ffffff",
           margin: 0,
           lineHeight: 0.88,
-          letterSpacing: "0.02em",
-          textShadow: `0 4px 60px rgba(0,0,0,0.8), 0 2px 0 rgba(0,0,0,0.5)`,
+          letterSpacing: "0.025em",
+          textShadow: `
+            0 2px 4px rgba(0,0,0,0.6),
+            0 6px 30px rgba(0,0,0,0.5),
+            0 0 80px rgba(180,80,80,0.3)
+          `,
         }}>
           {name}
         </h1>
 
-        {/* Línea dorada separadora */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", margin: "2rem 0 1.25rem" }}>
-          <div style={{ flex: 1, maxWidth: "6rem", height: "1.5px", background: `linear-gradient(to right, transparent, ${AU})` }}/>
-          <span style={{ color: AU, fontSize: "0.65rem", letterSpacing: "0.3em" }}>◆ ◆ ◆</span>
-          <div style={{ flex: 1, maxWidth: "6rem", height: "1.5px", background: `linear-gradient(to left, transparent, ${AU})` }}/>
+        {/* Regla dorada triple */}
+        <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", margin: "2.25rem auto 1.5rem", width: "55%", maxWidth: "18rem" }}>
+          <div style={{ width: "100%", height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}, transparent)` }}/>
+          <div style={{ width: "60%", height: "2px", background: `linear-gradient(to right, transparent, ${GOLD2}cc, transparent)` }}/>
+          <div style={{ width: "100%", height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}, transparent)` }}/>
         </div>
 
         {/* Tagline */}
         {tagline && (
           <p style={{
+            position: "relative",
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "1.1rem", color: "rgba(255,255,255,0.82)",
-            margin: 0, letterSpacing: "0.08em",
-            textShadow: "0 1px 8px rgba(0,0,0,0.5)",
+            fontSize: "1.08rem", color: "rgba(255,255,255,0.8)",
+            margin: 0, letterSpacing: "0.07em",
           }}>
             {tagline}
           </p>
         )}
 
-        {/* Welcome message en caja */}
+        {/* Welcome message — caja con borde */}
         {showWelcomeMessage && welcomeMessage && (
           <div style={{
+            position: "relative",
             margin: "1.75rem auto 0",
-            padding: "1.1rem 2rem",
+            padding: "1.1rem 2.5rem",
             maxWidth: "28rem",
-            border: "1px solid rgba(255,255,255,0.2)",
-            borderTop: "2px solid rgba(201,169,110,0.5)",
-            borderBottom: "2px solid rgba(201,169,110,0.5)",
+            borderTop: `1px solid ${GOLD}50`,
+            borderBottom: `1px solid ${GOLD}50`,
           }}>
             <p style={{
               fontFamily: bodyFont, fontStyle: "italic",
-              fontSize: "0.88rem", color: "rgba(255,255,255,0.65)",
+              fontSize: "0.87rem", color: "rgba(255,255,255,0.62)",
               lineHeight: 1.95, margin: 0,
             }}>
               {welcomeMessage}
@@ -212,9 +287,10 @@ function PosterHero({
         {/* Chef message */}
         {showChefMessage && chefMessage && (
           <p style={{
+            position: "relative",
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.82rem", color: "rgba(255,255,255,0.48)",
-            lineHeight: 2, maxWidth: "28rem",
+            fontSize: "0.81rem", color: "rgba(255,255,255,0.45)",
+            lineHeight: 2, maxWidth: "26rem",
             margin: "1.25rem auto 0",
           }}>
             {chefMessage}
@@ -222,25 +298,24 @@ function PosterHero({
         )}
       </div>
 
-      {/* ── BANDA VERDE DE BIENVENIDA ───────────────────────── */}
+      {/* ── FRANJA VERDE DE BIENVENIDA ── */}
       <div style={{
-        background: `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`,
-        padding: "0.95rem 4rem",
+        background: `linear-gradient(90deg, ${G} 0%, ${G2} 30%, ${G2} 70%, ${G} 100%)`,
+        padding: "0.9rem 3rem",
         textAlign: "center",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "1.5rem",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem",
+        borderTop: `2px solid ${GOLD}30`,
+        borderBottom: `2px solid ${GOLD}30`,
       }}>
-        <div style={{ height: "1px", flex: 1, background: `linear-gradient(to right, transparent, rgba(255,255,255,0.4))` }}/>
-        <p style={{
+        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
+        <span style={{
           fontFamily: bodyFont, fontStyle: "italic",
-          fontSize: "0.82rem", color: "rgba(255,255,255,0.92)",
-          margin: 0, letterSpacing: "0.05em", whiteSpace: "nowrap",
+          fontSize: "0.82rem", color: "rgba(255,255,255,0.88)",
+          letterSpacing: "0.06em", whiteSpace: "nowrap",
         }}>
           Cucina è amore — benvenuti alla nostra tavola
-        </p>
-        <div style={{ height: "1px", flex: 1, background: `linear-gradient(to left, transparent, rgba(255,255,255,0.4))` }}/>
+        </span>
+        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
       </div>
 
     </div>
@@ -248,54 +323,126 @@ function PosterHero({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CABECERA DE CATEGORÍA — bloque visual enorme, como capítulo de libro
+//  SEPARADOR ORNAMENTAL — flourish impreso entre categorías
 // ─────────────────────────────────────────────────────────────────────────────
+function OrnamentalDivider({ index }: { index: number }) {
+  const color = index % 2 === 0 ? R : G;
+  return (
+    <div aria-hidden style={{ padding: "2rem 0", textAlign: "center" }}>
+      <svg width="440" height="52" viewBox="0 0 440 52"
+        xmlns="http://www.w3.org/2000/svg" style={{ display: "inline-block" }}>
 
-function CategoryChapter({
-  index, label, title, description, headingFont, bodyFont,
+        {/* Líneas base */}
+        <line x1="0"   y1="26" x2="440" y2="26" stroke={PARCHMENT2} strokeWidth="1"/>
+        <line x1="0"   y1="24" x2="440" y2="24" stroke={color} strokeWidth="0.6" opacity="0.3"/>
+        <line x1="0"   y1="28" x2="440" y2="28" stroke={color} strokeWidth="0.6" opacity="0.3"/>
+
+        {/* Rama izquierda */}
+        <path d="M 0 26 C 40 24 80 20 130 24 C 160 26 178 26 196 26"
+          stroke={G} strokeWidth="2" fill="none" opacity="0.8"/>
+        {/* Hojas izquierda */}
+        {[[30,23],[58,21],[86,21],[114,22],[145,23],[172,24]].map(([x,y],i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y-2} rx={11-i*0.8} ry={3.2-i*0.25}
+              transform={`rotate(-10 ${x} ${y-2})`} fill={G} opacity={0.72-i*0.07}/>
+            <ellipse cx={x+2} cy={y+4} rx={10-i*0.8} ry={3-i*0.2}
+              transform={`rotate(10 ${x+2} ${y+4})`} fill={G} opacity={0.68-i*0.07}/>
+          </g>
+        ))}
+
+        {/* Ornamento central */}
+        <circle cx="220" cy="26" r="13" fill={color} opacity="0.15"/>
+        <circle cx="220" cy="26" r="10" fill={color}/>
+        <circle cx="220" cy="26" r="7"  fill={GOLD}/>
+        <circle cx="220" cy="26" r="4"  fill={color}/>
+        <circle cx="220" cy="26" r="2"  fill="#fff" opacity="0.9"/>
+        {/* flancos del ornamento */}
+        <circle cx="200" cy="26" r="3.5" fill={GOLD} opacity="0.8"/>
+        <circle cx="240" cy="26" r="3.5" fill={GOLD} opacity="0.8"/>
+        <circle cx="192" cy="26" r="2"   fill={color} opacity="0.6"/>
+        <circle cx="248" cy="26" r="2"   fill={color} opacity="0.6"/>
+
+        {/* Rama derecha espejo */}
+        <path d="M 440 26 C 400 24 360 20 310 24 C 280 26 262 26 244 26"
+          stroke={G} strokeWidth="2" fill="none" opacity="0.8"/>
+        {[[410,23],[382,21],[354,21],[326,22],[295,23],[268,24]].map(([x,y],i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y-2} rx={11-i*0.8} ry={3.2-i*0.25}
+              transform={`rotate(10 ${x} ${y-2})`} fill={G} opacity={0.72-i*0.07}/>
+            <ellipse cx={x-2} cy={y+4} rx={10-i*0.8} ry={3-i*0.2}
+              transform={`rotate(-10 ${x-2} ${y+4})`} fill={G} opacity={0.68-i*0.07}/>
+          </g>
+        ))}
+
+        {/* Detalles rojos — tomates/bayas */}
+        <circle cx="60"  cy="16" r="7" fill={R} opacity="0.7"/>
+        <circle cx="60"  cy="16" r="4" fill={R2} opacity="0.8"/>
+        <path d="M 58 9 Q 60 6 62 9" stroke={G} strokeWidth="1.5" fill="none"/>
+        <circle cx="380" cy="16" r="7" fill={R} opacity="0.7"/>
+        <circle cx="380" cy="16" r="4" fill={R2} opacity="0.8"/>
+        <path d="M 378 9 Q 380 6 382 9" stroke={G} strokeWidth="1.5" fill="none"/>
+      </svg>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  BLOQUE DE CATEGORÍA — contenedor visual propio, papel dentro de papel
+// ─────────────────────────────────────────────────────────────────────────────
+function CategoryBlock({
+  index, label, title, description,
+  headingFont, bodyFont,
+  children,
 }: {
   index: number; label: string; title: string; description?: string;
   headingFont: string; bodyFont: string;
+  children: React.ReactNode;
 }) {
   const isEven = index % 2 === 0;
+  const accent = isEven ? G : R;
+  const accent2 = isEven ? G2 : R2;
 
   return (
-    <div style={{ margin: "0 -4rem" }}>
+    <div style={{
+      // Contenedor con borde lateral izquierdo del color de la categoría
+      borderLeft: `5px solid ${accent}`,
+      background: `linear-gradient(to right, ${isEven ? "#eef5ee" : "#f5eeee"}60, ${PARCHMENT}00)`,
+      marginBottom: "0.5rem",
+    }}>
 
-      {/* Banda de etiqueta — alterna verde y rojo */}
+      {/* Etiqueta de sección — banda ancha de color */}
       <div style={{
-        background: isEven
-          ? `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`
-          : `linear-gradient(to right, ${R}, ${R2} 30%, ${R2} 70%, ${R})`,
-        padding: "0.85rem 6rem",
+        background: `linear-gradient(90deg, ${accent} 0%, ${accent2} 40%, ${accent2} 60%, ${accent} 100%)`,
+        padding: "0.85rem 2.5rem",
         display: "flex", alignItems: "center", justifyContent: "center", gap: "1.25rem",
+        marginLeft: "-5px", // cubrir el borde izquierdo
       }}>
-        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.35)" }}/>
+        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.4)" }}/>
         <span style={{
-          fontFamily: bodyFont, fontSize: "0.62rem", fontWeight: 800,
+          fontFamily: bodyFont, fontSize: "0.6rem", fontWeight: 800,
           letterSpacing: "0.65em", textTransform: "uppercase",
-          color: "#ffffff", whiteSpace: "nowrap",
+          color: "#ffffff",
         }}>
           {label}
         </span>
-        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.35)" }}/>
+        <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.4)" }}/>
       </div>
 
-      {/* Nombre de categoría — gigante */}
+      {/* Nombre de categoría — grande, fuera del flujo de lista */}
       <div style={{
         textAlign: "center",
-        padding: "2.5rem 2rem 1rem",
-        background: CR,
+        padding: "2.25rem 2rem 1rem",
       }}>
         <h2 style={{
           fontFamily: headingFont,
           fontSize: "5.5rem",
           fontWeight: 300,
           fontStyle: "italic",
-          color: IN,
-          margin: 0,
-          lineHeight: 0.95,
+          color: INK,
+          margin: 0, lineHeight: 0.92,
           letterSpacing: "-0.025em",
+          // Efecto de sombra que simula letterpress
+          textShadow: `1px 1px 0 ${accent}22, 2px 2px 0 ${accent}10`,
         }}>
           {title}
         </h2>
@@ -303,20 +450,29 @@ function CategoryChapter({
         {description && (
           <p style={{
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.85rem", color: IN, opacity: 0.45,
-            margin: "1rem 0 0", lineHeight: 1.8, maxWidth: "24rem",
-            marginLeft: "auto", marginRight: "auto",
+            fontSize: "0.83rem", color: INK, opacity: 0.44,
+            margin: "0.9rem 0 0", lineHeight: 1.85,
+            maxWidth: "22rem", marginLeft: "auto", marginRight: "auto",
           }}>
             {description}
           </p>
         )}
 
-        {/* Minibandera italiana bajo el título */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "0", margin: "1.75rem auto 0", width: "5rem", height: "3px" }}>
-          <div style={{ flex: 1, background: G }} />
-          <div style={{ flex: 1, background: "#f0ebe0" }} />
-          <div style={{ flex: 1, background: R }} />
+        {/* Minibandera debajo */}
+        <div style={{
+          display: "flex", justifyContent: "center",
+          margin: "1.5rem auto 0",
+          width: "4rem", borderRadius: "1px", overflow: "hidden",
+        }}>
+          <div style={{ flex: 1, height: "3px", background: G }}/>
+          <div style={{ flex: 1, height: "3px", background: PARCHMENT2 }}/>
+          <div style={{ flex: 1, height: "3px", background: R }}/>
         </div>
+      </div>
+
+      {/* Lista de ítems — dentro del contenedor */}
+      <div style={{ padding: "0.25rem 2.5rem 2rem" }}>
+        {children}
       </div>
 
     </div>
@@ -324,128 +480,60 @@ function CategoryChapter({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SEPARADOR ENTRE CATEGORÍAS — ramo decorativo SVG
+//  ÍTEM DE MENÚ — puntos líder, precio en tinta, nada de lista HTML
 // ─────────────────────────────────────────────────────────────────────────────
-
-function BranchDivider() {
-  return (
-    <div aria-hidden style={{ textAlign: "center", padding: "2.5rem 0", margin: "0 -4rem", background: CR }}>
-      <svg width="420" height="48" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg"
-        style={{ display: "inline-block" }}>
-
-        {/* Línea base */}
-        <line x1="0" y1="24" x2="420" y2="24" stroke={AU} strokeWidth="0.8" opacity="0.4"/>
-
-        {/* Rama izquierda */}
-        <path d="M 10 24 C 50 22 90 18 140 22 C 165 23 180 24 195 24"
-          stroke={G} strokeWidth="1.8" fill="none" opacity="0.75"/>
-        {/* Hojas izquierda */}
-        {[35, 65, 95, 125, 158].map((x, i) => (
-          <g key={i}>
-            <ellipse cx={x} cy={22 - i * 0.3} rx={12 - i} ry={3.5 - i * 0.2}
-              transform={`rotate(-8 ${x} ${22 - i * 0.3})`} fill={G} opacity={0.7 - i * 0.08}/>
-            <ellipse cx={x + 3} cy={26 + i * 0.3} rx={11 - i} ry={3 - i * 0.15}
-              transform={`rotate(8 ${x + 3} ${26 + i * 0.3})`} fill={G} opacity={0.65 - i * 0.08}/>
-          </g>
-        ))}
-
-        {/* Ornamento central */}
-        <circle cx="210" cy="24" r="10" fill={R}/>
-        <circle cx="210" cy="24" r="6.5" fill={AU}/>
-        <circle cx="210" cy="24" r="3.5" fill={R}/>
-        <circle cx="210" cy="24" r="1.5" fill="#fff" opacity="0.8"/>
-        <circle cx="192" cy="24" r="3" fill={AU} opacity="0.7"/>
-        <circle cx="228" cy="24" r="3" fill={AU} opacity="0.7"/>
-
-        {/* Rama derecha — espejo */}
-        <path d="M 410 24 C 370 22 330 18 280 22 C 255 23 240 24 225 24"
-          stroke={G} strokeWidth="1.8" fill="none" opacity="0.75"/>
-        {[385, 355, 325, 295, 262].map((x, i) => (
-          <g key={i}>
-            <ellipse cx={x} cy={22 - i * 0.3} rx={12 - i} ry={3.5 - i * 0.2}
-              transform={`rotate(8 ${x} ${22 - i * 0.3})`} fill={G} opacity={0.7 - i * 0.08}/>
-            <ellipse cx={x - 3} cy={26 + i * 0.3} rx={11 - i} ry={3 - i * 0.15}
-              transform={`rotate(-8 ${x - 3} ${26 + i * 0.3})`} fill={G} opacity={0.65 - i * 0.08}/>
-          </g>
-        ))}
-
-        {/* Tomates decorativos */}
-        <circle cx="60"  cy="14" r="6" fill={R} opacity="0.55"/>
-        <circle cx="60"  cy="14" r="3.5" fill={R2} opacity="0.6"/>
-        <path d="M 58 8 Q 60 5 62 8" stroke={G} strokeWidth="1.2" fill="none" opacity="0.7"/>
-
-        <circle cx="360" cy="14" r="6" fill={R} opacity="0.55"/>
-        <circle cx="360" cy="14" r="3.5" fill={R2} opacity="0.6"/>
-        <path d="M 358 8 Q 360 5 362 8" stroke={G} strokeWidth="1.2" fill="none" opacity="0.7"/>
-
-      </svg>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ÍTEM DE MENÚ — póster físico: espacio generoso, nada de lista HTML
-// ─────────────────────────────────────────────────────────────────────────────
-
 function MenuItem({
   name, description, price, currency,
   featured, allergens, image,
-  showPrice, showDescription, showAllergens,
-  categoryFont, bodyFont, priceFont,
-  isLast,
+  showPrice, showDescription,
+  categoryFont, bodyFont, priceFont, isLast,
 }: {
   name: string; description?: string; price?: number; currency?: string;
   featured?: boolean; allergens?: Allergen[]; image?: string;
-  showPrice: boolean; showDescription: boolean; showAllergens: boolean;
+  showPrice: boolean; showDescription: boolean;
   categoryFont: string; bodyFont: string; priceFont: string;
   isLast: boolean;
 }) {
   return (
     <div>
-      <div style={{
-        display: "flex", alignItems: "baseline",
-        gap: "1rem", padding: "1.6rem 0",
-      }}>
+      <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: "1.55rem 0" }}>
 
-        {/* Imagen (si existe) */}
         {image && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={image} alt={name} style={{
-            width: "5.5rem", height: "5.5rem", objectFit: "cover",
-            borderRadius: "2px", flexShrink: 0,
-            border: `1.5px solid ${R}22`,
-            alignSelf: "flex-start",
+            width: "5.5rem", height: "5.5rem",
+            objectFit: "cover", borderRadius: "2px", flexShrink: 0,
+            border: `1.5px solid ${GOLD}35`,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
           }}/>
         )}
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "0.8rem" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.65rem" }}>
 
-            {/* Punto decorativo featured */}
             {featured && (
-              <span style={{ color: R, fontSize: "0.45rem", flexShrink: 0, lineHeight: 1, position: "relative", top: "-0.1em" }}>✦</span>
+              <span style={{ color: R, fontSize: "0.42rem", flexShrink: 0, lineHeight: 1, position: "relative", top: "-0.1em" }}>✦</span>
             )}
 
-            {/* Nombre */}
             <span style={{
-              fontFamily: categoryFont, fontSize: "1.32rem",
-              fontWeight: featured ? 600 : 400, color: IN,
-              letterSpacing: "0.01em", lineHeight: 1.2, flex: 1,
+              fontFamily: categoryFont, fontSize: "1.28rem",
+              fontWeight: featured ? 600 : 400,
+              color: INK, letterSpacing: "0.01em", lineHeight: 1.2,
+              flex: "0 1 auto",
             }}>
               {name}
             </span>
 
-            {/* Puntos líder */}
-            <div style={{
-              flex: "0 1 4rem", borderBottom: `1px dotted ${IN}30`,
-              marginBottom: "0.3rem", minWidth: "1.5rem",
+            {/* puntos líder */}
+            <span style={{
+              flex: 1, borderBottom: `1.5px dotted ${INK}25`,
+              marginBottom: "0.32rem", minWidth: "1rem",
             }}/>
 
-            {/* Precio */}
             {showPrice && price != null && (
               <span style={{
-                fontFamily: priceFont, fontSize: "1.05rem",
-                fontWeight: 600, fontStyle: "italic",
+                fontFamily: priceFont, fontSize: "1rem",
+                fontWeight: 700, fontStyle: "italic",
                 color: R, whiteSpace: "nowrap", flexShrink: 0,
               }}>
                 {formatPrice(price, currency)}
@@ -453,30 +541,27 @@ function MenuItem({
             )}
           </div>
 
-          {/* Descripción */}
           {showDescription && description && (
             <p style={{
               fontFamily: bodyFont, fontStyle: "italic",
-              fontSize: "0.83rem", color: IN, opacity: 0.5,
-              margin: "0.45rem 0 0", lineHeight: 1.85,
-              paddingLeft: featured ? "1.1rem" : "0",
+              fontSize: "0.82rem", color: INK, opacity: 0.48,
+              margin: "0.42rem 0 0", lineHeight: 1.85,
+              paddingLeft: featured ? "1rem" : "0",
             }}>
               {description}
             </p>
           )}
 
-          {/* Alérgenos */}
-          {showAllergens && allergens && allergens.length > 0 && (
-            <AllergenBadges allergens={allergens} fontSize="0.56rem" opacity={0.38} marginTop="0.3rem"/>
+          {allergens && allergens.length > 0 && (
+            <AllergenBadges allergens={allergens} fontSize="0.56rem" opacity={0.36} marginTop="0.3rem"/>
           )}
         </div>
       </div>
 
-      {/* Separador entre ítems */}
       {!isLast && (
         <div style={{
           height: "1px",
-          background: `linear-gradient(to right, transparent, ${R}28 15%, ${R}22 85%, transparent)`,
+          background: `linear-gradient(to right, transparent, ${INK}18 15%, ${INK}14 85%, transparent)`,
         }}/>
       )}
     </div>
@@ -484,9 +569,8 @@ function MenuItem({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COMPONENTE PRINCIPAL
+//  COMPONENTE PRINCIPAL
 // ─────────────────────────────────────────────────────────────────────────────
-
 export function PizzaTrattoriaTemplate({ project, categories, design, lang }: TemplateProps) {
   const { restaurantInfo, branding, hero } = project;
   const { layout } = design;
@@ -510,23 +594,31 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
   return (
     <BackgroundLayer
       design={design}
-      style={{ color: IN, fontFamily: typo.bodyFont, minHeight: "100%", position: "relative" }}
+      style={{
+        color: INK,
+        fontFamily: typo.bodyFont,
+        minHeight: "100%",
+        position: "relative",
+        // Papel envejecido: color base + textura SVG + vignette radial
+        background: `
+          radial-gradient(ellipse at 50% 0%,    rgba(0,0,0,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse at 0% 50%,    rgba(0,0,0,0.04) 0%, transparent 50%),
+          radial-gradient(ellipse at 100% 50%,  rgba(0,0,0,0.04) 0%, transparent 50%),
+          radial-gradient(ellipse at 50% 100%,  rgba(0,0,0,0.06) 0%, transparent 60%),
+          ${PAPER_TEXTURE},
+          linear-gradient(160deg, #f8edd5 0%, ${PARCHMENT} 35%, ${PARCHMENT2} 100%)
+        `,
+      }}
     >
 
-      {/* ── Marco de póster ──────────────────────────────────────────────── */}
-      <PosterFrame />
+      {/* ── Marco ornamental (encima de todo) ─────────────────────────────── */}
+      <OrnateFrame />
 
-      {/* ── Ornamentos en las 4 esquinas del documento ───────────────────── */}
-      <div style={{ position: "absolute", top: "21px",    left: "21px",    zIndex: 15, pointerEvents: "none" }}><CornerOrnament /></div>
-      <div style={{ position: "absolute", top: "21px",    right: "21px",   zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipX /></div>
-      <div style={{ position: "absolute", bottom: "21px", left: "21px",    zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipY /></div>
-      <div style={{ position: "absolute", bottom: "21px", right: "21px",   zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipX flipY /></div>
+      {/* ── Contenido — margen interior al marco ──────────────────────────── */}
+      <div style={{ position: "relative", zIndex: 1, margin: "14px" }}>
 
-      {/* ── Contenido principal ──────────────────────────────────────────── */}
-      <div style={{ position: "relative", zIndex: 1, margin: "21px" }}>
-
-        {/* ── Cabecera tipo póster ────────────────────────────────────────── */}
-        <PosterHero
+        {/* ── Hero vintage ──────────────────────────────────────────────── */}
+        <VintageHero
           logo={branding?.logo}
           logoAlt={restaurantInfo.name}
           name={heroTitle}
@@ -540,8 +632,8 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
           bodyFont={typo.bodyFont}
         />
 
-        {/* ── Categorías ──────────────────────────────────────────────────── */}
-        <div style={{ background: CR, padding: "0 4rem 5rem" }}>
+        {/* ── Categorías sobre papel envejecido ─────────────────────────── */}
+        <div style={{ padding: "2rem 2.5rem 4rem" }}>
           {visible.map((cat, idx) => {
             const items = cat.items
               .filter((i) => i.available)
@@ -556,21 +648,16 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
             return (
               <section key={cat.id}>
 
-                {/* Separador entre categorías (no en la primera) */}
-                {idx > 0 && <BranchDivider />}
+                {idx > 0 && <OrnamentalDivider index={idx} />}
 
-                {/* Cabecera de categoría */}
-                <CategoryChapter
+                <CategoryBlock
                   index={idx}
                   label={catLabel}
                   title={t(cat.name, lang)}
                   description={catDesc}
                   headingFont={typo.categoryFont}
                   bodyFont={typo.bodyFont}
-                />
-
-                {/* Lista de ítems */}
-                <div style={{ marginTop: "1rem" }}>
+                >
                   {items.map((item, itemIdx) => (
                     <MenuItem
                       key={item.id}
@@ -583,55 +670,63 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                       image={item.image}
                       showPrice={layout.showPrices}
                       showDescription={layout.showDescriptions}
-                      showAllergens={true}
                       categoryFont={typo.categoryFont}
                       bodyFont={typo.bodyFont}
                       priceFont={typo.priceFont}
                       isLast={itemIdx === items.length - 1}
                     />
                   ))}
-                </div>
+                </CategoryBlock>
 
               </section>
             );
           })}
         </div>
 
-        {/* ── Pie de página ───────────────────────────────────────────────── */}
+        {/* ── Pie de página — sobre verde oscuro ────────────────────────── */}
         {(restaurantInfo.address || restaurantInfo.phone ||
           restaurantInfo.website || restaurantInfo.socialLinks?.instagram) && (
-          <div style={{
-            background: `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`,
-            padding: "1.5rem 4rem",
-            textAlign: "center",
-            display: "flex", flexDirection: "column", gap: "0.6rem",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
-              <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-              <span style={{ color: AU, fontSize: "0.5rem", letterSpacing: "0.4em" }}>✦ ✦ ✦</span>
-              <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-            </div>
-            <p style={{
-              fontFamily: typo.bodyFont, fontStyle: "italic",
-              fontSize: "0.72rem", color: "rgba(255,255,255,0.75)",
-              margin: 0, letterSpacing: "0.04em", lineHeight: 2,
+          <div>
+            {/* Separador ornamental final */}
+            <OrnamentalDivider index={0} />
+
+            <div style={{
+              background: `linear-gradient(90deg, ${G} 0%, ${G2} 40%, ${G2} 60%, ${G} 100%)`,
+              padding: "1.5rem 3rem",
+              textAlign: "center",
+              borderTop: `1px solid ${GOLD}40`,
             }}>
-              {[
-                restaurantInfo.address,
-                restaurantInfo.phone,
-                restaurantInfo.website,
-                restaurantInfo.socialLinks?.instagram,
-              ].filter(Boolean).join("  ·  ")}
-            </p>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
+                <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
+                <span style={{ color: GOLD2, opacity: 0.85, fontSize: "0.48rem", letterSpacing: "0.45em" }}>✦ ✦ ✦</span>
+                <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
+              </div>
+              <p style={{
+                fontFamily: typo.bodyFont, fontStyle: "italic",
+                fontSize: "0.71rem", color: "rgba(255,255,255,0.75)",
+                margin: 0, letterSpacing: "0.035em", lineHeight: 2,
+              }}>
+                {[
+                  restaurantInfo.address,
+                  restaurantInfo.phone,
+                  restaurantInfo.website,
+                  restaurantInfo.socialLinks?.instagram,
+                ].filter(Boolean).join("  ·  ")}
+              </p>
+            </div>
+
+            {/* Banda tricolor inferior */}
+            <div>
+              <div style={{ height: "20px", background: `linear-gradient(90deg, ${R} 0%, ${R2} 50%, ${R} 100%)` }}/>
+              <div style={{ height: "8px", background: PARCHMENT2 }}/>
+              <div style={{ height: "34px", background: `linear-gradient(90deg, ${G} 0%, ${G2} 50%, ${G} 100%)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.38rem", letterSpacing: "0.8em", fontFamily: typo.bodyFont }}>
+                  &nbsp;&nbsp;&nbsp;fatto con amore
+                </span>
+              </div>
+            </div>
           </div>
         )}
-
-        {/* ── Banda tricolor inferior ─────────────────────────────────────── */}
-        <div>
-          <div style={{ height: "28px", background: `linear-gradient(to right, ${R}, ${R2}, ${R})` }}/>
-          <div style={{ height: "12px", background: "#f0ebe0" }}/>
-          <div style={{ height: "28px", background: `linear-gradient(to right, ${G}, ${G2}, ${G})` }}/>
-        </div>
 
       </div>
     </BackgroundLayer>
