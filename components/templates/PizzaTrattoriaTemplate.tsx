@@ -8,9 +8,43 @@ import { resolveTypography } from "@/types/template";
 
 // ── Palette ──────────────────────────────────────────────────────────────────
 
-const RED    = "#8b1a1a";   // Italian vermillion
-const GOLD   = "#c9a96e";   // aged manuscript gold
-const INK    = "#2c1206";   // deep espresso brown
+const RED  = "#8b1a1a";   // Italian vermillion
+const GOLD = "#c9a96e";   // aged manuscript gold
+const INK  = "#2c1206";   // deep espresso
+
+// ── Ornamental "Il Menù" transition ──────────────────────────────────────────
+// Bridges the hero cover and the menu body — like a chapter title in an Italian
+// carta. Two hairline rules flank a small-caps label.
+
+function MenuOpening({ bodyFont }: { bodyFont: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "1.1rem",
+        padding: "2.5rem 4rem 0",
+      }}
+    >
+      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}30)` }} />
+      <span
+        style={{
+          fontFamily: bodyFont,
+          fontSize: "0.48rem",
+          letterSpacing: "0.5em",
+          textTransform: "uppercase",
+          color: RED,
+          opacity: 0.5,
+          whiteSpace: "nowrap",
+        }}
+      >
+        Il Menù
+      </span>
+      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}30)` }} />
+    </div>
+  );
+}
 
 // ── Between-section ornamental divider ───────────────────────────────────────
 
@@ -21,28 +55,20 @@ function SectionDivider() {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: "1rem",
-        margin: "0.25rem 0",
+        gap: "0.9rem",
+        margin: "0.5rem 0",
       }}
     >
-      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}28)` }} />
-      <span
-        style={{
-          color: RED,
-          opacity: 0.35,
-          fontSize: "0.42rem",
-          letterSpacing: "0.55em",
-          lineHeight: 1,
-        }}
-      >
+      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}30)` }} />
+      <span style={{ color: RED, opacity: 0.38, fontSize: "0.44rem", letterSpacing: "0.6em", lineHeight: 1 }}>
         ✦ ✦ ✦
       </span>
-      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}28)` }} />
+      <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}30)` }} />
     </div>
   );
 }
 
-// ── Category header ───────────────────────────────────────────────────────────
+// ── Category block ────────────────────────────────────────────────────────────
 
 function CategoryBlock({
   label,
@@ -58,47 +84,43 @@ function CategoryBlock({
   bodyFont: string;
 }) {
   return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "2.25rem 0 1.75rem",
-      }}
-    >
-      {/* Top rule with central fleuron */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginBottom: "1.5rem" }}>
-        <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}30)` }} />
-        <span style={{ color: RED, fontSize: "0.38rem", opacity: 0.45, letterSpacing: "0.3em" }}>✦</span>
-        <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}30)` }} />
+    <div style={{ textAlign: "center", padding: "2.75rem 0 1.5rem" }}>
+
+      {/* Top rule with fleuron */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginBottom: "1.6rem" }}>
+        <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}28)` }} />
+        <span style={{ color: RED, fontSize: "0.44rem", opacity: 0.42, letterSpacing: "0.2em" }}>✦</span>
+        <div style={{ flex: 1, height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}28)` }} />
       </div>
 
-      {/* Small-caps section label */}
+      {/* Section label — micro small-caps */}
       <p
         style={{
           fontFamily: bodyFont,
-          fontSize: "0.52rem",
-          fontWeight: 600,
-          letterSpacing: "0.42em",
+          fontSize: "0.5rem",
+          fontWeight: 700,
+          letterSpacing: "0.48em",
           textTransform: "uppercase",
           color: RED,
-          opacity: 0.65,
-          margin: "0 0 0.5rem",
+          opacity: 0.6,
+          margin: "0 0 0.55rem",
           lineHeight: 1,
         }}
       >
         {label}
       </p>
 
-      {/* Category name — large italic serif */}
+      {/* Category name — large italic serif, the protagonist */}
       <h2
         style={{
           fontFamily: headingFont,
-          fontSize: "2.6rem",
+          fontSize: "3rem",
           fontWeight: 300,
           fontStyle: "italic",
           color: INK,
-          margin: "0",
-          lineHeight: 1.05,
-          letterSpacing: "-0.01em",
+          margin: 0,
+          lineHeight: 1,
+          letterSpacing: "-0.015em",
         }}
       >
         {title}
@@ -109,12 +131,12 @@ function CategoryBlock({
         <p
           style={{
             fontFamily: bodyFont,
-            fontSize: "0.72rem",
+            fontSize: "0.73rem",
             fontStyle: "italic",
             color: INK,
-            opacity: 0.42,
-            margin: "0.6rem 0 0",
-            lineHeight: 1.6,
+            opacity: 0.4,
+            margin: "0.7rem 0 0",
+            lineHeight: 1.65,
             letterSpacing: "0.01em",
           }}
         >
@@ -122,19 +144,19 @@ function CategoryBlock({
         </p>
       )}
 
-      {/* Bottom ornament */}
+      {/* Bottom micro-ornament */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "1.35rem",
-          gap: "0.35rem",
           alignItems: "center",
+          gap: "0.4rem",
+          marginTop: "1.4rem",
         }}
       >
-        <div style={{ width: "1.8rem", height: "0.5px", backgroundColor: RED, opacity: 0.18 }} />
-        <span style={{ color: RED, fontSize: "0.32rem", opacity: 0.35 }}>◆</span>
-        <div style={{ width: "1.8rem", height: "0.5px", backgroundColor: RED, opacity: 0.18 }} />
+        <div style={{ width: "2.2rem", height: "0.5px", background: `linear-gradient(to right, transparent, ${RED}25)` }} />
+        <span style={{ color: RED, fontSize: "0.3rem", opacity: 0.35 }}>◆</span>
+        <div style={{ width: "2.2rem", height: "0.5px", background: `linear-gradient(to left, transparent, ${RED}25)` }} />
       </div>
     </div>
   );
@@ -163,14 +185,20 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
       design={design}
       style={{ color: INK, fontFamily: fonts.body, minHeight: "100%" }}
     >
-      {/* ── Double decorative frame ──────────────────────────────────────── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: "0.9rem", border: `1px solid ${RED}1e`, pointerEvents: "none", zIndex: 0 }} />
-      <div aria-hidden="true" style={{ position: "absolute", inset: "1.3rem", border: `0.5px solid ${RED}0f`, pointerEvents: "none", zIndex: 0 }} />
+      {/* ── Decorative frame — slightly more present ─────────────────────── */}
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", inset: "0.9rem", border: `1px solid ${RED}35`, pointerEvents: "none", zIndex: 0 }}
+      />
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", inset: "1.3rem", border: `0.5px solid ${RED}1a`, pointerEvents: "none", zIndex: 0 }}
+      />
 
       {/* ── Content ──────────────────────────────────────────────────────── */}
       <div style={{ position: "relative", zIndex: 1 }}>
 
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
+        {/* ── Hero cover ───────────────────────────────────────────────── */}
         <HeroSection
           variant="italian-warm"
           logo={branding?.logo}
@@ -193,13 +221,15 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
           bodyFont={typo.bodyFont}
         />
 
+        {/* ── "Il Menù" — transition from cover to body ────────────────── */}
+        <MenuOpening bodyFont={typo.bodyFont} />
+
         {/* ── Categories ───────────────────────────────────────────────── */}
         <div
           style={{
-            padding: "0 3.25rem 4.5rem",
+            padding: "0 4rem 5rem",
             display: "flex",
             flexDirection: "column",
-            gap: "0",
           }}
         >
           {visible.map((cat, idx) => {
@@ -235,13 +265,13 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                     return (
                       <div key={item.id}>
                         {hasItemImage ? (
-                          /* ── Thumbnail row ── */
+                          /* ── Thumbnail row ───────────────────────── */
                           <div
                             style={{
                               display: "flex",
-                              gap: "1.1rem",
+                              gap: "1.15rem",
                               alignItems: "flex-start",
-                              padding: "1.1rem 0",
+                              padding: "1.25rem 0",
                             }}
                           >
                             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -253,25 +283,32 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                                 height: "4.5rem",
                                 objectFit: "cover",
                                 borderRadius: "2px",
-                                border: `1px solid ${RED}14`,
+                                border: `1px solid ${RED}16`,
                                 flexShrink: 0,
-                                filter: "saturate(0.9) brightness(0.97)",
+                                filter: "saturate(0.88) brightness(0.96)",
                               }}
                             />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ display: "grid", gridTemplateColumns: "1fr auto", columnGap: "1.25rem", alignItems: "baseline" }}>
+                              <div
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "1fr auto",
+                                  columnGap: "1.5rem",
+                                  alignItems: "baseline",
+                                }}
+                              >
                                 <span
                                   style={{
                                     fontFamily: typo.categoryFont,
-                                    fontSize: "1.08rem",
-                                    fontWeight: 400,
+                                    fontSize: "1.15rem",
+                                    fontWeight: item.featured ? 500 : 400,
                                     color: INK,
                                     letterSpacing: "0.015em",
-                                    lineHeight: 1.25,
+                                    lineHeight: 1.2,
                                   }}
                                 >
                                   {item.featured && (
-                                    <span style={{ color: RED, fontSize: "0.36rem", marginRight: "0.32rem", opacity: 0.7, verticalAlign: "middle" }}>✦</span>
+                                    <span style={{ color: RED, fontSize: "0.32rem", marginRight: "0.35rem", opacity: 0.6, verticalAlign: "middle" }}>✦</span>
                                   )}
                                   {t(item.name, lang)}
                                 </span>
@@ -279,8 +316,8 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                                   <span
                                     style={{
                                       fontFamily: typo.priceFont,
-                                      fontSize: "0.95rem",
-                                      fontWeight: 600,
+                                      fontSize: "0.92rem",
+                                      fontWeight: 500,
                                       fontStyle: "italic",
                                       color: GOLD,
                                       whiteSpace: "nowrap",
@@ -296,41 +333,41 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                                   style={{
                                     fontFamily: typo.bodyFont,
                                     fontStyle: "italic",
-                                    fontSize: "0.78rem",
+                                    fontSize: "0.8rem",
                                     color: INK,
-                                    opacity: 0.48,
+                                    opacity: 0.5,
                                     margin: "0.3rem 0 0",
-                                    lineHeight: 1.7,
+                                    lineHeight: 1.72,
                                   }}
                                 >
                                   {t(item.description, lang)}
                                 </p>
                               )}
-                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.4} marginTop="0.22rem" />
+                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.38} marginTop="0.22rem" />
                             </div>
                           </div>
                         ) : (
-                          /* ── List row ── */
+                          /* ── List row ─────────────────────────────── */
                           <div
                             style={{
                               display: "grid",
                               gridTemplateColumns: "1fr auto",
                               columnGap: "1.5rem",
                               alignItems: "baseline",
-                              padding: "1.1rem 0",
+                              padding: "1.25rem 0",
                             }}
                           >
                             {/* Name */}
-                            <div style={{ display: "flex", alignItems: "baseline", gap: "0.38rem", minWidth: 0 }}>
+                            <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem", minWidth: 0 }}>
                               {item.featured && (
                                 <span
                                   style={{
                                     color: RED,
-                                    fontSize: "0.34rem",
+                                    fontSize: "0.32rem",
                                     flexShrink: 0,
-                                    opacity: 0.65,
+                                    opacity: 0.6,
                                     position: "relative",
-                                    top: "-0.08em",
+                                    top: "-0.1em",
                                     lineHeight: 1,
                                   }}
                                 >
@@ -340,27 +377,27 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                               <span
                                 style={{
                                   fontFamily: typo.categoryFont,
-                                  fontSize: "1.08rem",
+                                  fontSize: "1.15rem",
                                   fontWeight: item.featured ? 500 : 400,
-                                  color: item.featured ? INK : `${INK}e0`,
-                                  letterSpacing: "0.018em",
-                                  lineHeight: 1.25,
+                                  color: item.featured ? INK : `${INK}e8`,
+                                  letterSpacing: "0.015em",
+                                  lineHeight: 1.2,
                                 }}
                               >
                                 {t(item.name, lang)}
                               </span>
                             </div>
 
-                            {/* Price */}
+                            {/* Price — subordinate, italic, gold */}
                             {layout.showPrices ? (
                               <span
                                 style={{
                                   fontFamily: typo.priceFont,
-                                  fontSize: "0.97rem",
-                                  fontWeight: 600,
+                                  fontSize: "0.92rem",
+                                  fontWeight: 500,
                                   fontStyle: "italic",
                                   color: GOLD,
-                                  letterSpacing: "0.025em",
+                                  letterSpacing: "0.02em",
                                   whiteSpace: "nowrap",
                                   textAlign: "right",
                                 }}
@@ -378,11 +415,11 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                                   gridColumn: "1 / -1",
                                   fontFamily: typo.bodyFont,
                                   fontStyle: "italic",
-                                  fontSize: "0.79rem",
+                                  fontSize: "0.8rem",
                                   color: INK,
-                                  opacity: 0.48,
-                                  margin: "0.22rem 0 0",
-                                  lineHeight: 1.7,
+                                  opacity: 0.5,
+                                  margin: "0.25rem 0 0",
+                                  lineHeight: 1.72,
                                   letterSpacing: "0.005em",
                                 }}
                               >
@@ -392,17 +429,17 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
 
                             {/* Allergens */}
                             <div style={{ gridColumn: "1 / -1" }}>
-                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.4} />
+                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.38} />
                             </div>
                           </div>
                         )}
 
-                        {/* Item hairline separator */}
+                        {/* Item separator — visible but delicate */}
                         {!isLast && (
                           <div
                             style={{
                               height: "1px",
-                              background: `linear-gradient(to right, transparent, ${RED}12 15%, ${RED}10 85%, transparent)`,
+                              background: `linear-gradient(to right, transparent, ${RED}1e 20%, ${RED}18 80%, transparent)`,
                             }}
                           />
                         )}
@@ -411,7 +448,7 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                   })}
                 </div>
 
-                {/* Between-category ornamental divider */}
+                {/* ── Between-category ornamental divider ───────────── */}
                 {idx < visible.length - 1 && (
                   <div style={{ padding: `${spacing.sectionGap} 0 0` }}>
                     <SectionDivider />
@@ -428,24 +465,23 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
           restaurantInfo.socialLinks?.instagram) && (
           <footer
             style={{
-              borderTop: `1px solid ${RED}14`,
-              padding: "2.25rem 3.25rem 3.5rem",
+              borderTop: `1px solid ${RED}18`,
+              padding: "2.5rem 4rem 4rem",
               textAlign: "center",
             }}
           >
-            {/* Ornamental topper */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "0.75rem",
-                marginBottom: "1.5rem",
+                gap: "0.85rem",
+                marginBottom: "1.75rem",
               }}
             >
-              <div style={{ height: "0.5px", flex: 1, maxWidth: "3rem", background: `linear-gradient(to right, transparent, ${RED}28)` }} />
-              <span style={{ color: RED, opacity: 0.3, fontSize: "0.38rem", letterSpacing: "0.4em" }}>✦ ✦ ✦</span>
-              <div style={{ height: "0.5px", flex: 1, maxWidth: "3rem", background: `linear-gradient(to left, transparent, ${RED}28)` }} />
+              <div style={{ height: "0.5px", width: "2.5rem", background: `linear-gradient(to right, transparent, ${RED}28)` }} />
+              <span style={{ color: RED, opacity: 0.3, fontSize: "0.4rem", letterSpacing: "0.5em" }}>✦ ✦ ✦</span>
+              <div style={{ height: "0.5px", width: "2.5rem", background: `linear-gradient(to left, transparent, ${RED}28)` }} />
             </div>
 
             <div
@@ -455,29 +491,27 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                 justifyContent: "center",
                 gap: "0 0.15rem",
                 fontFamily: typo.bodyFont,
-                fontSize: "0.68rem",
+                fontSize: "0.7rem",
                 fontStyle: "italic",
                 color: INK,
                 opacity: 0.38,
-                letterSpacing: "0.02em",
-                lineHeight: 1.8,
+                letterSpacing: "0.025em",
+                lineHeight: 1.9,
               }}
             >
               {restaurantInfo.address && <span>{restaurantInfo.address}</span>}
               {restaurantInfo.address && (restaurantInfo.phone || restaurantInfo.website) && (
-                <span style={{ margin: "0 0.5rem", opacity: 0.5 }}>·</span>
+                <span style={{ margin: "0 0.55rem", opacity: 0.45 }}>·</span>
               )}
               {restaurantInfo.phone && <span>{restaurantInfo.phone}</span>}
               {restaurantInfo.phone && restaurantInfo.website && (
-                <span style={{ margin: "0 0.5rem", opacity: 0.5 }}>·</span>
+                <span style={{ margin: "0 0.55rem", opacity: 0.45 }}>·</span>
               )}
               {restaurantInfo.website && <span>{restaurantInfo.website}</span>}
               {restaurantInfo.socialLinks?.instagram && (
                 <>
-                  <span style={{ margin: "0 0.5rem", opacity: 0.5 }}>·</span>
-                  <span style={{ color: RED, opacity: 0.5 }}>
-                    {restaurantInfo.socialLinks.instagram}
-                  </span>
+                  <span style={{ margin: "0 0.55rem", opacity: 0.45 }}>·</span>
+                  <span style={{ color: RED, opacity: 0.48 }}>{restaurantInfo.socialLinks.instagram}</span>
                 </>
               )}
             </div>
