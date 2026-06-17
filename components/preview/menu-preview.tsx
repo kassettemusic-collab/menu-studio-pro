@@ -10,6 +10,7 @@ import { CoffeeTemplate } from "@/components/templates/CoffeeTemplate";
 import { PizzaTrattoriaTemplate } from "@/components/templates/PizzaTrattoriaTemplate";
 import { SteakhouseTemplate } from "@/components/templates/SteakhouseTemplate";
 import { BeachClubTemplate } from "@/components/templates/BeachClubTemplate";
+import { ItalianVintagePosterTemplate } from "@/components/templates/ItalianVintagePosterTemplate";
 import type { TemplateProps } from "@/components/templates/types";
 
 const TEMPLATE_MAP: Record<string, React.ComponentType<TemplateProps>> = {
@@ -21,6 +22,7 @@ const TEMPLATE_MAP: Record<string, React.ComponentType<TemplateProps>> = {
   "pizza-trattoria": PizzaTrattoriaTemplate,
   steakhouse: SteakhouseTemplate,
   "beach-club": BeachClubTemplate,
+  "italian-vintage-poster": ItalianVintagePosterTemplate,
 };
 
 export function MenuPreview() {

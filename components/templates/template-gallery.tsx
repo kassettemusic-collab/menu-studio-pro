@@ -29,7 +29,8 @@ const CATEGORY_MAP: Record<string, CategoryMeta> = {
   coffee:             { label: "Café & Bar",   color: "#92400e" },
   "pizza-trattoria":  { label: "Italiana",     color: "#8b1a1a" },
   steakhouse:         { label: "Steakhouse",   color: "#c9a84c" },
-  "beach-club":       { label: "Beach Club",   color: "#0a9396" },
+  "beach-club":              { label: "Beach Club",   color: "#0a9396" },
+  "italian-vintage-poster":  { label: "Italiana",     color: "#5A1A1A" },
 };
 
 function getMeta(id: string): CategoryMeta {

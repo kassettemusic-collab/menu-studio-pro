@@ -7,6 +7,7 @@ import { coffeeTemplate } from "./coffee/config";
 import { pizzaTrattoriaTemplate } from "./pizza-trattoria/config";
 import { steakhouseTemplate } from "./steakhouse/config";
 import { beachClubTemplate } from "./beach-club/config";
+import { italianVintagePosterTemplate } from "./italian-vintage-poster/config";
 
 // ── Registry ───────────────────────────────────────────────────────────────
 
@@ -19,6 +20,7 @@ export const DESIGN_REGISTRY: TemplateDesign[] = [
   pizzaTrattoriaTemplate,
   steakhouseTemplate,
   beachClubTemplate,
+  italianVintagePosterTemplate,
 ];
 
 export const DESIGN_REGISTRY_MAP = new Map<string, TemplateDesign>(
