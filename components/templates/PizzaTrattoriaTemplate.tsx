@@ -8,164 +8,304 @@ import { resolveTypography } from "@/types/template";
 import type { Allergen } from "@/types/menu";
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  PALETA DE IMPRENTA
+//  PALETA — colores de imprenta italiana auténtica
 // ─────────────────────────────────────────────────────────────────────────────
-const G    = "#1a5c1a";   // verde bandera
-const G2   = "#2e7d2e";
-const R    = "#7a1515";   // rojo profundo
-const R2   = "#9e1f1f";
-const GOLD = "#b8933a";   // dorado oxidado
-const GOLD2= "#d4aa55";
-const INK  = "#180800";   // tinta casi negra
-const PARCHMENT = "#f3e8cf"; // papel envejecido
-const PARCHMENT2 = "#ede0b8";
+
+const BG      = "#F5EDD4";   // pergamino cálido
+const DARK    = "#1E1005";   // tinta oscura para título
+const RED     = "#C0312A";   // rojo bandera italiana
+const RED2    = "#962020";   // rojo profundo
+const GREEN   = "#1A5C32";   // verde bandera italiana
+const GREEN2  = "#256B3A";
+const GOLD    = "#C49A28";   // oro antiguo
+const INK     = "#1C0F08";   // tinta casi negra
+const CHALK   = "#2A3826";   // verde pizarra
+const CREAM   = "#FBF3DE";   // crema claro
+
+// Textura de papel
+const PAPER = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.042'/%3E%3C/svg%3E")`;
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  TEXTURA DE PAPEL — SVG inline como background-image
+//  BLOQUES DE BANDERA ITALIANA — esquinas en pincelada
 // ─────────────────────────────────────────────────────────────────────────────
-// Grain muy sutil + manchas de tinta envejecida
-const PAPER_TEXTURE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E")`;
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  SELLO DE TINTA — "Fatto con Amore" — circular, ligeramente rotado
-//  Como un sello de caucho aplicado a mano. Imperfecto a propósito.
-// ─────────────────────────────────────────────────────────────────────────────
-function FattoConAmoreStamp({ rotation = -14, size = 148 }: { rotation?: number; size?: number }) {
+function ItalianFlagBlocks() {
   return (
-    <div aria-hidden style={{
-      position: "absolute",
-      bottom: "1.2rem",
-      right: "1.5rem",
-      zIndex: 30,
-      transform: `rotate(${rotation}deg)`,
-      pointerEvents: "none",
-      filter: "drop-shadow(0 4px 14px rgba(0,0,0,0.5))",
-      width: size, height: size,
-    }}>
-      <svg width={size} height={size} viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+    <div aria-hidden style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+      <svg width="100%" height="100%" style={{ position: "absolute", inset: 0 }} xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
         <defs>
-          {/* El radio del círculo de texto */}
-          <path id="stamp-circle-outer"
-            d="M 59,59 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"/>
-          <path id="stamp-circle-inner"
-            d="M 59,59 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0"/>
-          {/* Filtro para simular tinta irregular */}
-          <filter id="stamp-roughen">
-            <feTurbulence type="turbulence" baseFrequency="0.065" numOctaves="3" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+          <filter id="brush-rough" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="turbulence" baseFrequency="0.025 0.04" numOctaves="4" seed="8" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="brush-rough-r" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="turbulence" baseFrequency="0.025 0.04" numOctaves="4" seed="12" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G"/>
           </filter>
         </defs>
-
-        {/* Fondo circular opaco para que tape el hero */}
-        <circle cx="59" cy="59" r="54" fill={PARCHMENT} opacity="0.96"/>
-
-        {/* Borde exterior con filtro de rugosidad */}
-        <g filter="url(#stamp-roughen)">
-          <circle cx="59" cy="59" r="52" fill="none" stroke={R} strokeWidth="2.8" strokeDasharray="3,1.2,5,0.8,2,1.5" opacity="0.92"/>
-          <circle cx="59" cy="59" r="47" fill="none" stroke={R} strokeWidth="1"   opacity="0.55"/>
-          <circle cx="59" cy="59" r="37" fill="none" stroke={R} strokeWidth="1.2" opacity="0.45"/>
-        </g>
-
-        {/* Texto circular exterior: FATTO CON AMORE */}
-        <text
-          fontFamily="Palatino, Georgia, serif"
-          fontSize="7.5"
-          fontWeight="700"
-          letterSpacing="2.8"
-          fill={R}
-          opacity="0.95"
-          textAnchor="middle"
-        >
-          <textPath href="#stamp-circle-outer" startOffset="12%">
-            · FATTO CON AMORE · CUCINA ITALIANA ·
-          </textPath>
-        </text>
-
-        {/* Centro del sello */}
-        <text x="59" y="53" textAnchor="middle"
-          fontFamily="Palatino, Georgia, serif"
-          fontSize="8.5" fontWeight="700" letterSpacing="1.5"
-          fill={R} opacity="0.85" textLength="44">
-          SINCE
-        </text>
-        <text x="59" y="68" textAnchor="middle"
-          fontFamily="Palatino, Georgia, serif"
-          fontSize="15" fontWeight="700"
-          fill={R} opacity="0.95">
-          1984
-        </text>
-        <text x="59" y="80" textAnchor="middle"
-          fontFamily="Palatino, Georgia, serif"
-          fontSize="6.5" fontWeight="400" letterSpacing="1"
-          fill={R} opacity="0.65">
-          ROMA · ITALIA
-        </text>
-
-        {/* Estrella central decorativa */}
-        <text x="59" y="47" textAnchor="middle"
-          fontFamily="serif" fontSize="8" fill={GOLD} opacity="0.8">
-          ★
-        </text>
+        {/* Verde — esquina superior izquierda */}
+        <polygon points="0,0 420,0 0,560" fill={GREEN} opacity="0.88" filter="url(#brush-rough)"/>
+        {/* Verde más claro interior */}
+        <polygon points="0,0 330,0 0,430" fill={GREEN2} opacity="0.30" filter="url(#brush-rough)"/>
+        {/* Rojo — esquina superior derecha */}
+        <polygon points="1190,0 800,0 1190,560" fill={RED} opacity="0.88" filter="url(#brush-rough-r)"/>
+        {/* Rojo más claro interior */}
+        <polygon points="1190,0 900,0 1190,430" fill={RED2} opacity="0.30" filter="url(#brush-rough-r)"/>
+        {/* Rojo — franja derecha media */}
+        <polygon points="1190,600 980,600 1190,1100" fill={RED} opacity="0.55" filter="url(#brush-rough-r)"/>
       </svg>
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  CINTA ARTESANAL — "Since 1984" — ligeramente torcida, fuera de la cuadrícula
+//  ILUSTRACIONES — estilo grabado artesanal
 // ─────────────────────────────────────────────────────────────────────────────
-function ArtisanalRibbon() {
+
+function TomatoCluster({ width = 120, height = 130 }: { width?: number; height?: number }) {
   return (
-    <div aria-hidden style={{
-      position: "absolute",
-      bottom: "-16px",
-      left: "-8px",
-      zIndex: 25,
-      transform: "rotate(-3.5deg)",
-      pointerEvents: "none",
-      filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.3))",
-    }}>
-      <svg width="200" height="38" viewBox="0 0 200 38" xmlns="http://www.w3.org/2000/svg">
-        {/* Cinta con colas en V */}
-        <polygon points="0,19 12,0 188,0 200,19 188,38 12,38" fill={G}/>
-        {/* Colas en V más oscuras (doblez) */}
-        <polygon points="0,19 12,0 12,38"   fill={G2} opacity="0.6"/>
-        <polygon points="200,19 188,0 188,38" fill={G2} opacity="0.6"/>
-        {/* Línea dorada interior */}
-        <polygon points="4,19 14,3 186,3 196,19 186,35 14,35"
-          fill="none" stroke={GOLD} strokeWidth="0.7" opacity="0.55"/>
-        {/* Texto */}
-        <text x="100" y="23.5" textAnchor="middle"
-          fontFamily="Palatino, Georgia, serif"
-          fontSize="9.5" fontWeight="700" letterSpacing="3.5"
-          fill="rgba(255,255,255,0.92)">
-          SINCE  1984
-        </text>
-      </svg>
-    </div>
+    <svg width={width} height={height} viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <defs>
+        <filter id="engrave-t"><feGaussianBlur stdDeviation="0.4"/></filter>
+      </defs>
+      {/* Tomate grande */}
+      <circle cx="50" cy="80" r="38" fill={RED} opacity="0.82"/>
+      <ellipse cx="38" cy="65" rx="10" ry="7" fill="rgba(255,255,255,0.20)"/>
+      {/* Rayas de grabado */}
+      <path d="M 18,72 Q 32,90 50,84 Q 68,78 80,92" stroke={DARK} strokeWidth="0.5" fill="none" opacity="0.18"/>
+      <path d="M 15,82 Q 30,98 50,94 Q 70,90 82,102" stroke={DARK} strokeWidth="0.5" fill="none" opacity="0.15"/>
+      {/* Cáliz */}
+      <path d="M 50,42 C 44,30 32,27 29,35 C 35,37 42,39 50,42 Z" fill={GREEN} opacity="0.9"/>
+      <path d="M 50,42 C 56,30 68,27 71,35 C 65,37 58,39 50,42 Z" fill={GREEN} opacity="0.9"/>
+      <path d="M 50,42 C 48,28 44,22 40,23 C 41,30 45,36 50,42 Z" fill={GREEN2}/>
+      <path d="M 50,42 C 52,28 56,22 60,23 C 59,30 55,36 50,42 Z" fill={GREEN2}/>
+      <circle cx="50" cy="42" r="3" fill={GREEN2}/>
+      {/* Contorno grabado */}
+      <circle cx="50" cy="80" r="38" fill="none" stroke={DARK} strokeWidth="1.2" opacity="0.55"/>
+      {/* Tomate pequeño detrás */}
+      <circle cx="88" cy="68" r="22" fill={RED} opacity="0.70"/>
+      <ellipse cx="80" cy="60" rx="6" ry="4" fill="rgba(255,255,255,0.16)"/>
+      <path d="M 88,46 C 84,38 76,37 74,42 C 78,43 83,44 88,46 Z" fill={GREEN} opacity="0.85"/>
+      <path d="M 88,46 C 92,38 100,37 102,42 C 98,43 93,44 88,46 Z" fill={GREEN} opacity="0.85"/>
+      <circle cx="88" cy="46" r="2.2" fill={GREEN2}/>
+      <circle cx="88" cy="68" r="22" fill="none" stroke={DARK} strokeWidth="1" opacity="0.45"/>
+      {/* Hojas de albahaca */}
+      <ellipse cx="25" cy="48" rx="10" ry="16" fill={GREEN} opacity="0.75" transform="rotate(-35, 25, 48)"/>
+      <path d="M 25,36 Q 18,48 25,58" stroke={GREEN2} strokeWidth="0.8" fill="none"/>
+      <ellipse cx="15" cy="55" rx="8" ry="13" fill={GREEN2} opacity="0.65" transform="rotate(-50, 15, 55)"/>
+    </svg>
+  );
+}
+
+function PizzaIllustration({ width = 160, height = 155 }: { width?: number; height?: number }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 160 155" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      {/* Pizza completa */}
+      <circle cx="80" cy="78" r="72" fill="#D4A642" opacity="0.85"/>
+      {/* Borde de masa */}
+      <circle cx="80" cy="78" r="72" fill="none" stroke="#8B4513" strokeWidth="9" opacity="0.75"/>
+      {/* Salsa de tomate */}
+      <circle cx="80" cy="78" r="62" fill={RED} opacity="0.70"/>
+      {/* Mozzarella — manchas blancas */}
+      <circle cx="80" cy="58" r="10" fill="rgba(255,252,240,0.85)"/>
+      <circle cx="62" cy="82" r="8"  fill="rgba(255,252,240,0.80)"/>
+      <circle cx="98" cy="82" r="9"  fill="rgba(255,252,240,0.82)"/>
+      <circle cx="75" cy="100" r="7" fill="rgba(255,252,240,0.78)"/>
+      <circle cx="92" cy="60"  r="6" fill="rgba(255,252,240,0.75)"/>
+      {/* Toppings — aceitunas */}
+      <circle cx="70" cy="68" r="4" fill={DARK} opacity="0.70"/>
+      <circle cx="90" cy="92" r="4" fill={DARK} opacity="0.70"/>
+      <circle cx="68" cy="95" r="3.5" fill={DARK} opacity="0.65"/>
+      {/* Pimientos */}
+      <ellipse cx="88" cy="68" rx="3" ry="6" fill={GREEN} opacity="0.80" transform="rotate(30, 88, 68)"/>
+      <ellipse cx="72" cy="88" rx="3" ry="6" fill={GREEN} opacity="0.78" transform="rotate(-20, 72, 88)"/>
+      {/* Líneas de corte */}
+      <line x1="80" y1="6" x2="80" y2="150" stroke={DARK} strokeWidth="0.6" opacity="0.20"/>
+      <line x1="8" y1="78" x2="152" y2="78" stroke={DARK} strokeWidth="0.6" opacity="0.20"/>
+      <line x1="25" y1="25" x2="135" y2="131" stroke={DARK} strokeWidth="0.6" opacity="0.15"/>
+      <line x1="135" y1="25" x2="25" y2="131" stroke={DARK} strokeWidth="0.6" opacity="0.15"/>
+      {/* Contorno */}
+      <circle cx="80" cy="78" r="72" fill="none" stroke={DARK} strokeWidth="1.5" opacity="0.50"/>
+      {/* Hoja de albahaca encima */}
+      <ellipse cx="82" cy="56" rx="7" ry="14" fill={GREEN} opacity="0.80" transform="rotate(15, 82, 56)"/>
+      <path d="M 82,48 Q 78,56 82,66" stroke={GREEN2} strokeWidth="0.8" fill="none"/>
+    </svg>
+  );
+}
+
+function PastaPlate({ width = 140, height = 130 }: { width?: number; height?: number }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 140 130" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      {/* Plato — sombra */}
+      <ellipse cx="71" cy="95" rx="62" ry="18" fill={DARK} opacity="0.12"/>
+      {/* Plato — cuerpo */}
+      <ellipse cx="70" cy="88" rx="62" ry="22" fill="#F0E8D5"/>
+      <ellipse cx="70" cy="88" rx="55" ry="18" fill={CREAM}/>
+      {/* Pasta — nido de espaguetis */}
+      <ellipse cx="70" cy="80" rx="42" ry="28" fill="#D4A642" opacity="0.55"/>
+      {/* Hebras de pasta */}
+      {[
+        "M 35,75 Q 50,65 65,72 Q 80,79 95,70 Q 108,62 118,68",
+        "M 30,82 Q 45,72 60,79 Q 75,86 90,77 Q 103,68 115,74",
+        "M 32,89 Q 47,79 62,86 Q 77,93 92,84 Q 105,75 118,82",
+        "M 38,96 Q 52,86 67,92 Q 82,98 96,90 Q 108,83 115,88",
+        "M 42,68 Q 57,58 72,65 Q 87,72 100,63 Q 112,55 120,62",
+      ].map((d, i) => (
+        <path key={i} d={d} stroke="#B8860B" strokeWidth="1.8" fill="none" opacity={0.65 - i * 0.05} strokeLinecap="round"/>
+      ))}
+      {/* Salsa de tomate encima */}
+      <ellipse cx="70" cy="76" rx="22" ry="14" fill={RED} opacity="0.60"/>
+      {/* Albahaca */}
+      <ellipse cx="68" cy="68" rx="7" ry="11" fill={GREEN} opacity="0.75" transform="rotate(-20, 68, 68)"/>
+      <ellipse cx="76" cy="66" rx="6" ry="9"  fill={GREEN2} opacity="0.70" transform="rotate(15, 76, 66)"/>
+      {/* Borde del plato */}
+      <ellipse cx="70" cy="88" rx="62" ry="22" fill="none" stroke={DARK} strokeWidth="1.2" opacity="0.40"/>
+      <ellipse cx="70" cy="88" rx="55" ry="18" fill="none" stroke={DARK} strokeWidth="0.7" opacity="0.28"/>
+      {/* Tenedor */}
+      <rect x="116" y="30" width="5" height="55" rx="2" fill={DARK} opacity="0.55"/>
+      <rect x="112" y="28" width="2" height="20" rx="1" fill={DARK} opacity="0.55"/>
+      <rect x="116" y="28" width="2" height="20" rx="1" fill={DARK} opacity="0.55"/>
+      <rect x="120" y="28" width="2" height="20" rx="1" fill={DARK} opacity="0.55"/>
+      <rect x="124" y="28" width="2" height="20" rx="1" fill={DARK} opacity="0.55"/>
+    </svg>
+  );
+}
+
+function OliveOilBottle({ width = 70, height = 160 }: { width?: number; height?: number }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 70 160" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      {/* Corcho */}
+      <rect x="28" y="4" width="14" height="16" rx="3" fill="#8B5E3C"/>
+      <rect x="30" y="7" width="10" height="10" rx="2" fill="#A0703A"/>
+      {/* Cuello */}
+      <path d="M 28,20 L 24,40 L 46,40 L 42,20 Z" fill="#8B9E60" opacity="0.85"/>
+      {/* Cuerpo de la botella */}
+      <path d="M 22,40 L 12,60 L 10,130 Q 10,145 35,145 Q 60,145 60,130 L 58,60 L 48,40 Z" fill="#8B9E60" opacity="0.82"/>
+      {/* Aceite dentro */}
+      <path d="M 14,70 L 12,128 Q 12,142 35,142 Q 58,142 58,128 L 56,70 Z" fill="#C8B820" opacity="0.65"/>
+      {/* Etiqueta */}
+      <rect x="16" y="80" width="38" height="50" rx="3" fill={CREAM} opacity="0.90"/>
+      <rect x="19" y="83" width="32" height="44" rx="2" fill="none" stroke={DARK} strokeWidth="0.8" opacity="0.40"/>
+      <text x="35" y="100" textAnchor="middle" fontFamily="Georgia, serif" fontSize="5.5" fontWeight="700" fill={DARK} opacity="0.75" letterSpacing="0.5">OLIO</text>
+      <text x="35" y="110" textAnchor="middle" fontFamily="Georgia, serif" fontSize="4.5" fill={DARK} opacity="0.60" letterSpacing="0.3">EXTRA</text>
+      <text x="35" y="119" textAnchor="middle" fontFamily="Georgia, serif" fontSize="4.5" fill={DARK} opacity="0.60" letterSpacing="0.3">VERGINE</text>
+      <line x1="20" y1="105" x2="50" y2="105" stroke={GOLD} strokeWidth="0.6" opacity="0.50"/>
+      {/* Reflejo */}
+      <path d="M 16,60 Q 18,90 17,120" stroke="rgba(255,255,255,0.25)" strokeWidth="3" fill="none" strokeLinecap="round"/>
+      {/* Contorno */}
+      <path d="M 22,40 L 12,60 L 10,130 Q 10,145 35,145 Q 60,145 60,130 L 58,60 L 48,40 Z" fill="none" stroke={DARK} strokeWidth="1.2" opacity="0.45"/>
+    </svg>
+  );
+}
+
+function TiramisuIllustration({ width = 130, height = 110 }: { width?: number; height?: number }) {
+  return (
+    <svg width={width} height={height} viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      {/* Base del plato */}
+      <ellipse cx="65" cy="98" rx="60" ry="12" fill="#E8DFC8" opacity="0.80"/>
+      {/* Cuerpo del tiramisú — forma de bloque */}
+      <path d="M 15,90 L 15,50 Q 15,42 65,42 Q 115,42 115,50 L 115,90 Z" fill="#D4A642" opacity="0.80"/>
+      {/* Capas internas */}
+      <rect x="15" y="62" width="100" height="8" fill="#8B4513" opacity="0.45"/>
+      <rect x="15" y="76" width="100" height="8" fill="#8B4513" opacity="0.40"/>
+      {/* Tapa de mascarpone */}
+      <ellipse cx="65" cy="50" rx="50" ry="12" fill={CREAM} opacity="0.95"/>
+      {/* Cacao en polvo */}
+      <ellipse cx="65" cy="50" rx="50" ry="12" fill="#4A2E18" opacity="0.35"/>
+      {/* Rayas de cacao */}
+      {[48,54,60,66,72,78].map((x, i) => (
+        <line key={i} x1={x} y1="40" x2={x-6} y2="62" stroke="#3A2010" strokeWidth="0.5" opacity="0.25"/>
+      ))}
+      {/* Contornos */}
+      <path d="M 15,90 L 15,50 Q 15,42 65,42 Q 115,42 115,50 L 115,90 Z" fill="none" stroke={DARK} strokeWidth="1" opacity="0.40"/>
+      <ellipse cx="65" cy="50" rx="50" ry="12" fill="none" stroke={DARK} strokeWidth="0.8" opacity="0.35"/>
+      {/* Hoja de menta decorativa */}
+      <ellipse cx="90" cy="44" rx="7" ry="12" fill={GREEN} opacity="0.70" transform="rotate(20, 90, 44)"/>
+      <path d="M 90,36 Q 87,44 90,54" stroke={GREEN2} strokeWidth="0.7" fill="none"/>
+    </svg>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  NOTA MANUSCRITA — texto artesanal fuera de la cuadrícula principal
+//  ELEMENTOS DECORATIVOS
 // ─────────────────────────────────────────────────────────────────────────────
-function HandwrittenNote({ text, rotation = 3, color = R }: { text: string; rotation?: number; color?: string }) {
+
+function SinceBanner({ year }: { year: string }) {
   return (
-    <div aria-hidden style={{
-      display: "inline-block",
-      transform: `rotate(${rotation}deg)`,
-      pointerEvents: "none",
-    }}>
+    <div aria-hidden style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
+      {/* Líneas decorativas */}
+      <svg width="80" height="14" viewBox="0 0 80 14" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 0,7 Q 20,2 40,7 Q 60,12 80,7" stroke={DARK} strokeWidth="1" fill="none" opacity="0.55"/>
+        <circle cx="4" cy="7" r="2" fill={DARK} opacity="0.4"/>
+        <circle cx="76" cy="7" r="2" fill={DARK} opacity="0.4"/>
+      </svg>
       <span style={{
-        fontFamily: "Palatino, Georgia, serif",
+        fontFamily: "\"Cormorant Garamond\", Georgia, serif",
+        fontSize: "0.68rem",
+        fontWeight: 700,
+        letterSpacing: "0.45em",
+        color: DARK,
+        opacity: 0.70,
+        textTransform: "uppercase",
+        whiteSpace: "nowrap",
+      }}>
+        Since {year}
+      </span>
+      <svg width="80" height="14" viewBox="0 0 80 14" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 0,7 Q 20,12 40,7 Q 60,2 80,7" stroke={DARK} strokeWidth="1" fill="none" opacity="0.55"/>
+        <circle cx="4" cy="7" r="2" fill={DARK} opacity="0.4"/>
+        <circle cx="76" cy="7" r="2" fill={DARK} opacity="0.4"/>
+      </svg>
+    </div>
+  );
+}
+
+function FattoConAmoreScript({ bodyFont }: { bodyFont: string }) {
+  return (
+    <div aria-hidden style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem" }}>
+      {/* Flecha izquierda */}
+      <svg width="60" height="16" viewBox="0 0 60 16" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 60,8 L 5,8 L 12,3 M 5,8 L 12,13" stroke={DARK} strokeWidth="1.2" fill="none" opacity="0.60" strokeLinecap="round"/>
+      </svg>
+      <span style={{
+        fontFamily: bodyFont,
         fontStyle: "italic",
-        fontSize: "0.88rem",
-        color,
-        opacity: 0.7,
-        letterSpacing: "0.04em",
-        borderBottom: `1.5px solid ${color}40`,
-        paddingBottom: "1px",
-        display: "inline-block",
+        fontSize: "1.8rem",
+        color: DARK,
+        lineHeight: 1,
+        fontWeight: 400,
+        letterSpacing: "0.01em",
+      }}>
+        Fatto con Amore
+      </span>
+      {/* Flecha derecha */}
+      <svg width="60" height="16" viewBox="0 0 60 16" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 0,8 L 55,8 L 48,3 M 55,8 L 48,13" stroke={DARK} strokeWidth="1.2" fill="none" opacity="0.60" strokeLinecap="round"/>
+      </svg>
+    </div>
+  );
+}
+
+function DarkBanner({ text, headingFont }: { text: string; headingFont: string }) {
+  return (
+    <div style={{
+      background: DARK,
+      padding: "0.55rem 2.5rem",
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "0.75rem",
+      position: "relative",
+    }}>
+      {/* Muescas decorativas */}
+      <div style={{ position: "absolute", left: "-10px", top: 0, bottom: 0, width: "10px", background: DARK, clipPath: "polygon(0 50%, 100% 0, 100% 100%)" }}/>
+      <div style={{ position: "absolute", right: "-10px", top: 0, bottom: 0, width: "10px", background: DARK, clipPath: "polygon(0 0, 0 100%, 100% 50%)" }}/>
+      <span style={{
+        fontFamily: headingFont,
+        fontSize: "0.78rem",
+        fontWeight: 700,
+        letterSpacing: "0.38em",
+        color: "rgba(255,255,255,0.95)",
+        textTransform: "uppercase",
       }}>
         {text}
       </span>
@@ -173,653 +313,468 @@ function HandwrittenNote({ text, rotation = 3, color = R }: { text: string; rota
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  MARCO ORNAMENTAL — CSS puro para bordes + SVG fijo para esquinas
-//  Sin preserveAspectRatio="none": los círculos no se deforman nunca
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Esquina decorativa (top-left). Se voltea con CSS para las demás.
-function CornerRosette() {
-  // Arcos concéntricos de cuarto de círculo desde la esquina (0,0)
-  // + badge central + hojas decorativas
+function CircularStamp100({ rotation = -12 }: { rotation?: number }) {
   return (
-    <svg width="110" height="110" viewBox="0 0 110 110"
-      xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-
-      {/* ── Arcos concéntricos — capas de borde visual ── */}
-      {/* verde exterior */}
-      <path d="M 0 104 A 104 104 0 0 1 104 0 L 110 0 L 110 110 L 0 110 Z"
-        fill={G}/>
-      {/* franja crema */}
-      <path d="M 0 96 A 96 96 0 0 1 96 0 L 104 0 A 104 104 0 0 0 0 104 Z"
-        fill={PARCHMENT2}/>
-      {/* línea dorada */}
-      <path d="M 0 94 A 94 94 0 0 1 94 0 L 96 0 A 96 96 0 0 0 0 96 Z"
-        fill={GOLD}/>
-      {/* franja crema */}
-      <path d="M 0 91 A 91 91 0 0 1 91 0 L 94 0 A 94 94 0 0 0 0 94 Z"
-        fill={PARCHMENT2}/>
-      {/* rojo */}
-      <path d="M 0 84 A 84 84 0 0 1 84 0 L 91 0 A 91 91 0 0 0 0 91 Z"
-        fill={R}/>
-      {/* línea dorada interior */}
-      <path d="M 0 82 A 82 82 0 0 1 82 0 L 84 0 A 84 84 0 0 0 0 84 Z"
-        fill={GOLD} opacity="0.6"/>
-      {/* franja crema interior */}
-      <path d="M 0 79 A 79 79 0 0 1 79 0 L 82 0 A 82 82 0 0 0 0 82 Z"
-        fill={PARCHMENT}/>
-
-      {/* ── Badge central en la esquina ── */}
-      {/* Fondo verde del badge */}
-      <circle cx="0" cy="0" r="52" fill={G}/>
-      {/* Anillo dorado */}
-      <circle cx="0" cy="0" r="45" fill={GOLD}/>
-      {/* Relleno rojo */}
-      <circle cx="0" cy="0" r="40" fill={R}/>
-      {/* Línea dorada */}
-      <circle cx="0" cy="0" r="35" fill="none" stroke={GOLD} strokeWidth="1.5"/>
-      {/* Interior crema */}
-      <circle cx="0" cy="0" r="32" fill={PARCHMENT}/>
-      {/* Medallón dorado central */}
-      <circle cx="0" cy="0" r="22" fill={GOLD}/>
-      {/* Centro rojo */}
-      <circle cx="0" cy="0" r="15" fill={R}/>
-      {/* Punto blanco */}
-      <circle cx="0" cy="0" r="7"  fill={PARCHMENT2}/>
-      <circle cx="0" cy="0" r="3"  fill={GOLD}/>
-
-      {/* ── Hojas decorativas en los brazos del arco ── */}
-      {/* brazo horizontal (arriba) */}
-      <ellipse cx="58" cy="5"  rx="12" ry="3.5" transform="rotate(-8  58 5)"  fill={GOLD} opacity="0.75"/>
-      <ellipse cx="76" cy="4"  rx="10" ry="3"   transform="rotate(-5  76 4)"  fill={GOLD} opacity="0.6"/>
-      <ellipse cx="92" cy="3"  rx="8"  ry="2.5" transform="rotate(-3  92 3)"  fill={GOLD} opacity="0.5"/>
-      {/* brazo vertical (izquierda) */}
-      <ellipse cx="5"  cy="58" rx="12" ry="3.5" transform="rotate(-82 5  58)" fill={GOLD} opacity="0.75"/>
-      <ellipse cx="4"  cy="76" rx="10" ry="3"   transform="rotate(-85 4  76)" fill={GOLD} opacity="0.6"/>
-      <ellipse cx="3"  cy="92" rx="8"  ry="2.5" transform="rotate(-87 3  92)" fill={GOLD} opacity="0.5"/>
-
-      {/* ── Pequeños rombos decorativos ── */}
-      <path d="M 50 9 L 54 5 L 58 9 L 54 13 Z" fill={R} opacity="0.7"/>
-      <path d="M 9 50 L 5 54 L 9 58 L 13 54 Z" fill={R} opacity="0.7"/>
-    </svg>
+    <div aria-hidden style={{
+      transform: `rotate(${rotation}deg)`,
+      filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.25))",
+      width: 100, height: 100,
+    }}>
+      <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="sc-outer" d="M 50,50 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"/>
+          <path id="sc-inner" d="M 50,50 m -30,0 a 30,30 0 1,1 60,0 a 30,30 0 1,1 -60,0"/>
+          <filter id="sc-rough">
+            <feTurbulence type="turbulence" baseFrequency="0.06" numOctaves="3" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+        <circle cx="50" cy="50" r="46" fill={CREAM} opacity="0.95"/>
+        <g filter="url(#sc-rough)">
+          <circle cx="50" cy="50" r="46" fill="none" stroke={GREEN} strokeWidth="3" strokeDasharray="2,0.8" opacity="0.90"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke={GREEN} strokeWidth="1" opacity="0.50"/>
+          <circle cx="50" cy="50" r="32" fill="none" stroke={GREEN} strokeWidth="1.5" strokeDasharray="1.5,0.5" opacity="0.60"/>
+        </g>
+        <text fontFamily="Georgia, serif" fontSize="8" fontWeight="700" letterSpacing="2.5" fill={GREEN} opacity="0.88" textAnchor="middle">
+          <textPath href="#sc-outer" startOffset="12%">✦ 100% ITALIAN ✦ QUALITY ✦</textPath>
+        </text>
+        <text x="50" y="46" textAnchor="middle" fontFamily="Georgia, serif" fontSize="16" fontWeight="700" fill={GREEN} opacity="0.92">100%</text>
+        <text x="50" y="58" textAnchor="middle" fontFamily="Georgia, serif" fontSize="9" fontWeight="700" letterSpacing="2" fill={GREEN} opacity="0.88">ITALIAN</text>
+        <text x="50" y="68" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6.5" letterSpacing="1" fill={GREEN} opacity="0.65">QUALITY</text>
+        <text x="50" y="77" textAnchor="middle" fontFamily="Georgia, serif" fontSize="5" letterSpacing="0.5" fill={GREEN} opacity="0.50">★ ★ ★ ★ ★</text>
+      </svg>
+    </div>
   );
 }
 
-// Medallón para el centro de cada lado del borde
-function SideMedallion({ horizontal = true }: { horizontal?: boolean }) {
+function BuonAppetitoCrossTag() {
   return (
-    <svg
-      width={horizontal ? 48 : 26}
-      height={horizontal ? 26 : 48}
-      viewBox="0 0 48 26"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ display: "block", transform: horizontal ? "none" : "rotate(90deg)" }}
-    >
-      {/* Cuerpo del medallón — rombo ovalado */}
-      <ellipse cx="24" cy="13" rx="23" ry="12" fill={G}/>
-      <ellipse cx="24" cy="13" rx="19" ry="9"  fill={GOLD}/>
-      <ellipse cx="24" cy="13" rx="15" ry="6"  fill={R}/>
-      <ellipse cx="24" cy="13" rx="10" ry="4"  fill={GOLD}/>
-      <ellipse cx="24" cy="13" rx="5"  ry="2"  fill={R}/>
-      <circle  cx="24" cy="13" r="2"           fill={PARCHMENT2}/>
-      {/* Puntas */}
-      <path d="M 0 13 L 5 10 L 5 16 Z"  fill={G}/>
-      <path d="M 48 13 L 43 10 L 43 16 Z" fill={G}/>
-    </svg>
+    <div aria-hidden style={{ transform: "rotate(8deg)", filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.22))" }}>
+      <svg width="110" height="130" viewBox="0 0 110 130" xmlns="http://www.w3.org/2000/svg">
+        {/* Hilo de la etiqueta */}
+        <path d="M 55,4 Q 70,14 65,28" stroke="#8B7355" strokeWidth="1.5" fill="none"/>
+        <circle cx="55" cy="4" r="3" fill="#C4953A" opacity="0.7"/>
+        {/* Etiqueta kraft */}
+        <rect x="8" y="26" width="94" height="96" rx="5" fill="#E8D5A8"/>
+        <rect x="12" y="30" width="86" height="88" rx="4" fill="#F0DFB5"/>
+        {/* Agujero de la cuerda */}
+        <circle cx="55" cy="36" r="5" fill="#C4953A" opacity="0.50"/>
+        <circle cx="55" cy="36" r="3" fill="#E8D5A8"/>
+        {/* Texto */}
+        <text x="55" y="62" textAnchor="middle" fontFamily="Georgia, serif" fontStyle="italic" fontSize="15" fontWeight="700" fill={GREEN} opacity="0.85">Buon</text>
+        <text x="55" y="80" textAnchor="middle" fontFamily="Georgia, serif" fontStyle="italic" fontSize="15" fontWeight="700" fill={RED} opacity="0.85">Appetito!</text>
+        {/* Corazón */}
+        <path d="M 55,95 C 55,95 47,88 47,83 C 47,80 50,78 53,80 C 54,81 55,82 55,82 C 55,82 56,81 57,80 C 60,78 63,80 63,83 C 63,88 55,95 55,95 Z" fill={RED} opacity="0.70"/>
+        {/* Borde */}
+        <rect x="8" y="26" width="94" height="96" rx="5" fill="none" stroke="#A89060" strokeWidth="1" opacity="0.50"/>
+        <line x1="18" y1="48" x2="92" y2="48" stroke="#A89060" strokeWidth="0.5" opacity="0.35"/>
+      </svg>
+    </div>
   );
 }
 
-function OrnateFrame() {
+function RecipeStamp({ rotation = 6 }: { rotation?: number }) {
   return (
-    <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}>
+    <div aria-hidden style={{ transform: `rotate(${rotation}deg)`, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.20))" }}>
+      <svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="rs-path" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"/>
+          <filter id="rs-rough">
+            <feTurbulence type="turbulence" baseFrequency="0.055" numOctaves="3" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+        <circle cx="60" cy="60" r="52" fill={CREAM} opacity="0.95"/>
+        <g filter="url(#rs-rough)">
+          <circle cx="60" cy="60" r="52" fill="none" stroke={RED} strokeWidth="2.5" strokeDasharray="3,1" opacity="0.85"/>
+          <circle cx="60" cy="60" r="46" fill="none" stroke={RED} strokeWidth="0.8" opacity="0.45"/>
+          <circle cx="60" cy="60" r="38" fill="none" stroke={RED} strokeWidth="1.5" strokeDasharray="2,0.8" opacity="0.55"/>
+        </g>
+        <text fontFamily="Georgia, serif" fontSize="7" fontWeight="700" letterSpacing="2" fill={RED} opacity="0.80" textAnchor="middle">
+          <textPath href="#rs-path" startOffset="8%">✦ TRADITIONAL ✦ ITALIAN FOOD ✦</textPath>
+        </text>
+        <text x="60" y="52" textAnchor="middle" fontFamily="Georgia, serif" fontSize="7" letterSpacing="2" fill={RED} opacity="0.68">THE BEST</text>
+        <text x="60" y="68" textAnchor="middle" fontFamily="Georgia, serif" fontSize="16" fontWeight="700" fontStyle="italic" fill={RED} opacity="0.88">Recipes</text>
+        <path d="M 42,76 C 52,72 68,72 78,76" stroke={RED} strokeWidth="0.8" fill="none" opacity="0.50"/>
+        <path d="M 60,77 C 57,80 55,83 56,86 C 57,89 63,89 64,86 C 65,83 63,80 60,77 Z" fill={RED} opacity="0.60"/>
+      </svg>
+    </div>
+  );
+}
 
-      {/* ── CAPAS DE BORDE — CSS box-shadow, sin distorsión ── */}
-      <div style={{
-        position: "absolute", inset: 0,
-        boxShadow: `
-          inset 0 0 0 9px  ${G},
-          inset 0 0 0 12px ${PARCHMENT2},
-          inset 0 0 0 13px ${GOLD},
-          inset 0 0 0 14px ${PARCHMENT2},
-          inset 0 0 0 20px ${R},
-          inset 0 0 0 21px ${GOLD}90,
-          inset 0 0 0 23px ${PARCHMENT}
-        `,
-      }}/>
-
-      {/* ── ESQUINAS — SVG fijo 110×110, volteo CSS ── */}
-      <div style={{ position: "absolute", top: 0, left: 0 }}>
-        <CornerRosette />
-      </div>
-      <div style={{ position: "absolute", top: 0, right: 0, transform: "scaleX(-1)" }}>
-        <CornerRosette />
-      </div>
-      <div style={{ position: "absolute", bottom: 0, left: 0, transform: "scaleY(-1)" }}>
-        <CornerRosette />
-      </div>
-      <div style={{ position: "absolute", bottom: 0, right: 0, transform: "scale(-1,-1)" }}>
-        <CornerRosette />
-      </div>
-
-      {/* ── MEDALLONES LATERALES — centro de cada lado ── */}
-      {/* Arriba */}
-      <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)" }}>
-        <SideMedallion horizontal={true} />
-      </div>
-      {/* Abajo */}
-      <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%) scaleY(-1)" }}>
-        <SideMedallion horizontal={true} />
-      </div>
-      {/* Izquierda */}
-      <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
-        <SideMedallion horizontal={false} />
-      </div>
-      {/* Derecha */}
-      <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%) scaleX(-1)" }}>
-        <SideMedallion horizontal={false} />
-      </div>
-
+function ChalkboardSign({ bodyFont }: { bodyFont: string }) {
+  return (
+    <div style={{
+      background: CHALK,
+      borderRadius: "4px",
+      padding: "1rem 1.5rem",
+      position: "relative",
+      boxShadow: "inset 0 0 0 3px rgba(255,255,255,0.08), 2px 3px 8px rgba(0,0,0,0.30)",
+      width: "130px",
+    }}>
+      {/* Trozos de cinta adhesiva */}
+      <div style={{ position: "absolute", top: "-8px", left: "18px", width: "30px", height: "12px", background: "#C49A2850", transform: "rotate(-3deg)", borderRadius: "2px" }}/>
+      <div style={{ position: "absolute", top: "-8px", right: "18px", width: "25px", height: "12px", background: "#C49A2850", transform: "rotate(4deg)", borderRadius: "2px" }}/>
+      {/* Texto de pizarra */}
+      {["Buoni", "Vini", "Buona", "Gente"].map((line, i) => (
+        <p key={i} style={{
+          fontFamily: bodyFont,
+          fontStyle: "italic",
+          fontSize: i === 0 || i === 2 ? "1.1rem" : "1.35rem",
+          fontWeight: i === 1 || i === 3 ? 600 : 400,
+          color: "rgba(255,255,255,0.88)",
+          margin: 0,
+          lineHeight: 1.35,
+          textAlign: "center",
+          letterSpacing: "0.02em",
+        }}>
+          {line}
+        </p>
+      ))}
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  CABECERA — bloque tipo cartel vintage. Impreso sobre papel. No web.
+//  CABECERA PRINCIPAL — estilo póster woodblock
 // ─────────────────────────────────────────────────────────────────────────────
-function VintageHero({
-  logo, logoAlt, name, tagline, welcomeMessage, chefMessage,
-  showLogo, showWelcomeMessage, showChefMessage,
-  headingFont, bodyFont,
-}: {
-  logo?: string; logoAlt?: string; name: string; tagline?: string;
-  welcomeMessage?: string; chefMessage?: string;
-  showLogo?: boolean; showWelcomeMessage?: boolean; showChefMessage?: boolean;
-  headingFont: string; bodyFont: string;
-}) {
-  return (
-    <div style={{ position: "relative" }}>
 
-      {/* ── BANDA TRICOLOR SUPERIOR — ancha, visible ── */}
-      <div>
-        <div style={{
-          height: "34px",
-          background: `linear-gradient(90deg, ${G} 0%, ${G2} 50%, ${G} 100%)`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{
-            color: "rgba(255,255,255,0.82)", fontSize: "0.42rem",
-            letterSpacing: "0.85em", fontFamily: bodyFont,
-            textTransform: "uppercase", fontWeight: 400,
-          }}>
-            &nbsp;&nbsp;&nbsp;ristorante autentico italiano
-          </span>
-        </div>
-        <div style={{ height: "8px", background: PARCHMENT2 }}/>
-        <div style={{
-          height: "20px",
-          background: `linear-gradient(90deg, ${R} 0%, ${R2} 50%, ${R} 100%)`,
-        }}/>
+interface HeaderProps {
+  name: string;
+  tagline?: string;
+  logo?: string;
+  logoAlt?: string;
+  showLogo: boolean;
+  headingFont: string;
+  bodyFont: string;
+}
+
+function PosterHeader({ name, tagline, logo, logoAlt, showLogo, headingFont, bodyFont }: HeaderProps) {
+  // Separar nombre en líneas si tiene espacio (para el efecto visual)
+  const words = name.split(" ");
+  const line1 = words.slice(0, Math.ceil(words.length / 2)).join(" ");
+  const line2 = words.slice(Math.ceil(words.length / 2)).join(" ");
+  const hasTwo = words.length > 1;
+
+  return (
+    <div style={{ position: "relative", textAlign: "center", padding: "2rem 5rem 1.5rem", zIndex: 2 }}>
+
+      {/* Ornamento superior con olivo */}
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.6rem" }}>
+        <svg width="60" height="30" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <path d="M 0,15 L 8,15 M 52,15 L 60,15" stroke={DARK} strokeWidth="1" opacity="0.5"/>
+          <ellipse cx="14" cy="10" rx="5" ry="9" fill={GREEN2} opacity="0.70" transform="rotate(-30, 14, 10)"/>
+          <ellipse cx="22" cy="8"  rx="4" ry="8" fill={GREEN}  opacity="0.65" transform="rotate(-15, 22, 8)"/>
+          <ellipse cx="30" cy="7"  rx="4" ry="8" fill={GREEN2} opacity="0.68"/>
+          <ellipse cx="38" cy="8"  rx="4" ry="8" fill={GREEN}  opacity="0.65" transform="rotate(15, 38, 8)"/>
+          <ellipse cx="46" cy="10" rx="5" ry="9" fill={GREEN2} opacity="0.70" transform="rotate(30, 46, 10)"/>
+          <path d="M 8,15 Q 30,5 52,15" stroke={GREEN2} strokeWidth="1.2" fill="none" opacity="0.55"/>
+          <circle cx="30" cy="20" r="3" fill={GOLD} opacity="0.60"/>
+        </svg>
       </div>
 
-      {/* ── CUERPO PRINCIPAL DEL HERO — bermellón profundo ── */}
-      <div style={{
-        position: "relative",
-        background: `
-          radial-gradient(ellipse at 50% 30%, #6a0f0f 0%, #4a0808 45%, #2e0404 100%)
-        `,
-        padding: "3.5rem 4rem 4.5rem",
-        textAlign: "center",
-        overflow: "visible",
-      }}>
+      {/* "Since 1984" */}
+      <SinceBanner year="1984"/>
 
-        {/* Textura de líneas finas sobre el bloque rojo */}
-        <div aria-hidden style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            rgba(255,255,255,0.018) 0px,
-            rgba(255,255,255,0.018) 1px,
-            transparent 1px,
-            transparent 14px
-          )`,
-        }}/>
+      <div style={{ height: "0.5rem" }}/>
 
-        {/* Vignette lateral */}
-        <div aria-hidden style={{
-          position: "absolute", inset: 0, pointerEvents: "none",
-          background: "radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.35) 100%)",
-        }}/>
-
-        {/* Marco dorado interior del hero */}
-        <div aria-hidden style={{
-          position: "absolute", inset: "12px", pointerEvents: "none",
-          border: `1px solid ${GOLD}45`,
-          boxShadow: `inset 0 0 0 4px ${GOLD}18`,
-        }}/>
-
-        {/* Logo */}
-        {showLogo && logo && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={logo} alt={logoAlt ?? name} style={{
-            height: "7rem", objectFit: "contain",
-            marginBottom: "1.75rem", position: "relative",
-            filter: "brightness(0) invert(1) sepia(0.2)", opacity: 0.92,
-          }}/>
-        )}
-
-        {/* Ornamento superior de estrellas */}
-        <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.75rem" }}>
-          <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}80)` }}/>
-          <span style={{ color: GOLD2, fontSize: "0.55rem", letterSpacing: "0.5em" }}>★ ★ ★ ★ ★</span>
-          <div style={{ flex: 1, height: "1px", background: `linear-gradient(to left, transparent, ${GOLD2}80)` }}/>
+      {/* Logo si existe */}
+      {showLogo && logo && (
+        <div style={{ marginBottom: "0.8rem" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logo} alt={logoAlt ?? name} style={{ height: "5rem", objectFit: "contain", filter: "sepia(0.3) contrast(1.1)", opacity: 0.88 }}/>
         </div>
+      )}
 
-        {/* NOMBRE — 7rem, tipografía de póster */}
+      {/* NOMBRE PRINCIPAL — escala póster woodblock */}
+      {hasTwo ? (
+        <>
+          <h1 style={{
+            fontFamily: headingFont,
+            fontSize: "clamp(4rem, 13vw, 8.5rem)",
+            fontWeight: 700,
+            color: DARK,
+            lineHeight: 0.88,
+            margin: "0.2rem 0 0",
+            letterSpacing: "-0.01em",
+            textShadow: `2px 2px 0 rgba(30,16,5,0.12), 4px 4px 0 rgba(30,16,5,0.07)`,
+            textTransform: "uppercase",
+          }}>
+            {line1}
+          </h1>
+          <h1 style={{
+            fontFamily: headingFont,
+            fontSize: "clamp(3rem, 10vw, 6.5rem)",
+            fontWeight: 700,
+            color: RED,
+            lineHeight: 0.92,
+            margin: "0.1rem 0 0",
+            letterSpacing: "0.02em",
+            textShadow: `2px 2px 0 rgba(150,32,32,0.12)`,
+            textTransform: "uppercase",
+          }}>
+            {line2}
+          </h1>
+        </>
+      ) : (
         <h1 style={{
-          position: "relative",
           fontFamily: headingFont,
-          fontSize: "7rem",
+          fontSize: "clamp(3.5rem, 12vw, 8rem)",
           fontWeight: 700,
-          color: "#ffffff",
-          margin: 0,
+          color: DARK,
           lineHeight: 0.88,
-          letterSpacing: "0.025em",
-          textShadow: `
-            0 2px 4px rgba(0,0,0,0.6),
-            0 6px 30px rgba(0,0,0,0.5),
-            0 0 80px rgba(180,80,80,0.3)
-          `,
+          margin: "0.2rem 0 0",
+          letterSpacing: "-0.01em",
+          textShadow: `2px 2px 0 rgba(30,16,5,0.12), 4px 4px 0 rgba(30,16,5,0.07)`,
+          textTransform: "uppercase",
         }}>
           {name}
         </h1>
+      )}
 
-        {/* Regla dorada triple */}
-        <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: "3px", margin: "2.25rem auto 1.5rem", width: "55%", maxWidth: "18rem" }}>
-          <div style={{ width: "100%", height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}, transparent)` }}/>
-          <div style={{ width: "60%", height: "2px", background: `linear-gradient(to right, transparent, ${GOLD2}cc, transparent)` }}/>
-          <div style={{ width: "100%", height: "1px", background: `linear-gradient(to right, transparent, ${GOLD2}, transparent)` }}/>
-        </div>
+      <div style={{ height: "0.8rem" }}/>
 
-        {/* Tagline */}
-        {tagline && (
-          <p style={{
-            position: "relative",
-            fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "1.08rem", color: "rgba(255,255,255,0.8)",
-            margin: 0, letterSpacing: "0.07em",
-          }}>
-            {tagline}
-          </p>
-        )}
+      {/* "Fatto con Amore" */}
+      <FattoConAmoreScript bodyFont={bodyFont}/>
 
-        {/* Welcome message — caja con borde */}
-        {showWelcomeMessage && welcomeMessage && (
-          <div style={{
-            position: "relative",
-            margin: "1.75rem auto 0",
-            padding: "1.1rem 2.5rem",
-            maxWidth: "28rem",
-            borderTop: `1px solid ${GOLD}50`,
-            borderBottom: `1px solid ${GOLD}50`,
-          }}>
-            <p style={{
-              fontFamily: bodyFont, fontStyle: "italic",
-              fontSize: "0.87rem", color: "rgba(255,255,255,0.62)",
-              lineHeight: 1.95, margin: 0,
-            }}>
-              {welcomeMessage}
-            </p>
-          </div>
-        )}
+      <div style={{ height: "0.7rem" }}/>
 
-        {/* Chef message */}
-        {showChefMessage && chefMessage && (
-          <p style={{
-            position: "relative",
-            fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.81rem", color: "rgba(255,255,255,0.45)",
-            lineHeight: 2, maxWidth: "26rem",
-            margin: "1.25rem auto 0",
-          }}>
-            {chefMessage}
-          </p>
-        )}
-
-        {/* ── SELLO DE IMPRENTA — rompe la simetría intencionalmente ── */}
-        <FattoConAmoreStamp rotation={-16} size={155} />
-
-        {/* ── CINTA "Since 1984" — fuera del grid, rotada ── */}
-        <ArtisanalRibbon />
-
+      {/* Tagline o "AUTHENTIC ITALIAN FOOD" */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <DarkBanner text={tagline || "Authentic Italian Food"} headingFont={headingFont}/>
       </div>
 
-      {/* ── FRANJA VERDE DE BIENVENIDA ── */}
-      <div style={{
-        background: `linear-gradient(90deg, ${G} 0%, ${G2} 30%, ${G2} 70%, ${G} 100%)`,
-        padding: "0.9rem 3rem",
-        textAlign: "center",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem",
-        borderTop: `2px solid ${GOLD}30`,
-        borderBottom: `2px solid ${GOLD}30`,
-      }}>
-        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-        <span style={{
-          fontFamily: bodyFont, fontStyle: "italic",
-          fontSize: "0.82rem", color: "rgba(255,255,255,0.88)",
-          letterSpacing: "0.06em", whiteSpace: "nowrap",
-        }}>
-          Cucina è amore — benvenuti alla nostra tavola
-        </span>
-        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-      </div>
+      <div style={{ height: "1.2rem" }}/>
 
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  REGLA TIPOGRÁFICA — borde ornamental superior/inferior de categoría
-// ─────────────────────────────────────────────────────────────────────────────
-function TypographicRule({ accent }: { accent: string }) {
-  return (
-    <svg width="100%" height="28" viewBox="0 0 500 28" preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-      {/* Línea gruesa */}
-      <line x1="0" y1="14" x2="500" y2="14" stroke={accent} strokeWidth="3"/>
-      {/* Línea fina dorada encima */}
-      <line x1="0" y1="10" x2="500" y2="10" stroke={GOLD} strokeWidth="0.8" opacity="0.6"/>
-      {/* Línea fina dorada debajo */}
-      <line x1="0" y1="18" x2="500" y2="18" stroke={GOLD} strokeWidth="0.8" opacity="0.6"/>
-      {/* Rombo ornamental izquierdo */}
-      <path d="M 24 14 L 32 8 L 40 14 L 32 20 Z" fill={accent}/>
-      <path d="M 26 14 L 32 10 L 38 14 L 32 18 Z" fill={GOLD} opacity="0.7"/>
-      {/* Rombo central */}
-      <path d="M 242 14 L 250 5  L 258 14 L 250 23 Z" fill={accent}/>
-      <path d="M 244 14 L 250 8  L 256 14 L 250 20 Z" fill={GOLD} opacity="0.8"/>
-      <circle cx="250" cy="14" r="3" fill={PARCHMENT}/>
-      {/* Rombo ornamental derecho */}
-      <path d="M 460 14 L 468 8 L 476 14 L 468 20 Z" fill={accent}/>
-      <path d="M 462 14 L 468 10 L 474 14 L 468 18 Z" fill={GOLD} opacity="0.7"/>
-      {/* Puntos decorativos flanqueando el centro */}
-      <circle cx="220" cy="14" r="3" fill={accent} opacity="0.7"/>
-      <circle cx="210" cy="14" r="2" fill={accent} opacity="0.4"/>
-      <circle cx="280" cy="14" r="3" fill={accent} opacity="0.7"/>
-      <circle cx="290" cy="14" r="2" fill={accent} opacity="0.4"/>
-    </svg>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  SEPARADOR ENTRE CATEGORÍAS — pausa visual de peso tipográfico real
-// ─────────────────────────────────────────────────────────────────────────────
-function OrnamentalDivider({ index }: { index: number }) {
-  const notes = ["— la vera cucina —", "— ingredienti freschi —", "— fatto a mano —"];
-  const note  = notes[index % notes.length];
-  const c1    = index % 2 === 0 ? R : G;
-  const c2    = index % 2 === 0 ? G : R;
-  return (
-    <div style={{
-      position: "relative",
-      padding: "3rem 0",
-      display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem",
-    }}>
-      {/* Nota manuscrita rotada — fuera de cuadrícula */}
-      <div aria-hidden style={{
-        position: "absolute", top: "10px", right: "10px",
-        transform: "rotate(5deg)", pointerEvents: "none",
-      }}>
-        <span style={{
-          fontFamily: "Palatino, Georgia, serif", fontStyle: "italic",
-          fontSize: "0.7rem", color: c1, opacity: 0.5, letterSpacing: "0.04em",
-        }}>{note}</span>
-      </div>
-
-      {/* Triple regla coloreada */}
-      <div style={{ width: "100%", height: "2px", background: `linear-gradient(to right, transparent, ${c1} 15%, ${c1} 85%, transparent)` }}/>
-      <div style={{ width: "70%",  height: "1px", background: `linear-gradient(to right, transparent, ${GOLD}80, transparent)` }}/>
-      <div style={{ width: "100%", height: "2px", background: `linear-gradient(to right, transparent, ${c2} 15%, ${c2} 85%, transparent)` }}/>
-
-      {/* Ornamento central grande */}
-      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}>
-        <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="30" cy="30" r="28" fill={PARCHMENT}/>
-          <circle cx="30" cy="30" r="26" fill="none" stroke={c1} strokeWidth="2"/>
-          <circle cx="30" cy="30" r="20" fill={c1}/>
-          <circle cx="30" cy="30" r="14" fill={GOLD}/>
-          <circle cx="30" cy="30" r="9"  fill={c2}/>
-          <circle cx="30" cy="30" r="5"  fill={PARCHMENT2}/>
-          <circle cx="30" cy="30" r="2"  fill={GOLD}/>
+      {/* Línea divisoria */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+        <div style={{ flex: 1, height: "1.5px", background: `linear-gradient(to right, transparent, ${DARK}35)` }}/>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <polygon points="12,2 14,10 22,10 16,15 18,23 12,18 6,23 8,15 2,10 10,10" fill="none" stroke={GOLD} strokeWidth="1.2" opacity="0.65"/>
         </svg>
+        <div style={{ flex: 1, height: "1.5px", background: `linear-gradient(to left, transparent, ${DARK}35)` }}/>
       </div>
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  BLOQUE DE CATEGORÍA — carta italiana premium: visible a varios metros
+//  CABECERA DE CATEGORÍA
 // ─────────────────────────────────────────────────────────────────────────────
-function CategoryBlock({
-  index, label, title, description,
-  headingFont, bodyFont,
-  children,
+
+function CategoryHeader({
+  name, subtitle, color, headingFont, bodyFont,
 }: {
-  index: number; label: string; title: string; description?: string;
-  headingFont: string; bodyFont: string;
-  children: React.ReactNode;
+  name: string; subtitle?: string; color: string; headingFont: string; bodyFont: string;
 }) {
-  const isEven = index % 2 === 0;
-  const accent  = isEven ? G  : R;
-  const accent2 = isEven ? G2 : R2;
-  const bgBlock = isEven ? "#e8f2e8" : "#f2e8e8";
-
   return (
-    <div style={{
-      position: "relative",
-      background: bgBlock,
-      border: `1.5px solid ${accent}30`,
-      boxShadow: `0 4px 24px ${accent}18, inset 0 0 0 4px ${PARCHMENT}`,
-      marginBottom: "0.5rem",
-    }}>
-
-      {/* ── Regla tipográfica superior ── */}
-      <TypographicRule accent={accent} />
-
-      {/* ── Número de capítulo rotado — fuera de cuadrícula ── */}
-      <div aria-hidden style={{
-        position: "absolute", top: "28px", right: "16px",
-        transform: "rotate(8deg)", zIndex: 5, pointerEvents: "none",
-      }}>
-        <svg width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="27" cy="27" r="25" fill={PARCHMENT}/>
-          <circle cx="27" cy="27" r="23" fill="none" stroke={accent} strokeWidth="1.5" strokeDasharray="4,2" opacity="0.6"/>
-          <circle cx="27" cy="27" r="18" fill={accent} opacity="0.12"/>
-          <text x="27" y="32" textAnchor="middle"
-            fontFamily="Palatino, Georgia, serif" fontSize="18" fontWeight="700"
-            fill={accent} opacity="0.65">
-            {String(index + 1).padStart(2, "0")}
-          </text>
+    <div style={{ marginBottom: "0.9rem" }}>
+      {/* Hojitas decorativas + nombre */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+        {/* Hoja izquierda */}
+        <svg width="26" height="20" viewBox="0 0 26 20" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <ellipse cx="8"  cy="10" rx="4" ry="8" fill={GREEN} opacity="0.65" transform="rotate(-20, 8, 10)"/>
+          <ellipse cx="18" cy="8"  rx="3.5" ry="7" fill={GREEN2} opacity="0.60" transform="rotate(-5, 18, 8)"/>
+          <path d="M 2,10 Q 12,6 22,10" stroke={GREEN2} strokeWidth="0.8" fill="none" opacity="0.50"/>
         </svg>
-      </div>
 
-      {/* ── Banda de etiqueta — ALTA y protagonista ── */}
-      <div style={{
-        background: `linear-gradient(135deg, ${accent} 0%, ${accent2} 40%, ${accent2} 60%, ${accent} 100%)`,
-        padding: "1.4rem 4rem",
-        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.5rem",
-        borderTop: `1px solid ${GOLD}55`,
-        borderBottom: `1px solid ${GOLD}55`,
-      }}>
-        {/* Rombo decorativo izquierdo */}
-        <svg width="14" height="14" viewBox="0 0 14 14" style={{ flexShrink: 0 }}>
-          <path d="M 7 0 L 14 7 L 7 14 L 0 7 Z" fill={GOLD} opacity="0.75"/>
-          <path d="M 7 3 L 11 7 L 7 11 L 3 7 Z" fill={PARCHMENT} opacity="0.4"/>
-        </svg>
-        <div style={{ flex: 1, height: "1.5px", background: "rgba(255,255,255,0.35)" }}/>
-        <span style={{
-          fontFamily: bodyFont, fontSize: "0.68rem", fontWeight: 900,
-          letterSpacing: "0.72em", textTransform: "uppercase",
-          color: "#ffffff", whiteSpace: "nowrap",
-          textShadow: "0 1px 6px rgba(0,0,0,0.4)",
-        }}>
-          {label}
-        </span>
-        <div style={{ flex: 1, height: "1.5px", background: "rgba(255,255,255,0.35)" }}/>
-        {/* Rombo decorativo derecho */}
-        <svg width="14" height="14" viewBox="0 0 14 14" style={{ flexShrink: 0 }}>
-          <path d="M 7 0 L 14 7 L 7 14 L 0 7 Z" fill={GOLD} opacity="0.75"/>
-          <path d="M 7 3 L 11 7 L 7 11 L 3 7 Z" fill={PARCHMENT} opacity="0.4"/>
-        </svg>
-      </div>
-
-      {/* ── NOMBRE — el más grande de la carta, visible desde lejos ── */}
-      <div style={{ textAlign: "center", padding: "3rem 2rem 1.5rem" }}>
         <h2 style={{
           fontFamily: headingFont,
-          fontSize: "7rem",
-          fontWeight: 300,
+          fontSize: "clamp(2rem, 6vw, 3.2rem)",
+          fontWeight: 700,
           fontStyle: "italic",
-          color: INK,
+          color: color,
+          lineHeight: 1,
           margin: 0,
-          lineHeight: 0.88,
-          letterSpacing: "-0.03em",
-          textShadow: `2px 2px 0 ${accent}20, 4px 4px 0 ${accent}0c`,
+          letterSpacing: "0.02em",
+          textShadow: `1px 1px 0 ${color}20`,
         }}>
-          {title}
+          {name}
         </h2>
 
-        {description && (
-          <p style={{
-            fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.88rem", color: INK, opacity: 0.48,
-            margin: "1.1rem 0 0", lineHeight: 1.85,
-            maxWidth: "22rem", marginLeft: "auto", marginRight: "auto",
-          }}>
-            {description}
-          </p>
-        )}
+        {/* Hoja derecha (espejo) */}
+        <svg width="26" height="20" viewBox="0 0 26 20" xmlns="http://www.w3.org/2000/svg" aria-hidden style={{ transform: "scaleX(-1)" }}>
+          <ellipse cx="8"  cy="10" rx="4" ry="8" fill={GREEN} opacity="0.65" transform="rotate(-20, 8, 10)"/>
+          <ellipse cx="18" cy="8"  rx="3.5" ry="7" fill={GREEN2} opacity="0.60" transform="rotate(-5, 18, 8)"/>
+          <path d="M 2,10 Q 12,6 22,10" stroke={GREEN2} strokeWidth="0.8" fill="none" opacity="0.50"/>
+        </svg>
+      </div>
 
-        {/* Minibandera tricolor */}
-        <div style={{
-          display: "flex", justifyContent: "center", alignItems: "stretch",
-          margin: "2rem auto 0", width: "5rem", height: "4px",
-          borderRadius: "2px", overflow: "hidden",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
+      {/* Subtítulo en cursiva */}
+      {subtitle && (
+        <p style={{
+          fontFamily: bodyFont,
+          fontStyle: "italic",
+          fontSize: "1.0rem",
+          color: color,
+          margin: "0.1rem 0 0.4rem 2px",
+          opacity: 0.70,
+          lineHeight: 1,
         }}>
-          <div style={{ flex: 1, background: G }}/>
-          <div style={{ flex: 1, background: PARCHMENT2 }}/>
-          <div style={{ flex: 1, background: R }}/>
-        </div>
+          {subtitle}
+        </p>
+      )}
+
+      {/* Línea delgada bajo el header */}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "0.3rem" }}>
+        <div style={{ flex: 1, height: "1px", background: `${color}40` }}/>
+        <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: color, opacity: 0.45 }}/>
+        <div style={{ flex: 0, width: "30px", height: "1px", background: `${color}40` }}/>
       </div>
-
-      {/* ── Regla tipográfica inferior — antes de los ítems ── */}
-      <div style={{ padding: "0.5rem 0" }}>
-        <TypographicRule accent={accent} />
-      </div>
-
-      {/* ── Lista de ítems — generosa, aireada ── */}
-      <div style={{ padding: "0.5rem 3rem 3rem" }}>
-        {children}
-      </div>
-
-      {/* ── Regla tipográfica de cierre ── */}
-      <TypographicRule accent={accent} />
-
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  ÍTEM DE MENÚ — puntos líder, precio en tinta, nada de lista HTML
+//  ITEM DE MENÚ
 // ─────────────────────────────────────────────────────────────────────────────
-function MenuItem({
-  name, description, price, currency,
-  featured, allergens, image,
-  showPrice, showDescription,
-  categoryFont, bodyFont, priceFont, isLast,
-}: {
-  name: string; description?: string; price?: number; currency?: string;
-  featured?: boolean; allergens?: Allergen[]; image?: string;
-  showPrice: boolean; showDescription: boolean;
-  categoryFont: string; bodyFont: string; priceFont: string;
-  isLast: boolean;
-}) {
-  return (
-    <div>
-      <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start", padding: "1.55rem 0" }}>
 
-        {image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt={name} style={{
-            width: "5.5rem", height: "5.5rem",
-            objectFit: "cover", borderRadius: "2px", flexShrink: 0,
-            border: `1.5px solid ${GOLD}35`,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+interface MenuItemProps {
+  name?: string;
+  description?: string;
+  price?: number;
+  currency?: string;
+  featured?: boolean;
+  allergens?: Allergen[];
+  showPrice: boolean;
+  showDescription: boolean;
+  headingFont: string;
+  bodyFont: string;
+  isLast: boolean;
+}
+
+function MenuItem({
+  name, description, price, currency, featured, allergens,
+  showPrice, showDescription, headingFont, bodyFont, isLast,
+}: MenuItemProps) {
+  return (
+    <div style={{ marginBottom: isLast ? 0 : "0.85rem", paddingBottom: isLast ? 0 : "0.85rem", borderBottom: isLast ? "none" : `1px solid ${DARK}12` }}>
+      {/* Nombre + precio */}
+      <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem" }}>
+        {featured && <span style={{ color: GOLD, fontSize: "0.75rem", flexShrink: 0 }}>★</span>}
+        <span style={{
+          fontFamily: headingFont,
+          fontSize: "0.85rem",
+          fontWeight: 700,
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: INK,
+          flex: "0 1 auto",
+          lineHeight: 1.25,
+        }}>
+          {name}
+        </span>
+        {showPrice && (
+          <span style={{
+            flex: 1,
+            borderBottom: `1.5px dotted ${INK}25`,
+            marginBottom: "2px",
+            minWidth: "1rem",
           }}/>
         )}
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "0.65rem" }}>
-
-            {featured && (
-              <span style={{ color: R, fontSize: "0.42rem", flexShrink: 0, lineHeight: 1, position: "relative", top: "-0.1em" }}>✦</span>
-            )}
-
-            <span style={{
-              fontFamily: categoryFont, fontSize: "1.28rem",
-              fontWeight: featured ? 600 : 400,
-              color: INK, letterSpacing: "0.01em", lineHeight: 1.2,
-              flex: "0 1 auto",
-            }}>
-              {name}
-            </span>
-
-            {/* puntos líder */}
-            <span style={{
-              flex: 1, borderBottom: `1.5px dotted ${INK}25`,
-              marginBottom: "0.32rem", minWidth: "1rem",
-            }}/>
-
-            {showPrice && price != null && (
-              <span style={{
-                fontFamily: priceFont, fontSize: "1rem",
-                fontWeight: 700, fontStyle: "italic",
-                color: R, whiteSpace: "nowrap", flexShrink: 0,
-              }}>
-                {formatPrice(price, currency)}
-              </span>
-            )}
-          </div>
-
-          {showDescription && description && (
-            <p style={{
-              fontFamily: bodyFont, fontStyle: "italic",
-              fontSize: "0.82rem", color: INK, opacity: 0.48,
-              margin: "0.42rem 0 0", lineHeight: 1.85,
-              paddingLeft: featured ? "1rem" : "0",
-            }}>
-              {description}
-            </p>
-          )}
-
-          {allergens && allergens.length > 0 && (
-            <AllergenBadges allergens={allergens} fontSize="0.56rem" opacity={0.36} marginTop="0.3rem"/>
-          )}
-        </div>
+        {showPrice && price !== undefined && price > 0 && (
+          <span style={{
+            fontFamily: bodyFont,
+            fontSize: "0.9rem",
+            fontWeight: 700,
+            color: INK,
+            flexShrink: 0,
+            lineHeight: 1.25,
+          }}>
+            {formatPrice(price, currency)}
+          </span>
+        )}
       </div>
-
-      {!isLast && (
-        <div style={{
-          height: "1px",
-          background: `linear-gradient(to right, transparent, ${INK}18 15%, ${INK}14 85%, transparent)`,
-        }}/>
+      {/* Descripción */}
+      {showDescription && description && (
+        <p style={{
+          fontFamily: bodyFont,
+          fontSize: "0.78rem",
+          fontStyle: "italic",
+          color: INK,
+          opacity: 0.55,
+          lineHeight: 1.5,
+          margin: "0.15rem 0 0",
+          paddingLeft: featured ? "1rem" : "0",
+        }}>
+          {description}
+        </p>
+      )}
+      {allergens && allergens.length > 0 && (
+        <AllergenBadges allergens={allergens} fontSize="0.52rem" opacity={0.38} marginTop="0.2rem"/>
       )}
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  COMPONENTE PRINCIPAL
+//  PIE DE PÁGINA
 // ─────────────────────────────────────────────────────────────────────────────
+
+function PosterFooter({ address, phone, website, instagram, bodyFont }: {
+  address?: string; phone?: string; website?: string; instagram?: string; bodyFont: string;
+}) {
+  return (
+    <footer style={{ textAlign: "center", padding: "1.5rem 2rem 2rem", position: "relative", zIndex: 2 }}>
+      {/* "GRAZIE E ARRIVEDERCI!" */}
+      <div style={{
+        display: "inline-block",
+        border: `1.5px solid ${DARK}40`,
+        padding: "0.5rem 2.5rem",
+        marginBottom: "1rem",
+      }}>
+        <span style={{
+          fontFamily: `"Cormorant Garamond", Georgia, serif`,
+          fontSize: "0.78rem",
+          fontWeight: 700,
+          letterSpacing: "0.35em",
+          color: DARK,
+          opacity: 0.65,
+          textTransform: "uppercase",
+        }}>
+          Grazie e Arrivederci!
+        </span>
+      </div>
+
+      {/* Info de contacto */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          {instagram && (
+            <span style={{ fontFamily: bodyFont, fontSize: "0.68rem", color: DARK, opacity: 0.50 }}>
+              📷 {instagram}
+            </span>
+          )}
+        </div>
+        <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", justifyContent: "center" }}>
+          {[address, phone].filter(Boolean).map((info, i) => (
+            <span key={i} style={{ fontFamily: bodyFont, fontSize: "0.68rem", color: DARK, opacity: 0.50, letterSpacing: "0.02em" }}>
+              {info}
+            </span>
+          ))}
+        </div>
+        {website && (
+          <span style={{ fontFamily: bodyFont, fontSize: "0.68rem", color: DARK, opacity: 0.50 }}>
+            {website}
+          </span>
+        )}
+      </div>
+    </footer>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  PLANTILLA PRINCIPAL
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Subtítulos editoriales por posición
+const CAT_SUBTITLES = [
+  "Starters", "Homemade", "From the Wood Oven", "Main Courses", "Desserts",
+  "Grilled", "Seafood", "Specials", "Sides", "Extras",
+];
+
+// Colores alternados para categorías
+const CAT_COLORS = [GREEN, RED, GREEN, RED, GREEN, RED, GREEN, RED];
+
 export function PizzaTrattoriaTemplate({ project, categories, design, lang }: TemplateProps) {
   const { restaurantInfo, branding, hero } = project;
   const { layout } = design;
@@ -827,18 +782,20 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
 
   const visible = categories
     .filter((c) => c.visible)
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .filter((c) => c.items.filter((i) => i.available).length > 0);
 
   const hasLogo = !!(branding?.showLogo && branding.logo);
-
   const showHero =
     design.capabilities.supportsHeroSection &&
     !!hero?.showHero &&
     (!!hero.heroImage || !!(hero.title?.[lang] || hero.title?.["es"]));
+  const heroTitle = (showHero && t(hero?.title, lang)) ? t(hero!.title, lang) : restaurantInfo.name;
 
-  const heroTitle = (showHero && t(hero?.title, lang))
-    ? t(hero!.title, lang)
-    : restaurantInfo.name;
+  // Dividir categorías en 2 columnas
+  const mid   = Math.ceil(visible.length / 2);
+  const left  = visible.slice(0, mid);
+  const right = visible.slice(mid);
 
   return (
     <BackgroundLayer
@@ -848,66 +805,63 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
         fontFamily: typo.bodyFont,
         minHeight: "100%",
         position: "relative",
-        // Papel envejecido: color base + textura SVG + vignette radial
-        background: `
-          radial-gradient(ellipse at 50% 0%,    rgba(0,0,0,0.06) 0%, transparent 60%),
-          radial-gradient(ellipse at 0% 50%,    rgba(0,0,0,0.04) 0%, transparent 50%),
-          radial-gradient(ellipse at 100% 50%,  rgba(0,0,0,0.04) 0%, transparent 50%),
-          radial-gradient(ellipse at 50% 100%,  rgba(0,0,0,0.06) 0%, transparent 60%),
-          ${PAPER_TEXTURE},
-          linear-gradient(160deg, #f8edd5 0%, ${PARCHMENT} 35%, ${PARCHMENT2} 100%)
-        `,
+        background: `${PAPER}, linear-gradient(150deg, #FBF3DE 0%, ${BG} 50%, #EFE3C8 100%)`,
       }}
     >
+      {/* Bloques de bandera italiana */}
+      <ItalianFlagBlocks/>
 
-      {/* ── Marco ornamental (encima de todo) ─────────────────────────────── */}
-      <OrnateFrame />
+      {/* Contenido — sobre z-index 1 */}
+      <div style={{ position: "relative", zIndex: 1 }}>
 
-      {/* ── Contenido — margen interior al marco ──────────────────────────── */}
-      <div style={{ position: "relative", zIndex: 1, margin: "14px" }}>
+        {/* Cabecera póster */}
+        <div style={{ position: "relative" }}>
 
-        {/* ── Hero vintage ──────────────────────────────────────────────── */}
-        <VintageHero
-          logo={branding?.logo}
-          logoAlt={restaurantInfo.name}
-          name={heroTitle}
-          tagline={restaurantInfo.tagline}
-          welcomeMessage={branding?.welcomeMessage?.[lang]}
-          chefMessage={hero?.chefMessage?.[lang]}
-          showLogo={hasLogo}
-          showWelcomeMessage={!!(branding?.welcomeMessage?.[lang])}
-          showChefMessage={!!(hero?.showChefMessage && hero.chefMessage?.[lang])}
-          headingFont={typo.titleFont}
-          bodyFont={typo.bodyFont}
-        />
+          {/* Sello 100% Italian — esquina superior izquierda */}
+          <div style={{ position: "absolute", top: "1.5rem", left: "1.5rem", zIndex: 10 }}>
+            <CircularStamp100 rotation={-10}/>
+          </div>
 
-        {/* ── Categorías sobre papel envejecido ─────────────────────────── */}
-        <div style={{ padding: "2rem 2.5rem 4rem" }}>
-          {visible.map((cat, idx) => {
-            const items = cat.items
-              .filter((i) => i.available)
-              .sort((a, b) => a.sortOrder - b.sortOrder);
-            if (items.length === 0) return null;
+          {/* Etiqueta "Buon Appetito!" — esquina superior derecha */}
+          <div style={{ position: "absolute", top: "1rem", right: "1.5rem", zIndex: 10 }}>
+            <BuonAppetitoCrossTag/>
+          </div>
 
-            const catLabel = t(cat.name, lang)?.toUpperCase() ?? "";
-            const catDesc  = layout.showDescriptions
-              ? t(cat.description, lang) || undefined
-              : undefined;
+          <PosterHeader
+            name={heroTitle}
+            tagline={restaurantInfo.tagline}
+            logo={branding?.logo}
+            logoAlt={restaurantInfo.name}
+            showLogo={hasLogo}
+            headingFont={typo.titleFont}
+            bodyFont={typo.bodyFont}
+          />
+        </div>
 
-            return (
-              <section key={cat.id}>
+        {/* ── ZONA DE CATEGORÍAS EN 2 COLUMNAS ── */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "0",
+          padding: "0 1.5rem",
+          alignItems: "start",
+        }}>
 
-                {idx > 0 && <OrnamentalDivider index={idx} />}
-
-                <CategoryBlock
-                  index={idx}
-                  label={catLabel}
-                  title={t(cat.name, lang)}
-                  description={catDesc}
-                  headingFont={typo.categoryFont}
-                  bodyFont={typo.bodyFont}
-                >
-                  {items.map((item, itemIdx) => (
+          {/* COLUMNA IZQUIERDA */}
+          <div style={{ padding: "0 1.2rem 0 0.5rem", borderRight: `1px solid ${DARK}15` }}>
+            {left.map((cat, idx) => {
+              const items = cat.items.filter((i) => i.available).sort((a, b) => a.sortOrder - b.sortOrder);
+              const color = CAT_COLORS[idx % CAT_COLORS.length];
+              return (
+                <div key={cat.id} style={{ marginBottom: "1.8rem" }}>
+                  <CategoryHeader
+                    name={t(cat.name, lang) ?? ""}
+                    subtitle={CAT_SUBTITLES[idx]}
+                    color={color}
+                    headingFont={typo.categoryFont}
+                    bodyFont={typo.bodyFont}
+                  />
+                  {items.map((item, i) => (
                     <MenuItem
                       key={item.id}
                       name={t(item.name, lang)}
@@ -916,67 +870,109 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
                       currency={item.currency}
                       featured={item.featured}
                       allergens={item.allergens?.contains}
-                      image={item.image}
                       showPrice={layout.showPrices}
                       showDescription={layout.showDescriptions}
-                      categoryFont={typo.categoryFont}
+                      headingFont={typo.categoryFont}
                       bodyFont={typo.bodyFont}
-                      priceFont={typo.priceFont}
-                      isLast={itemIdx === items.length - 1}
+                      isLast={i === items.length - 1}
                     />
                   ))}
-                </CategoryBlock>
+                </div>
+              );
+            })}
 
-              </section>
-            );
-          })}
-        </div>
-
-        {/* ── Pie de página — sobre verde oscuro ────────────────────────── */}
-        {(restaurantInfo.address || restaurantInfo.phone ||
-          restaurantInfo.website || restaurantInfo.socialLinks?.instagram) && (
-          <div>
-            {/* Separador ornamental final */}
-            <OrnamentalDivider index={0} />
-
-            <div style={{
-              background: `linear-gradient(90deg, ${G} 0%, ${G2} 40%, ${G2} 60%, ${G} 100%)`,
-              padding: "1.5rem 3rem",
-              textAlign: "center",
-              borderTop: `1px solid ${GOLD}40`,
-            }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-                <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-                <span style={{ color: GOLD2, opacity: 0.85, fontSize: "0.48rem", letterSpacing: "0.45em" }}>✦ ✦ ✦</span>
-                <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
-              </div>
-              <p style={{
-                fontFamily: typo.bodyFont, fontStyle: "italic",
-                fontSize: "0.71rem", color: "rgba(255,255,255,0.75)",
-                margin: 0, letterSpacing: "0.035em", lineHeight: 2,
-              }}>
-                {[
-                  restaurantInfo.address,
-                  restaurantInfo.phone,
-                  restaurantInfo.website,
-                  restaurantInfo.socialLinks?.instagram,
-                ].filter(Boolean).join("  ·  ")}
-              </p>
-            </div>
-
-            {/* Banda tricolor inferior */}
-            <div>
-              <div style={{ height: "20px", background: `linear-gradient(90deg, ${R} 0%, ${R2} 50%, ${R} 100%)` }}/>
-              <div style={{ height: "8px", background: PARCHMENT2 }}/>
-              <div style={{ height: "34px", background: `linear-gradient(90deg, ${G} 0%, ${G2} 50%, ${G} 100%)`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.38rem", letterSpacing: "0.8em", fontFamily: typo.bodyFont }}>
-                  &nbsp;&nbsp;&nbsp;fatto con amore
-                </span>
-              </div>
+            {/* Pizarra artesanal — esquina inferior izquierda */}
+            <div style={{ marginTop: "0.5rem", marginBottom: "1rem" }}>
+              <ChalkboardSign bodyFont={typo.bodyFont}/>
             </div>
           </div>
-        )}
 
+          {/* COLUMNA DERECHA */}
+          <div style={{ padding: "0 0.5rem 0 1.2rem", position: "relative" }}>
+            {right.map((cat, idx) => {
+              const globalIdx = left.length + idx;
+              const items = cat.items.filter((i) => i.available).sort((a, b) => a.sortOrder - b.sortOrder);
+              const color = CAT_COLORS[globalIdx % CAT_COLORS.length];
+              return (
+                <div key={cat.id} style={{ marginBottom: "1.8rem" }}>
+                  <CategoryHeader
+                    name={t(cat.name, lang) ?? ""}
+                    subtitle={CAT_SUBTITLES[globalIdx] ?? "Specialty"}
+                    color={color}
+                    headingFont={typo.categoryFont}
+                    bodyFont={typo.bodyFont}
+                  />
+                  {items.map((item, i) => (
+                    <MenuItem
+                      key={item.id}
+                      name={t(item.name, lang)}
+                      description={layout.showDescriptions ? t(item.description, lang) || undefined : undefined}
+                      price={item.price}
+                      currency={item.currency}
+                      featured={item.featured}
+                      allergens={item.allergens?.contains}
+                      showPrice={layout.showPrices}
+                      showDescription={layout.showDescriptions}
+                      headingFont={typo.categoryFont}
+                      bodyFont={typo.bodyFont}
+                      isLast={i === items.length - 1}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+
+            {/* Sello "Best Recipes" flotante entre categorías */}
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "0.5rem" }}>
+              <RecipeStamp rotation={5}/>
+            </div>
+          </div>
+        </div>
+
+        {/* ── ILUSTRACIONES DE COMIDA — integradas en la composición ── */}
+        {/* Tomates — zona izquierda bajo el header */}
+        <div style={{ position: "absolute", top: "380px", left: "-8px", zIndex: 0, opacity: 0.85 }}>
+          <TomatoCluster width={100} height={110}/>
+        </div>
+
+        {/* Pasta + botella — zona derecha */}
+        <div style={{ position: "absolute", top: "300px", right: "-5px", zIndex: 0, opacity: 0.80 }}>
+          <PastaPlate width={120} height={110}/>
+        </div>
+        <div style={{ position: "absolute", top: "420px", right: "-5px", zIndex: 0, opacity: 0.75 }}>
+          <OliveOilBottle width={55} height={130}/>
+        </div>
+
+        {/* Pizza ilustración — abajo a la izquierda */}
+        <div style={{
+          position: "absolute",
+          bottom: "80px",
+          left: "-20px",
+          zIndex: 0,
+          opacity: 0.80,
+        }}>
+          <PizzaIllustration width={150} height={140}/>
+        </div>
+
+        {/* Tiramisú — abajo a la derecha */}
+        <div style={{
+          position: "absolute",
+          bottom: "75px",
+          right: "-10px",
+          zIndex: 0,
+          opacity: 0.78,
+        }}>
+          <TiramisuIllustration width={120} height={105}/>
+        </div>
+
+        {/* Pie de página */}
+        <PosterFooter
+          address={restaurantInfo.address}
+          phone={restaurantInfo.phone}
+          website={restaurantInfo.website}
+          instagram={restaurantInfo.socialLinks?.instagram}
+          bodyFont={typo.bodyFont}
+        />
       </div>
     </BackgroundLayer>
   );
