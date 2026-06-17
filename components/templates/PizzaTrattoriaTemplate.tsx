@@ -173,110 +173,151 @@ function HandwrittenNote({ text, rotation = 3, color = R }: { text: string; rota
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  MARCO ORNAMENTAL — todo el documento, tipo menú impreso victoriano
+//  MARCO ORNAMENTAL — CSS puro para bordes + SVG fijo para esquinas
+//  Sin preserveAspectRatio="none": los círculos no se deforman nunca
 // ─────────────────────────────────────────────────────────────────────────────
-function OrnateFrame() {
-  // Margen desde el borde del papel
-  const M = 14;
-  const W = "calc(100% - 28px)";
-  const H = "calc(100% - 28px)";
 
+// Esquina decorativa (top-left). Se voltea con CSS para las demás.
+function CornerRosette() {
+  // Arcos concéntricos de cuarto de círculo desde la esquina (0,0)
+  // + badge central + hojas decorativas
+  return (
+    <svg width="110" height="110" viewBox="0 0 110 110"
+      xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
+
+      {/* ── Arcos concéntricos — capas de borde visual ── */}
+      {/* verde exterior */}
+      <path d="M 0 104 A 104 104 0 0 1 104 0 L 110 0 L 110 110 L 0 110 Z"
+        fill={G}/>
+      {/* franja crema */}
+      <path d="M 0 96 A 96 96 0 0 1 96 0 L 104 0 A 104 104 0 0 0 0 104 Z"
+        fill={PARCHMENT2}/>
+      {/* línea dorada */}
+      <path d="M 0 94 A 94 94 0 0 1 94 0 L 96 0 A 96 96 0 0 0 0 96 Z"
+        fill={GOLD}/>
+      {/* franja crema */}
+      <path d="M 0 91 A 91 91 0 0 1 91 0 L 94 0 A 94 94 0 0 0 0 94 Z"
+        fill={PARCHMENT2}/>
+      {/* rojo */}
+      <path d="M 0 84 A 84 84 0 0 1 84 0 L 91 0 A 91 91 0 0 0 0 91 Z"
+        fill={R}/>
+      {/* línea dorada interior */}
+      <path d="M 0 82 A 82 82 0 0 1 82 0 L 84 0 A 84 84 0 0 0 0 84 Z"
+        fill={GOLD} opacity="0.6"/>
+      {/* franja crema interior */}
+      <path d="M 0 79 A 79 79 0 0 1 79 0 L 82 0 A 82 82 0 0 0 0 82 Z"
+        fill={PARCHMENT}/>
+
+      {/* ── Badge central en la esquina ── */}
+      {/* Fondo verde del badge */}
+      <circle cx="0" cy="0" r="52" fill={G}/>
+      {/* Anillo dorado */}
+      <circle cx="0" cy="0" r="45" fill={GOLD}/>
+      {/* Relleno rojo */}
+      <circle cx="0" cy="0" r="40" fill={R}/>
+      {/* Línea dorada */}
+      <circle cx="0" cy="0" r="35" fill="none" stroke={GOLD} strokeWidth="1.5"/>
+      {/* Interior crema */}
+      <circle cx="0" cy="0" r="32" fill={PARCHMENT}/>
+      {/* Medallón dorado central */}
+      <circle cx="0" cy="0" r="22" fill={GOLD}/>
+      {/* Centro rojo */}
+      <circle cx="0" cy="0" r="15" fill={R}/>
+      {/* Punto blanco */}
+      <circle cx="0" cy="0" r="7"  fill={PARCHMENT2}/>
+      <circle cx="0" cy="0" r="3"  fill={GOLD}/>
+
+      {/* ── Hojas decorativas en los brazos del arco ── */}
+      {/* brazo horizontal (arriba) */}
+      <ellipse cx="58" cy="5"  rx="12" ry="3.5" transform="rotate(-8  58 5)"  fill={GOLD} opacity="0.75"/>
+      <ellipse cx="76" cy="4"  rx="10" ry="3"   transform="rotate(-5  76 4)"  fill={GOLD} opacity="0.6"/>
+      <ellipse cx="92" cy="3"  rx="8"  ry="2.5" transform="rotate(-3  92 3)"  fill={GOLD} opacity="0.5"/>
+      {/* brazo vertical (izquierda) */}
+      <ellipse cx="5"  cy="58" rx="12" ry="3.5" transform="rotate(-82 5  58)" fill={GOLD} opacity="0.75"/>
+      <ellipse cx="4"  cy="76" rx="10" ry="3"   transform="rotate(-85 4  76)" fill={GOLD} opacity="0.6"/>
+      <ellipse cx="3"  cy="92" rx="8"  ry="2.5" transform="rotate(-87 3  92)" fill={GOLD} opacity="0.5"/>
+
+      {/* ── Pequeños rombos decorativos ── */}
+      <path d="M 50 9 L 54 5 L 58 9 L 54 13 Z" fill={R} opacity="0.7"/>
+      <path d="M 9 50 L 5 54 L 9 58 L 13 54 Z" fill={R} opacity="0.7"/>
+    </svg>
+  );
+}
+
+// Medallón para el centro de cada lado del borde
+function SideMedallion({ horizontal = true }: { horizontal?: boolean }) {
+  return (
+    <svg
+      width={horizontal ? 48 : 26}
+      height={horizontal ? 26 : 48}
+      viewBox="0 0 48 26"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ display: "block", transform: horizontal ? "none" : "rotate(90deg)" }}
+    >
+      {/* Cuerpo del medallón — rombo ovalado */}
+      <ellipse cx="24" cy="13" rx="23" ry="12" fill={G}/>
+      <ellipse cx="24" cy="13" rx="19" ry="9"  fill={GOLD}/>
+      <ellipse cx="24" cy="13" rx="15" ry="6"  fill={R}/>
+      <ellipse cx="24" cy="13" rx="10" ry="4"  fill={GOLD}/>
+      <ellipse cx="24" cy="13" rx="5"  ry="2"  fill={R}/>
+      <circle  cx="24" cy="13" r="2"           fill={PARCHMENT2}/>
+      {/* Puntas */}
+      <path d="M 0 13 L 5 10 L 5 16 Z"  fill={G}/>
+      <path d="M 48 13 L 43 10 L 43 16 Z" fill={G}/>
+    </svg>
+  );
+}
+
+function OrnateFrame() {
   return (
     <div aria-hidden style={{ position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none" }}>
-      <svg
-        style={{ position: "absolute", top: M, left: M, width: W, height: H }}
-        viewBox="0 0 600 860" preserveAspectRatio="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Capa exterior verde */}
-        <rect x="0"  y="0"  width="600" height="860" fill="none" stroke={G}    strokeWidth="10"/>
-        {/* Línea dorada fina */}
-        <rect x="6"  y="6"  width="588" height="848" fill="none" stroke={GOLD} strokeWidth="1.5"/>
-        {/* Capa roja */}
-        <rect x="10" y="10" width="580" height="840" fill="none" stroke={R}    strokeWidth="7"/>
-        {/* Línea dorada interior */}
-        <rect x="16" y="16" width="568" height="828" fill="none" stroke={GOLD} strokeWidth="1"/>
-        {/* Línea negra de cierre */}
-        <rect x="20" y="20" width="560" height="820" fill="none" stroke={INK}  strokeWidth="0.5" opacity="0.3"/>
 
-        {/* ── Ornamentos en las 4 esquinas ── */}
-        {/* SUPERIOR IZQUIERDA */}
-        <g transform="translate(0,0)">
-          <circle cx="10" cy="10" r="9"  fill={G}/>
-          <circle cx="10" cy="10" r="6"  fill={R}/>
-          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
-          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
-          {/* flores decorativas */}
-          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
-          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
-          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
-          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
-          {/* pequeñas hojas de laurel */}
-          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
-          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
-        </g>
-        {/* SUPERIOR DERECHA */}
-        <g transform="translate(600,0) scale(-1,1)">
-          <circle cx="10" cy="10" r="9"  fill={G}/>
-          <circle cx="10" cy="10" r="6"  fill={R}/>
-          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
-          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
-          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
-          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
-          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
-          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
-          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
-          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
-        </g>
-        {/* INFERIOR IZQUIERDA */}
-        <g transform="translate(0,860) scale(1,-1)">
-          <circle cx="10" cy="10" r="9"  fill={G}/>
-          <circle cx="10" cy="10" r="6"  fill={R}/>
-          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
-          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
-          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
-          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
-          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
-          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
-          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
-          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
-        </g>
-        {/* INFERIOR DERECHA */}
-        <g transform="translate(600,860) scale(-1,-1)">
-          <circle cx="10" cy="10" r="9"  fill={G}/>
-          <circle cx="10" cy="10" r="6"  fill={R}/>
-          <circle cx="10" cy="10" r="3.5" fill={GOLD}/>
-          <circle cx="10" cy="10" r="1.5" fill="#fff" opacity="0.7"/>
-          <path d="M 22 10 Q 32 4 42 10 Q 32 16 22 10Z" fill={GOLD} opacity="0.65"/>
-          <path d="M 10 22 Q 4 32 10 42 Q 16 32 10 22Z" fill={GOLD} opacity="0.65"/>
-          <circle cx="42" cy="10" r="3" fill={R} opacity="0.7"/>
-          <circle cx="10" cy="42" r="3" fill={R} opacity="0.7"/>
-          <ellipse cx="30" cy="7"  rx="8" ry="3" transform="rotate(-15 30 7)"  fill={G} opacity="0.7"/>
-          <ellipse cx="7"  cy="30" rx="8" ry="3" transform="rotate(-75 7 30)"  fill={G} opacity="0.7"/>
-        </g>
+      {/* ── CAPAS DE BORDE — CSS box-shadow, sin distorsión ── */}
+      <div style={{
+        position: "absolute", inset: 0,
+        boxShadow: `
+          inset 0 0 0 9px  ${G},
+          inset 0 0 0 12px ${PARCHMENT2},
+          inset 0 0 0 13px ${GOLD},
+          inset 0 0 0 14px ${PARCHMENT2},
+          inset 0 0 0 20px ${R},
+          inset 0 0 0 21px ${GOLD}90,
+          inset 0 0 0 23px ${PARCHMENT}
+        `,
+      }}/>
 
-        {/* ── Medallones centrales en los bordes laterales ── */}
-        <g transform="translate(0,430)">
-          <circle cx="10" cy="0" r="7" fill={G}/>
-          <circle cx="10" cy="0" r="4" fill={GOLD}/>
-          <circle cx="10" cy="0" r="2" fill={R}/>
-        </g>
-        <g transform="translate(600,430) scale(-1,1)">
-          <circle cx="10" cy="0" r="7" fill={G}/>
-          <circle cx="10" cy="0" r="4" fill={GOLD}/>
-          <circle cx="10" cy="0" r="2" fill={R}/>
-        </g>
-        <g transform="translate(300,0)">
-          <circle cx="0" cy="10" r="7" fill={G}/>
-          <circle cx="0" cy="10" r="4" fill={GOLD}/>
-          <circle cx="0" cy="10" r="2" fill={R}/>
-        </g>
-        <g transform="translate(300,860) scale(1,-1)">
-          <circle cx="0" cy="10" r="7" fill={G}/>
-          <circle cx="0" cy="10" r="4" fill={GOLD}/>
-          <circle cx="0" cy="10" r="2" fill={R}/>
-        </g>
-      </svg>
+      {/* ── ESQUINAS — SVG fijo 110×110, volteo CSS ── */}
+      <div style={{ position: "absolute", top: 0, left: 0 }}>
+        <CornerRosette />
+      </div>
+      <div style={{ position: "absolute", top: 0, right: 0, transform: "scaleX(-1)" }}>
+        <CornerRosette />
+      </div>
+      <div style={{ position: "absolute", bottom: 0, left: 0, transform: "scaleY(-1)" }}>
+        <CornerRosette />
+      </div>
+      <div style={{ position: "absolute", bottom: 0, right: 0, transform: "scale(-1,-1)" }}>
+        <CornerRosette />
+      </div>
+
+      {/* ── MEDALLONES LATERALES — centro de cada lado ── */}
+      {/* Arriba */}
+      <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)" }}>
+        <SideMedallion horizontal={true} />
+      </div>
+      {/* Abajo */}
+      <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%) scaleY(-1)" }}>
+        <SideMedallion horizontal={true} />
+      </div>
+      {/* Izquierda */}
+      <div style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}>
+        <SideMedallion horizontal={false} />
+      </div>
+      {/* Derecha */}
+      <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%) scaleX(-1)" }}>
+        <SideMedallion horizontal={false} />
+      </div>
+
     </div>
   );
 }
