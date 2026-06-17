@@ -5,6 +5,7 @@ import { formatPrice } from "@/utils/price";
 import { AllergenBadges, BackgroundLayer } from "./shared";
 import type { TemplateProps } from "./types";
 import { resolveTypography } from "@/types/template";
+import type { Allergen } from "@/types/menu";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PALETA — colores de la bandera italiana + dorado de imprenta
@@ -394,7 +395,7 @@ function MenuItem({
   isLast,
 }: {
   name: string; description?: string; price?: number; currency?: string;
-  featured?: boolean; allergens?: string[]; image?: string;
+  featured?: boolean; allergens?: Allergen[]; image?: string;
   showPrice: boolean; showDescription: boolean; showAllergens: boolean;
   categoryFont: string; bodyFont: string; priceFont: string;
   isLast: boolean;
