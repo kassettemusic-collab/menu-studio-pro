@@ -27,6 +27,152 @@ const PARCHMENT2 = "#ede0b8";
 const PAPER_TEXTURE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E")`;
 
 // ─────────────────────────────────────────────────────────────────────────────
+//  SELLO DE TINTA — "Fatto con Amore" — circular, ligeramente rotado
+//  Como un sello de caucho aplicado a mano. Imperfecto a propósito.
+// ─────────────────────────────────────────────────────────────────────────────
+function FattoConAmoreStamp({ rotation = -14 }: { rotation?: number }) {
+  return (
+    <div aria-hidden style={{
+      position: "absolute",
+      bottom: "-38px",
+      right: "24px",
+      zIndex: 30,
+      transform: `rotate(${rotation}deg)`,
+      pointerEvents: "none",
+      filter: "drop-shadow(0 3px 8px rgba(0,0,0,0.35))",
+    }}>
+      <svg width="118" height="118" viewBox="0 0 118 118" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          {/* El radio del círculo de texto */}
+          <path id="stamp-circle-outer"
+            d="M 59,59 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"/>
+          <path id="stamp-circle-inner"
+            d="M 59,59 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0"/>
+          {/* Filtro para simular tinta irregular */}
+          <filter id="stamp-roughen">
+            <feTurbulence type="turbulence" baseFrequency="0.065" numOctaves="3" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.4" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+
+        {/* Fondo circular opaco para que tape el hero */}
+        <circle cx="59" cy="59" r="54" fill={PARCHMENT} opacity="0.96"/>
+
+        {/* Borde exterior con filtro de rugosidad */}
+        <g filter="url(#stamp-roughen)">
+          <circle cx="59" cy="59" r="52" fill="none" stroke={R} strokeWidth="2.8" strokeDasharray="3,1.2,5,0.8,2,1.5" opacity="0.92"/>
+          <circle cx="59" cy="59" r="47" fill="none" stroke={R} strokeWidth="1"   opacity="0.55"/>
+          <circle cx="59" cy="59" r="37" fill="none" stroke={R} strokeWidth="1.2" opacity="0.45"/>
+        </g>
+
+        {/* Texto circular exterior: FATTO CON AMORE */}
+        <text
+          fontFamily="Palatino, Georgia, serif"
+          fontSize="7.5"
+          fontWeight="700"
+          letterSpacing="2.8"
+          fill={R}
+          opacity="0.95"
+          textAnchor="middle"
+        >
+          <textPath href="#stamp-circle-outer" startOffset="12%">
+            · FATTO CON AMORE · CUCINA ITALIANA ·
+          </textPath>
+        </text>
+
+        {/* Centro del sello */}
+        <text x="59" y="53" textAnchor="middle"
+          fontFamily="Palatino, Georgia, serif"
+          fontSize="8.5" fontWeight="700" letterSpacing="1.5"
+          fill={R} opacity="0.85" textLength="44">
+          SINCE
+        </text>
+        <text x="59" y="68" textAnchor="middle"
+          fontFamily="Palatino, Georgia, serif"
+          fontSize="15" fontWeight="700"
+          fill={R} opacity="0.95">
+          1984
+        </text>
+        <text x="59" y="80" textAnchor="middle"
+          fontFamily="Palatino, Georgia, serif"
+          fontSize="6.5" fontWeight="400" letterSpacing="1"
+          fill={R} opacity="0.65">
+          ROMA · ITALIA
+        </text>
+
+        {/* Estrella central decorativa */}
+        <text x="59" y="47" textAnchor="middle"
+          fontFamily="serif" fontSize="8" fill={GOLD} opacity="0.8">
+          ★
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  CINTA ARTESANAL — "Since 1984" — ligeramente torcida, fuera de la cuadrícula
+// ─────────────────────────────────────────────────────────────────────────────
+function ArtisanalRibbon() {
+  return (
+    <div aria-hidden style={{
+      position: "absolute",
+      bottom: "-16px",
+      left: "-8px",
+      zIndex: 25,
+      transform: "rotate(-3.5deg)",
+      pointerEvents: "none",
+      filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.3))",
+    }}>
+      <svg width="200" height="38" viewBox="0 0 200 38" xmlns="http://www.w3.org/2000/svg">
+        {/* Cinta con colas en V */}
+        <polygon points="0,19 12,0 188,0 200,19 188,38 12,38" fill={G}/>
+        {/* Colas en V más oscuras (doblez) */}
+        <polygon points="0,19 12,0 12,38"   fill={G2} opacity="0.6"/>
+        <polygon points="200,19 188,0 188,38" fill={G2} opacity="0.6"/>
+        {/* Línea dorada interior */}
+        <polygon points="4,19 14,3 186,3 196,19 186,35 14,35"
+          fill="none" stroke={GOLD} strokeWidth="0.7" opacity="0.55"/>
+        {/* Texto */}
+        <text x="100" y="23.5" textAnchor="middle"
+          fontFamily="Palatino, Georgia, serif"
+          fontSize="9.5" fontWeight="700" letterSpacing="3.5"
+          fill="rgba(255,255,255,0.92)">
+          SINCE  1984
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  NOTA MANUSCRITA — texto artesanal fuera de la cuadrícula principal
+// ─────────────────────────────────────────────────────────────────────────────
+function HandwrittenNote({ text, rotation = 3, color = R }: { text: string; rotation?: number; color?: string }) {
+  return (
+    <div aria-hidden style={{
+      display: "inline-block",
+      transform: `rotate(${rotation}deg)`,
+      pointerEvents: "none",
+    }}>
+      <span style={{
+        fontFamily: "Palatino, Georgia, serif",
+        fontStyle: "italic",
+        fontSize: "0.88rem",
+        color,
+        opacity: 0.7,
+        letterSpacing: "0.04em",
+        borderBottom: `1.5px solid ${color}40`,
+        paddingBottom: "1px",
+        display: "inline-block",
+      }}>
+        {text}
+      </span>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  MARCO ORNAMENTAL — todo el documento, tipo menú impreso victoriano
 // ─────────────────────────────────────────────────────────────────────────────
 function OrnateFrame() {
@@ -296,6 +442,13 @@ function VintageHero({
             {chefMessage}
           </p>
         )}
+
+        {/* ── SELLO DE IMPRENTA — rompe la simetría intencionalmente ── */}
+        <FattoConAmoreStamp rotation={-14} />
+
+        {/* ── CINTA "Since 1984" — fuera del grid, rotada ── */}
+        <ArtisanalRibbon />
+
       </div>
 
       {/* ── FRANJA VERDE DE BIENVENIDA ── */}
@@ -327,8 +480,30 @@ function VintageHero({
 // ─────────────────────────────────────────────────────────────────────────────
 function OrnamentalDivider({ index }: { index: number }) {
   const color = index % 2 === 0 ? R : G;
+  // Notas manuscritas que alternan, ligeramente fuera de la cuadrícula
+  const notes = ["— la vera cucina —", "— ingredienti freschi —", "— fatto a mano —"];
+  const note = notes[index % notes.length];
   return (
-    <div aria-hidden style={{ padding: "2rem 0", textAlign: "center" }}>
+    <div aria-hidden style={{ padding: "2rem 0", textAlign: "center", position: "relative" }}>
+      {/* Nota manuscrita — rotada y ligeramente desplazada */}
+      <div style={{
+        position: "absolute",
+        top: "6px",
+        right: "18px",
+        transform: "rotate(4.5deg)",
+        pointerEvents: "none",
+      }}>
+        <span style={{
+          fontFamily: "Palatino, Georgia, serif",
+          fontStyle: "italic",
+          fontSize: "0.72rem",
+          color,
+          opacity: 0.55,
+          letterSpacing: "0.04em",
+        }}>
+          {note}
+        </span>
+      </div>
       <svg width="440" height="52" viewBox="0 0 440 52"
         xmlns="http://www.w3.org/2000/svg" style={{ display: "inline-block" }}>
 
@@ -405,10 +580,32 @@ function CategoryBlock({
   return (
     <div style={{
       // Contenedor con borde lateral izquierdo del color de la categoría
+      position: "relative",
       borderLeft: `5px solid ${accent}`,
       background: `linear-gradient(to right, ${isEven ? "#eef5ee" : "#f5eeee"}60, ${PARCHMENT}00)`,
       marginBottom: "0.5rem",
     }}>
+
+      {/* Número de capítulo — fuera del grid, rotado */}
+      <div aria-hidden style={{
+        position: "absolute",
+        top: "-18px",
+        right: "12px",
+        transform: "rotate(7deg)",
+        pointerEvents: "none",
+        zIndex: 5,
+      }}>
+        <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="22" fill={accent} opacity="0.12"/>
+          <circle cx="24" cy="24" r="20" fill="none" stroke={accent} strokeWidth="1" opacity="0.35" strokeDasharray="3,2"/>
+          <text x="24" y="29" textAnchor="middle"
+            fontFamily="Palatino, Georgia, serif"
+            fontSize="16" fontWeight="700"
+            fill={accent} opacity="0.55">
+            {String(index + 1).padStart(2, "0")}
+          </text>
+        </svg>
+      </div>
 
       {/* Etiqueta de sección — banda ancha de color */}
       <div style={{
