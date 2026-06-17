@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { EditorPanel } from "@/components/editor/editor-panel";
 import { MenuPreview } from "@/components/preview/menu-preview";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useProjectStore } from "@/store/project-store";
 import { ChevronLeft } from "lucide-react";
 
@@ -83,7 +82,7 @@ export default function EditorPage() {
           </div>
 
           {/* ── Canvas ───────────────────────────────────────── */}
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-y-auto">
             <div
               className="min-h-full flex flex-col items-center"
               style={{
@@ -110,7 +109,7 @@ export default function EditorPage() {
                 <MenuPreview />
               </div>
             </div>
-          </ScrollArea>
+          </div>
 
         </div>
 

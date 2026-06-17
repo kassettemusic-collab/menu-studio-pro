@@ -1,7 +1,6 @@
 "use client";
 
 import { useProjectStore } from "@/store/project-store";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { RestaurantInfoEditor } from "./restaurant-info-editor";
@@ -64,7 +63,7 @@ export function EditorPanel() {
         </h2>
       </div>
 
-      <ScrollArea className="flex-1">
+      <div className="flex-1 overflow-y-auto">
         <div className="px-5 py-6 space-y-6">
 
           {/* 1 · Restaurante */}
@@ -154,7 +153,7 @@ export function EditorPanel() {
           </Section>
 
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }
