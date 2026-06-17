@@ -6,399 +6,295 @@ import { AllergenBadges, BackgroundLayer } from "./shared";
 import type { TemplateProps } from "./types";
 import { resolveTypography } from "@/types/template";
 
-// ── Palette ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// PALETA — colores de la bandera italiana + dorado de imprenta
+// ─────────────────────────────────────────────────────────────────────────────
 
-const RED        = "#8b1a1a";
-const RED_DEEP   = "#5c0e0e";
-const GREEN      = "#1a5c1a";
-const GREEN_MID  = "#1e7a1e";
-const GOLD       = "#c9a96e";
-const CREAM      = "#faf3e8";
-const INK        = "#2c1206";
+const G  = "#1a5c1a";   // verde Italia
+const G2 = "#2a7a2a";   // verde medio
+const R  = "#8b1a1a";   // rojo profundo
+const R2 = "#a82020";   // rojo medio
+const AU = "#c9a96e";   // dorado
+const CR = "#faf3e8";   // crema papel
+const IN = "#1e0a02";   // tinta oscura
 
-// ── Italian side strips — 30px bands, full document height ───────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// MARCO TRICOLOR — borde completo como póster impreso
+// ─────────────────────────────────────────────────────────────────────────────
 
-function ItalianSideStrips() {
+function PosterFrame() {
   return (
     <>
-      {/* LEFT — verde */}
+      {/* Borde exterior verde */}
       <div aria-hidden style={{
-        position: "absolute", top: 0, bottom: 0, left: 0,
-        width: "30px", zIndex: 10, pointerEvents: "none",
-        background: `linear-gradient(to bottom,
-          ${RED_DEEP} 0%,
-          ${GREEN} 8%,
-          ${GREEN_MID} 50%,
-          ${GREEN} 92%,
-          ${RED_DEEP} 100%)`,
-        boxShadow: "inset -2px 0 6px rgba(0,0,0,0.22)",
-      }}>
-        {/* thin gold inner line */}
-        <div style={{
-          position: "absolute", top: 0, bottom: 0, right: 0,
-          width: "2px",
-          background: `linear-gradient(to bottom, transparent, ${GOLD}60 20%, ${GOLD}60 80%, transparent)`,
-        }}/>
-      </div>
-
-      {/* RIGHT — rosso */}
+        position: "absolute", inset: 0, zIndex: 20, pointerEvents: "none",
+        boxShadow: `inset 0 0 0 10px ${G}`,
+      }}/>
+      {/* Línea dorada interior */}
       <div aria-hidden style={{
-        position: "absolute", top: 0, bottom: 0, right: 0,
-        width: "30px", zIndex: 10, pointerEvents: "none",
-        background: `linear-gradient(to bottom,
-          ${RED_DEEP} 0%,
-          ${RED} 8%,
-          #9e1f1f 50%,
-          ${RED} 92%,
-          ${RED_DEEP} 100%)`,
-        boxShadow: "inset 2px 0 6px rgba(0,0,0,0.22)",
-      }}>
-        {/* thin gold inner line */}
-        <div style={{
-          position: "absolute", top: 0, bottom: 0, left: 0,
-          width: "2px",
-          background: `linear-gradient(to bottom, transparent, ${GOLD}60 20%, ${GOLD}60 80%, transparent)`,
-        }}/>
-      </div>
+        position: "absolute", inset: "10px", zIndex: 20, pointerEvents: "none",
+        boxShadow: `inset 0 0 0 2px ${AU}55`,
+      }}/>
+      {/* Borde rojo más interior */}
+      <div aria-hidden style={{
+        position: "absolute", inset: "14px", zIndex: 20, pointerEvents: "none",
+        boxShadow: `inset 0 0 0 6px ${R}`,
+      }}/>
+      {/* Línea dorada final */}
+      <div aria-hidden style={{
+        position: "absolute", inset: "20px", zIndex: 20, pointerEvents: "none",
+        boxShadow: `inset 0 0 0 1px ${AU}40`,
+      }}/>
     </>
   );
 }
 
-// ── Tricolor top & bottom bands — thick & proud ───────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// ORNAMENTO DE ESQUINA — esquinas decorativas en SVG
+// ─────────────────────────────────────────────────────────────────────────────
 
-function TricolorBand({ position }: { position: "top" | "bottom" }) {
-  const isTop = position === "top";
+function CornerOrnament({ flipX = false, flipY = false }) {
   return (
-    <div aria-hidden style={{
-      position: "absolute",
-      left: "30px", right: "30px",
-      ...(isTop ? { top: 0 } : { bottom: 0 }),
-      zIndex: 9, pointerEvents: "none",
-      display: "flex", flexDirection: "column",
-    }}>
-      <div style={{ height: "6px", background: isTop ? GREEN_MID : RED }} />
-      <div style={{ height: "4px", background: "#f4ede0" }} />
-      <div style={{ height: "6px", background: isTop ? RED : GREEN_MID }} />
-    </div>
-  );
-}
-
-// ── Corner laurel wreath — 200px, fully visible ───────────────────────────────
-
-function CornerLaurel({ flipX = false, flipY = false }) {
-  const S = 200;
-  const sx = flipX ? -1 : 1;
-  const sy = flipY ? -1 : 1;
-  const ox = flipX ? -S : 0;
-  const oy = flipY ? -S : 0;
-
-  return (
-    <svg width={S} height={S} viewBox="0 0 200 200"
+    <svg width="90" height="90" viewBox="0 0 90 90"
       xmlns="http://www.w3.org/2000/svg" aria-hidden
-      style={{ display: "block" }}>
-      <g transform={`translate(${ox},${oy}) scale(${sx},${sy})`} opacity="0.82">
-
-        {/* ── Main vine stem ── */}
-        <path
-          d="M 14 14 C 30 50 55 80 88 118 C 110 142 140 165 175 185"
-          stroke={GREEN} strokeWidth="2.2" strokeLinecap="round" fill="none" />
-
-        {/* ── Secondary stem ── */}
-        <path
-          d="M 14 14 C 24 38 42 62 68 90 C 88 112 115 135 148 158"
-          stroke={RED} strokeWidth="1.2" strokeLinecap="round" fill="none" opacity="0.55" />
-
-        {/* ── Leaf pairs — green, growing in size down the stem ── */}
-        {/* pair 1 */}
-        <ellipse cx="26" cy="28" rx="20" ry="6" transform="rotate(-50 26 28)" fill={GREEN} opacity="0.85"/>
-        <ellipse cx="38" cy="32" rx="20" ry="6" transform="rotate(-15 38 32)" fill={GREEN} opacity="0.85"/>
-        {/* pair 2 */}
-        <ellipse cx="46" cy="55" rx="22" ry="6.5" transform="rotate(-46 46 55)" fill={GREEN} opacity="0.78"/>
-        <ellipse cx="60" cy="60" rx="22" ry="6.5" transform="rotate(-12 60 60)" fill={GREEN} opacity="0.78"/>
-        {/* pair 3 */}
-        <ellipse cx="68" cy="84" rx="22" ry="6" transform="rotate(-42 68 84)" fill={GREEN} opacity="0.72"/>
-        <ellipse cx="82" cy="89" rx="22" ry="6" transform="rotate(-10 82 89)" fill={GREEN} opacity="0.72"/>
-        {/* pair 4 */}
-        <ellipse cx="92" cy="114" rx="20" ry="5.5" transform="rotate(-37 92 114)" fill={GREEN} opacity="0.65"/>
-        <ellipse cx="106" cy="119" rx="20" ry="5.5" transform="rotate(-8 106 119)" fill={GREEN} opacity="0.65"/>
-        {/* pair 5 */}
-        <ellipse cx="120" cy="143" rx="18" ry="5" transform="rotate(-32 120 143)" fill={GREEN} opacity="0.55"/>
-        <ellipse cx="133" cy="148" rx="18" ry="5" transform="rotate(-6 133 148)" fill={GREEN} opacity="0.55"/>
-        {/* pair 6 */}
-        <ellipse cx="147" cy="167" rx="16" ry="4.5" transform="rotate(-26 147 167)" fill={GREEN} opacity="0.45"/>
-        <ellipse cx="158" cy="171" rx="16" ry="4.5" transform="rotate(-4 158 171)" fill={GREEN} opacity="0.45"/>
-
-        {/* ── Vine tendrils ── */}
-        <path d="M 28 32 C 16 22 12 28 16 14" stroke={GREEN} strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.6"/>
-        <path d="M 52 62 C 40 52 36 60 44 70" stroke={GREEN} strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.5"/>
-        <path d="M 78 96 C 66 86 62 95 70 105" stroke={GREEN} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.45"/>
-        <path d="M 108 128 C 96 118 92 128 100 138" stroke={GREEN} strokeWidth="0.8" strokeLinecap="round" fill="none" opacity="0.4"/>
-
-        {/* ── Grape cluster at corner — big & vivid ── */}
-        <circle cx="14" cy="14" r="9"  fill={RED} opacity="0.92"/>
-        <circle cx="26" cy="10" r="7.5" fill={RED} opacity="0.85"/>
-        <circle cx="10" cy="26" r="7.5" fill={RED} opacity="0.85"/>
-        <circle cx="24" cy="24" r="6.5" fill={RED} opacity="0.78"/>
-        <circle cx="36" cy="16" r="6"   fill={RED} opacity="0.70"/>
-        <circle cx="16" cy="36" r="6"   fill={RED} opacity="0.70"/>
-        <circle cx="34" cy="34" r="5"   fill={RED} opacity="0.60"/>
-        <circle cx="44" cy="22" r="4.5" fill={RED} opacity="0.52"/>
-        <circle cx="22" cy="44" r="4.5" fill={RED} opacity="0.52"/>
-        {/* Highlights */}
-        <circle cx="12" cy="11" r="3.5" fill={GOLD} opacity="0.62"/>
-        <circle cx="24" cy="8"  r="2.5" fill={GOLD} opacity="0.48"/>
-
-        {/* ── Berries along stem ── */}
-        <circle cx="42" cy="46" r="5"   fill={RED} opacity="0.62"/>
-        <circle cx="40" cy="57" r="3.5" fill={GOLD} opacity="0.52"/>
-        <circle cx="70" cy="80" r="5"   fill={RED} opacity="0.55"/>
-        <circle cx="68" cy="92" r="3.5" fill={GOLD} opacity="0.45"/>
-        <circle cx="100" cy="116" r="4.5" fill={RED} opacity="0.48"/>
-        <circle cx="98"  cy="127" r="3"   fill={GOLD} opacity="0.38"/>
-        <circle cx="132" cy="150" r="4"   fill={RED} opacity="0.40"/>
-
-        {/* ── Small star ornament near tip ── */}
-        <text x="160" y="188" fontSize="10" fill={GOLD} opacity="0.55"
-          fontFamily="serif" textAnchor="middle">✦</text>
-
+      style={{
+        display: "block",
+        transform: `scale(${flipX ? -1 : 1}, ${flipY ? -1 : 1})`,
+      }}>
+      <g opacity="0.9">
+        {/* L-shape base */}
+        <rect x="0" y="0" width="90" height="8"  fill={G}/>
+        <rect x="0" y="0" width="8"  height="90" fill={G}/>
+        <rect x="2" y="10" width="4" height="76" fill={AU} opacity="0.5"/>
+        <rect x="10" y="2" width="76" height="4" fill={AU} opacity="0.5"/>
+        {/* Corner circle ornament */}
+        <circle cx="4" cy="4" r="10" fill={G}/>
+        <circle cx="4" cy="4" r="7"  fill={R}/>
+        <circle cx="4" cy="4" r="4"  fill={AU}/>
+        <circle cx="4" cy="4" r="2"  fill="#fff" opacity="0.8"/>
+        {/* Decorative sprigs */}
+        <path d="M 20 8 Q 28 4 36 8"  stroke={AU} strokeWidth="1.2" fill="none" opacity="0.7"/>
+        <path d="M 8 20 Q 4 28 8 36"  stroke={AU} strokeWidth="1.2" fill="none" opacity="0.7"/>
+        <circle cx="22" cy="6"  r="2" fill={AU} opacity="0.6"/>
+        <circle cx="34" cy="6"  r="2" fill={AU} opacity="0.6"/>
+        <circle cx="6"  cy="22" r="2" fill={AU} opacity="0.6"/>
+        <circle cx="6"  cy="34" r="2" fill={AU} opacity="0.6"/>
       </g>
     </svg>
   );
 }
 
-// ── Decorative SVG divider — full laurel branch ───────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// CABECERA PRINCIPAL — póster vintage, tipografía enorme
+// ─────────────────────────────────────────────────────────────────────────────
 
-function LaurelDivider() {
-  return (
-    <div aria-hidden style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "0.5rem 0 0", padding: "1rem 0" }}>
-      <svg width="380" height="40" viewBox="0 0 380 40" xmlns="http://www.w3.org/2000/svg">
-
-        {/* Left branch */}
-        <path d="M 10 20 C 40 18 70 15 120 17 C 150 18 165 20 180 20"
-          stroke={GREEN} strokeWidth="1.2" fill="none" opacity="0.7" />
-        {/* Left leaves */}
-        <ellipse cx="40" cy="17" rx="14" ry="4" transform="rotate(-8 40 17)" fill={GREEN} opacity="0.65"/>
-        <ellipse cx="40" cy="23" rx="14" ry="4" transform="rotate(8 40 23)"  fill={GREEN} opacity="0.65"/>
-        <ellipse cx="72" cy="16" rx="13" ry="3.8" transform="rotate(-6 72 16)" fill={GREEN} opacity="0.58"/>
-        <ellipse cx="72" cy="24" rx="13" ry="3.8" transform="rotate(6 72 24)"  fill={GREEN} opacity="0.58"/>
-        <ellipse cx="104" cy="16.5" rx="12" ry="3.5" transform="rotate(-4 104 16)" fill={GREEN} opacity="0.5"/>
-        <ellipse cx="104" cy="23.5" rx="12" ry="3.5" transform="rotate(4 104 23)"  fill={GREEN} opacity="0.5"/>
-        <ellipse cx="135" cy="17" rx="11" ry="3.2" transform="rotate(-3 135 17)" fill={GREEN} opacity="0.42"/>
-        <ellipse cx="135" cy="23" rx="11" ry="3.2" transform="rotate(3 135 23)"  fill={GREEN} opacity="0.42"/>
-        {/* Left gold line */}
-        <line x1="10" y1="20" x2="178" y2="20" stroke={GOLD} strokeWidth="0.5" opacity="0.4"/>
-
-        {/* Center ornament */}
-        <circle cx="190" cy="20" r="8" fill={RED} opacity="0.85"/>
-        <circle cx="190" cy="20" r="5" fill={GOLD} opacity="0.6"/>
-        <text x="190" y="24" fontSize="6" fill="#fff" opacity="0.9"
-          fontFamily="serif" textAnchor="middle">✦</text>
-        {/* Small flanking dots */}
-        <circle cx="174" cy="20" r="2.5" fill={GOLD} opacity="0.55"/>
-        <circle cx="206" cy="20" r="2.5" fill={GOLD} opacity="0.55"/>
-
-        {/* Right branch — mirror */}
-        <path d="M 370 20 C 340 18 310 15 260 17 C 230 18 215 20 200 20"
-          stroke={GREEN} strokeWidth="1.2" fill="none" opacity="0.7" />
-        <ellipse cx="340" cy="17" rx="14" ry="4" transform="rotate(8 340 17)"  fill={GREEN} opacity="0.65"/>
-        <ellipse cx="340" cy="23" rx="14" ry="4" transform="rotate(-8 340 23)" fill={GREEN} opacity="0.65"/>
-        <ellipse cx="308" cy="16" rx="13" ry="3.8" transform="rotate(6 308 16)"  fill={GREEN} opacity="0.58"/>
-        <ellipse cx="308" cy="24" rx="13" ry="3.8" transform="rotate(-6 308 24)" fill={GREEN} opacity="0.58"/>
-        <ellipse cx="276" cy="16.5" rx="12" ry="3.5" transform="rotate(4 276 16)"  fill={GREEN} opacity="0.5"/>
-        <ellipse cx="276" cy="23.5" rx="12" ry="3.5" transform="rotate(-4 276 23)" fill={GREEN} opacity="0.5"/>
-        <ellipse cx="245" cy="17" rx="11" ry="3.2" transform="rotate(3 245 17)"  fill={GREEN} opacity="0.42"/>
-        <ellipse cx="245" cy="23" rx="11" ry="3.2" transform="rotate(-3 245 23)" fill={GREEN} opacity="0.42"/>
-        <line x1="370" y1="20" x2="202" y2="20" stroke={GOLD} strokeWidth="0.5" opacity="0.4"/>
-
-      </svg>
-    </div>
-  );
-}
-
-// ── Italian hero — title a 5.5rem, todo custom ────────────────────────────────
-
-function ItalianHero({
-  logo, logoAlt, title, subtitle,
-  welcomeMessage, chefMessage,
+function PosterHero({
+  logo, logoAlt, name, tagline, welcomeMessage, chefMessage,
   showLogo, showWelcomeMessage, showChefMessage,
   headingFont, bodyFont,
 }: {
-  logo?: string; logoAlt?: string; title: string; subtitle?: string;
+  logo?: string; logoAlt?: string; name: string; tagline?: string;
   welcomeMessage?: string; chefMessage?: string;
-  showLogo?: boolean; showSubtitle?: boolean;
-  showWelcomeMessage?: boolean; showChefMessage?: boolean;
+  showLogo?: boolean; showWelcomeMessage?: boolean; showChefMessage?: boolean;
   headingFont: string; bodyFont: string;
 }) {
   return (
-    <div style={{
-      position: "relative",
-      width: "100%",
-      background: `linear-gradient(175deg, #4a0c0c 0%, #6e1212 25%, ${RED} 55%, #c47050 80%, ${CREAM} 100%)`,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      padding: "5.5rem 5.5rem 6.5rem",
-      overflow: "hidden",
-    }}>
+    <div style={{ position: "relative" }}>
 
-      {/* Subtle vignette top */}
-      <div aria-hidden style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: "3rem",
-        background: "linear-gradient(to bottom, rgba(0,0,0,0.3), transparent)",
-        pointerEvents: "none",
-      }}/>
-
-      {/* Watermark text behind content */}
-      <div aria-hidden style={{
-        position: "absolute", inset: 0, display: "flex",
-        alignItems: "center", justifyContent: "center",
-        pointerEvents: "none", overflow: "hidden",
-      }}>
-        <span style={{
-          fontFamily: headingFont, fontSize: "9rem", fontWeight: 700,
-          color: "rgba(255,255,255,0.04)", letterSpacing: "0.25em",
-          textTransform: "uppercase", userSelect: "none",
-          transform: "rotate(-8deg)",
-          whiteSpace: "nowrap",
-        }}>ITALIA</span>
+      {/* ── BANDA SUPERIOR TRICOLOR ─────────────────────────── */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ height: "28px", background: `linear-gradient(to right, ${G}, ${G2}, ${G})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.42rem", letterSpacing: "0.8em", fontFamily: bodyFont, textTransform: "uppercase" }}>
+            ristorante autentico italiano
+          </span>
+        </div>
+        <div style={{ height: "12px", background: "#f7f0e6", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: "80%", height: "1px", background: `linear-gradient(to right, transparent, ${AU}60, transparent)` }}/>
+        </div>
+        <div style={{ height: "28px", background: `linear-gradient(to right, ${R}, ${R2}, ${R})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ color: "rgba(255,255,255,0.65)", fontSize: "0.42rem", letterSpacing: "0.8em", fontFamily: bodyFont, textTransform: "uppercase" }}>
+            cucina tradizionale dal 1984
+          </span>
+        </div>
       </div>
 
-      {/* Logo */}
-      {showLogo && logo && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={logo} alt={logoAlt ?? title} style={{
-          height: "7rem", objectFit: "contain", marginBottom: "2rem",
-          filter: "brightness(0) invert(1)", opacity: 0.95,
+      {/* ── BLOQUE ROJO CENTRAL — nombre del restaurante ───── */}
+      <div style={{
+        background: `radial-gradient(ellipse at 50% 40%, #7a1010 0%, #5c0c0c 60%, #3d0808 100%)`,
+        padding: "4.5rem 5rem 5rem",
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+
+        {/* Textura de fondo — líneas finas */}
+        <div aria-hidden style={{
+          position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.06,
+          backgroundImage: `repeating-linear-gradient(0deg, ${AU} 0px, ${AU} 1px, transparent 1px, transparent 18px)`,
         }}/>
-      )}
 
-      {/* Gold top rule */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: "0.75rem",
-        width: "70%", maxWidth: "22rem", marginBottom: "2rem",
-      }}>
-        <div style={{ flex: 1, height: "1.5px", background: `linear-gradient(to right, transparent, ${GOLD})` }}/>
-        <span style={{ color: GOLD, fontSize: "0.6rem", letterSpacing: "0.35em" }}>★ ★ ★</span>
-        <div style={{ flex: 1, height: "1.5px", background: `linear-gradient(to left, transparent, ${GOLD})` }}/>
-      </div>
+        {/* Ornamentos de esquina dentro del hero */}
+        <div style={{ position: "absolute", top: "12px", left: "12px"  }}><CornerOrnament /></div>
+        <div style={{ position: "absolute", top: "12px", right: "12px" }}><CornerOrnament flipX /></div>
+        <div style={{ position: "absolute", bottom: "12px", left: "12px"  }}><CornerOrnament flipY /></div>
+        <div style={{ position: "absolute", bottom: "12px", right: "12px" }}><CornerOrnament flipX flipY /></div>
 
-      {/* Restaurant name — the real WOW */}
-      <h1 style={{
-        fontFamily: headingFont,
-        fontSize: "5.5rem",
-        fontWeight: 700,
-        color: "#ffffff",
-        letterSpacing: "0.03em",
-        margin: 0,
-        lineHeight: 0.92,
-        textShadow: "0 3px 40px rgba(0,0,0,0.65), 0 1px 0 rgba(0,0,0,0.4)",
-      }}>
-        {title}
-      </h1>
+        {/* Logo */}
+        {showLogo && logo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logo} alt={logoAlt ?? name} style={{
+            height: "7rem", objectFit: "contain", marginBottom: "2rem",
+            filter: "brightness(0) invert(1)", opacity: 0.9,
+          }}/>
+        )}
 
-      {/* Tagline */}
-      {subtitle && (
-        <p style={{
-          fontFamily: bodyFont, fontStyle: "italic",
-          fontSize: "1.05rem", color: "rgba(255,255,255,0.78)",
-          margin: "1.1rem 0 0", letterSpacing: "0.06em",
+        {/* Estrellitas doradas */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+          <div style={{ height: "1px", width: "3rem", background: `linear-gradient(to right, transparent, ${AU})` }}/>
+          <span style={{ color: AU, fontSize: "0.55rem", letterSpacing: "0.4em" }}>★ ★ ★ ★ ★</span>
+          <div style={{ height: "1px", width: "3rem", background: `linear-gradient(to left, transparent, ${AU})` }}/>
+        </div>
+
+        {/* NOMBRE — 7rem, el corazón del póster */}
+        <h1 style={{
+          fontFamily: headingFont,
+          fontSize: "7rem",
+          fontWeight: 700,
+          color: "#ffffff",
+          margin: 0,
+          lineHeight: 0.88,
+          letterSpacing: "0.02em",
+          textShadow: `0 4px 60px rgba(0,0,0,0.8), 0 2px 0 rgba(0,0,0,0.5)`,
         }}>
-          {subtitle}
-        </p>
-      )}
+          {name}
+        </h1>
 
-      {/* Gold diamond rule */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: "0.75rem",
-        margin: "1.75rem 0", width: "65%", maxWidth: "20rem",
-      }}>
-        <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, transparent, ${GOLD}90)` }}/>
-        <span style={{ color: GOLD, fontSize: "0.5rem", letterSpacing: "0.15em" }}>◆ ◆ ◆</span>
-        <div style={{ flex: 1, height: "1px", background: `linear-gradient(to left, transparent, ${GOLD}90)` }}/>
-      </div>
+        {/* Línea dorada separadora */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", margin: "2rem 0 1.25rem" }}>
+          <div style={{ flex: 1, maxWidth: "6rem", height: "1.5px", background: `linear-gradient(to right, transparent, ${AU})` }}/>
+          <span style={{ color: AU, fontSize: "0.65rem", letterSpacing: "0.3em" }}>◆ ◆ ◆</span>
+          <div style={{ flex: 1, maxWidth: "6rem", height: "1.5px", background: `linear-gradient(to left, transparent, ${AU})` }}/>
+        </div>
 
-      {/* Welcome message */}
-      {showWelcomeMessage && welcomeMessage && (
-        <p style={{
-          fontFamily: bodyFont, fontStyle: "italic",
-          fontSize: "0.95rem", color: "rgba(255,255,255,0.68)",
-          lineHeight: 1.9, maxWidth: "27rem", margin: 0,
-        }}>
-          {welcomeMessage}
-        </p>
-      )}
-
-      {/* Chef message */}
-      {showChefMessage && chefMessage && (
-        <div style={{
-          marginTop: "1.5rem",
-          padding: "1rem 2rem",
-          border: "1px solid rgba(255,255,255,0.22)",
-          maxWidth: "27rem", width: "100%",
-        }}>
+        {/* Tagline */}
+        {tagline && (
           <p style={{
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.85rem", color: "rgba(255,255,255,0.55)",
-            lineHeight: 2, margin: 0,
+            fontSize: "1.1rem", color: "rgba(255,255,255,0.82)",
+            margin: 0, letterSpacing: "0.08em",
+            textShadow: "0 1px 8px rgba(0,0,0,0.5)",
+          }}>
+            {tagline}
+          </p>
+        )}
+
+        {/* Welcome message en caja */}
+        {showWelcomeMessage && welcomeMessage && (
+          <div style={{
+            margin: "1.75rem auto 0",
+            padding: "1.1rem 2rem",
+            maxWidth: "28rem",
+            border: "1px solid rgba(255,255,255,0.2)",
+            borderTop: "2px solid rgba(201,169,110,0.5)",
+            borderBottom: "2px solid rgba(201,169,110,0.5)",
+          }}>
+            <p style={{
+              fontFamily: bodyFont, fontStyle: "italic",
+              fontSize: "0.88rem", color: "rgba(255,255,255,0.65)",
+              lineHeight: 1.95, margin: 0,
+            }}>
+              {welcomeMessage}
+            </p>
+          </div>
+        )}
+
+        {/* Chef message */}
+        {showChefMessage && chefMessage && (
+          <p style={{
+            fontFamily: bodyFont, fontStyle: "italic",
+            fontSize: "0.82rem", color: "rgba(255,255,255,0.48)",
+            lineHeight: 2, maxWidth: "28rem",
+            margin: "1.25rem auto 0",
           }}>
             {chefMessage}
           </p>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* ── BANDA VERDE DE BIENVENIDA ───────────────────────── */}
+      <div style={{
+        background: `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`,
+        padding: "0.95rem 4rem",
+        textAlign: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "1.5rem",
+      }}>
+        <div style={{ height: "1px", flex: 1, background: `linear-gradient(to right, transparent, rgba(255,255,255,0.4))` }}/>
+        <p style={{
+          fontFamily: bodyFont, fontStyle: "italic",
+          fontSize: "0.82rem", color: "rgba(255,255,255,0.92)",
+          margin: 0, letterSpacing: "0.05em", whiteSpace: "nowrap",
+        }}>
+          Cucina è amore — benvenuti alla nostra tavola
+        </p>
+        <div style={{ height: "1px", flex: 1, background: `linear-gradient(to left, transparent, rgba(255,255,255,0.4))` }}/>
+      </div>
 
     </div>
   );
 }
 
-// ── Category header — huge, proud, unmissable ─────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// CABECERA DE CATEGORÍA — bloque visual enorme, como capítulo de libro
+// ─────────────────────────────────────────────────────────────────────────────
 
-function CategoryHeader({
-  label, title, description, headingFont, bodyFont,
+function CategoryChapter({
+  index, label, title, description, headingFont, bodyFont,
 }: {
-  label: string; title: string; description?: string;
+  index: number; label: string; title: string; description?: string;
   headingFont: string; bodyFont: string;
 }) {
-  return (
-    <div style={{ margin: "3.5rem -4.5rem 0" }}>
+  const isEven = index % 2 === 0;
 
-      {/* Full-bleed red banner */}
+  return (
+    <div style={{ margin: "0 -4rem" }}>
+
+      {/* Banda de etiqueta — alterna verde y rojo */}
       <div style={{
-        background: `linear-gradient(to right, ${RED_DEEP}, ${RED} 25%, ${RED} 75%, ${RED_DEEP})`,
-        padding: "1rem 5.5rem",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "1.25rem",
-        borderTop: `2px solid ${GOLD}50`,
-        borderBottom: `2px solid ${GOLD}50`,
+        background: isEven
+          ? `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`
+          : `linear-gradient(to right, ${R}, ${R2} 30%, ${R2} 70%, ${R})`,
+        padding: "0.85rem 6rem",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: "1.25rem",
       }}>
-        <div style={{ flex: 1, height: "1px", background: `linear-gradient(to right, transparent, ${GOLD}70)` }}/>
+        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.35)" }}/>
         <span style={{
-          fontFamily: bodyFont,
-          fontSize: "0.68rem", fontWeight: 800,
-          letterSpacing: "0.6em",
-          textTransform: "uppercase",
-          color: "#ffffff",
-          whiteSpace: "nowrap",
+          fontFamily: bodyFont, fontSize: "0.62rem", fontWeight: 800,
+          letterSpacing: "0.65em", textTransform: "uppercase",
+          color: "#ffffff", whiteSpace: "nowrap",
         }}>
           {label}
         </span>
-        <div style={{ flex: 1, height: "1px", background: `linear-gradient(to left, transparent, ${GOLD}70)` }}/>
+        <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.35)" }}/>
       </div>
 
-      {/* Category name — HUGE */}
-      <div style={{ textAlign: "center", padding: "2rem 0 0.75rem" }}>
+      {/* Nombre de categoría — gigante */}
+      <div style={{
+        textAlign: "center",
+        padding: "2.5rem 2rem 1rem",
+        background: CR,
+      }}>
         <h2 style={{
           fontFamily: headingFont,
-          fontSize: "4.5rem",
+          fontSize: "5.5rem",
           fontWeight: 300,
           fontStyle: "italic",
-          color: INK,
+          color: IN,
           margin: 0,
-          lineHeight: 1,
-          letterSpacing: "-0.02em",
-          textShadow: `0 1px 0 rgba(139,26,26,0.1)`,
+          lineHeight: 0.95,
+          letterSpacing: "-0.025em",
         }}>
           {title}
         </h2>
@@ -406,82 +302,234 @@ function CategoryHeader({
         {description && (
           <p style={{
             fontFamily: bodyFont, fontStyle: "italic",
-            fontSize: "0.8rem", color: INK, opacity: 0.48,
-            margin: "0.8rem 0 0", lineHeight: 1.7,
+            fontSize: "0.85rem", color: IN, opacity: 0.45,
+            margin: "1rem 0 0", lineHeight: 1.8, maxWidth: "24rem",
+            marginLeft: "auto", marginRight: "auto",
           }}>
             {description}
           </p>
         )}
 
-        {/* Green + red micro bars */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.3rem", marginTop: "1.5rem" }}>
-          <div style={{ width: "2.5rem", height: "2px", backgroundColor: GREEN, borderRadius: "1px", opacity: 0.7 }}/>
-          <div style={{ width: "2.5rem", height: "2px", backgroundColor: "#f4ede0", borderRadius: "1px", opacity: 0.9 }}/>
-          <div style={{ width: "2.5rem", height: "2px", backgroundColor: RED, borderRadius: "1px", opacity: 0.7 }}/>
+        {/* Minibandera italiana bajo el título */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "0", margin: "1.75rem auto 0", width: "5rem", height: "3px" }}>
+          <div style={{ flex: 1, background: G }} />
+          <div style={{ flex: 1, background: "#f0ebe0" }} />
+          <div style={{ flex: 1, background: R }} />
         </div>
       </div>
+
     </div>
   );
 }
 
-// ── Main component ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// SEPARADOR ENTRE CATEGORÍAS — ramo decorativo SVG
+// ─────────────────────────────────────────────────────────────────────────────
+
+function BranchDivider() {
+  return (
+    <div aria-hidden style={{ textAlign: "center", padding: "2.5rem 0", margin: "0 -4rem", background: CR }}>
+      <svg width="420" height="48" viewBox="0 0 420 48" xmlns="http://www.w3.org/2000/svg"
+        style={{ display: "inline-block" }}>
+
+        {/* Línea base */}
+        <line x1="0" y1="24" x2="420" y2="24" stroke={AU} strokeWidth="0.8" opacity="0.4"/>
+
+        {/* Rama izquierda */}
+        <path d="M 10 24 C 50 22 90 18 140 22 C 165 23 180 24 195 24"
+          stroke={G} strokeWidth="1.8" fill="none" opacity="0.75"/>
+        {/* Hojas izquierda */}
+        {[35, 65, 95, 125, 158].map((x, i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={22 - i * 0.3} rx={12 - i} ry={3.5 - i * 0.2}
+              transform={`rotate(-8 ${x} ${22 - i * 0.3})`} fill={G} opacity={0.7 - i * 0.08}/>
+            <ellipse cx={x + 3} cy={26 + i * 0.3} rx={11 - i} ry={3 - i * 0.15}
+              transform={`rotate(8 ${x + 3} ${26 + i * 0.3})`} fill={G} opacity={0.65 - i * 0.08}/>
+          </g>
+        ))}
+
+        {/* Ornamento central */}
+        <circle cx="210" cy="24" r="10" fill={R}/>
+        <circle cx="210" cy="24" r="6.5" fill={AU}/>
+        <circle cx="210" cy="24" r="3.5" fill={R}/>
+        <circle cx="210" cy="24" r="1.5" fill="#fff" opacity="0.8"/>
+        <circle cx="192" cy="24" r="3" fill={AU} opacity="0.7"/>
+        <circle cx="228" cy="24" r="3" fill={AU} opacity="0.7"/>
+
+        {/* Rama derecha — espejo */}
+        <path d="M 410 24 C 370 22 330 18 280 22 C 255 23 240 24 225 24"
+          stroke={G} strokeWidth="1.8" fill="none" opacity="0.75"/>
+        {[385, 355, 325, 295, 262].map((x, i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={22 - i * 0.3} rx={12 - i} ry={3.5 - i * 0.2}
+              transform={`rotate(8 ${x} ${22 - i * 0.3})`} fill={G} opacity={0.7 - i * 0.08}/>
+            <ellipse cx={x - 3} cy={26 + i * 0.3} rx={11 - i} ry={3 - i * 0.15}
+              transform={`rotate(-8 ${x - 3} ${26 + i * 0.3})`} fill={G} opacity={0.65 - i * 0.08}/>
+          </g>
+        ))}
+
+        {/* Tomates decorativos */}
+        <circle cx="60"  cy="14" r="6" fill={R} opacity="0.55"/>
+        <circle cx="60"  cy="14" r="3.5" fill={R2} opacity="0.6"/>
+        <path d="M 58 8 Q 60 5 62 8" stroke={G} strokeWidth="1.2" fill="none" opacity="0.7"/>
+
+        <circle cx="360" cy="14" r="6" fill={R} opacity="0.55"/>
+        <circle cx="360" cy="14" r="3.5" fill={R2} opacity="0.6"/>
+        <path d="M 358 8 Q 360 5 362 8" stroke={G} strokeWidth="1.2" fill="none" opacity="0.7"/>
+
+      </svg>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ÍTEM DE MENÚ — póster físico: espacio generoso, nada de lista HTML
+// ─────────────────────────────────────────────────────────────────────────────
+
+function MenuItem({
+  name, description, price, currency,
+  featured, allergens, image,
+  showPrice, showDescription, showAllergens,
+  categoryFont, bodyFont, priceFont,
+  isLast,
+}: {
+  name: string; description?: string; price?: number; currency?: string;
+  featured?: boolean; allergens?: string[]; image?: string;
+  showPrice: boolean; showDescription: boolean; showAllergens: boolean;
+  categoryFont: string; bodyFont: string; priceFont: string;
+  isLast: boolean;
+}) {
+  return (
+    <div>
+      <div style={{
+        display: "flex", alignItems: "baseline",
+        gap: "1rem", padding: "1.6rem 0",
+      }}>
+
+        {/* Imagen (si existe) */}
+        {image && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={image} alt={name} style={{
+            width: "5.5rem", height: "5.5rem", objectFit: "cover",
+            borderRadius: "2px", flexShrink: 0,
+            border: `1.5px solid ${R}22`,
+            alignSelf: "flex-start",
+          }}/>
+        )}
+
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "0.8rem" }}>
+
+            {/* Punto decorativo featured */}
+            {featured && (
+              <span style={{ color: R, fontSize: "0.45rem", flexShrink: 0, lineHeight: 1, position: "relative", top: "-0.1em" }}>✦</span>
+            )}
+
+            {/* Nombre */}
+            <span style={{
+              fontFamily: categoryFont, fontSize: "1.32rem",
+              fontWeight: featured ? 600 : 400, color: IN,
+              letterSpacing: "0.01em", lineHeight: 1.2, flex: 1,
+            }}>
+              {name}
+            </span>
+
+            {/* Puntos líder */}
+            <div style={{
+              flex: "0 1 4rem", borderBottom: `1px dotted ${IN}30`,
+              marginBottom: "0.3rem", minWidth: "1.5rem",
+            }}/>
+
+            {/* Precio */}
+            {showPrice && price != null && (
+              <span style={{
+                fontFamily: priceFont, fontSize: "1.05rem",
+                fontWeight: 600, fontStyle: "italic",
+                color: R, whiteSpace: "nowrap", flexShrink: 0,
+              }}>
+                {formatPrice(price, currency)}
+              </span>
+            )}
+          </div>
+
+          {/* Descripción */}
+          {showDescription && description && (
+            <p style={{
+              fontFamily: bodyFont, fontStyle: "italic",
+              fontSize: "0.83rem", color: IN, opacity: 0.5,
+              margin: "0.45rem 0 0", lineHeight: 1.85,
+              paddingLeft: featured ? "1.1rem" : "0",
+            }}>
+              {description}
+            </p>
+          )}
+
+          {/* Alérgenos */}
+          {showAllergens && allergens && allergens.length > 0 && (
+            <AllergenBadges allergens={allergens} fontSize="0.56rem" opacity={0.38} marginTop="0.3rem"/>
+          )}
+        </div>
+      </div>
+
+      {/* Separador entre ítems */}
+      {!isLast && (
+        <div style={{
+          height: "1px",
+          background: `linear-gradient(to right, transparent, ${R}28 15%, ${R}22 85%, transparent)`,
+        }}/>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPONENTE PRINCIPAL
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function PizzaTrattoriaTemplate({ project, categories, design, lang }: TemplateProps) {
   const { restaurantInfo, branding, hero } = project;
-  const { fonts, spacing, layout } = design;
+  const { layout } = design;
   const typo = resolveTypography(design);
 
   const visible = categories
     .filter((c) => c.visible)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
+  const hasLogo = !!(branding?.showLogo && branding.logo);
+
   const showHero =
     design.capabilities.supportsHeroSection &&
     !!hero?.showHero &&
     (!!hero.heroImage || !!(hero.title?.[lang] || hero.title?.["es"]));
 
-  const hasLogo = !!(branding?.showLogo && branding.logo);
+  const heroTitle = (showHero && t(hero?.title, lang))
+    ? t(hero!.title, lang)
+    : restaurantInfo.name;
 
   return (
     <BackgroundLayer
       design={design}
-      style={{ color: INK, fontFamily: fonts.body, minHeight: "100%" }}
+      style={{ color: IN, fontFamily: typo.bodyFont, minHeight: "100%", position: "relative" }}
     >
 
-      {/* ── Tricolor top + bottom ─────────────────────────────────────────── */}
-      <TricolorBand position="top" />
-      <TricolorBand position="bottom" />
+      {/* ── Marco de póster ──────────────────────────────────────────────── */}
+      <PosterFrame />
 
-      {/* ── Verde & Rosso — thick side strips ────────────────────────────── */}
-      <ItalianSideStrips />
+      {/* ── Ornamentos en las 4 esquinas del documento ───────────────────── */}
+      <div style={{ position: "absolute", top: "21px",    left: "21px",    zIndex: 15, pointerEvents: "none" }}><CornerOrnament /></div>
+      <div style={{ position: "absolute", top: "21px",    right: "21px",   zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipX /></div>
+      <div style={{ position: "absolute", bottom: "21px", left: "21px",    zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipY /></div>
+      <div style={{ position: "absolute", bottom: "21px", right: "21px",   zIndex: 15, pointerEvents: "none" }}><CornerOrnament flipX flipY /></div>
 
-      {/* ── Corner laurels — 200px, fully visible ────────────────────────── */}
-      <div style={{ position: "absolute", top: "16px",  left: "30px",  zIndex: 5, pointerEvents: "none" }}>
-        <CornerLaurel />
-      </div>
-      <div style={{ position: "absolute", top: "16px",  right: "30px", zIndex: 5, pointerEvents: "none" }}>
-        <CornerLaurel flipX />
-      </div>
-      <div style={{ position: "absolute", bottom: "16px", left: "30px",  zIndex: 5, pointerEvents: "none" }}>
-        <CornerLaurel flipY />
-      </div>
-      <div style={{ position: "absolute", bottom: "16px", right: "30px", zIndex: 5, pointerEvents: "none" }}>
-        <CornerLaurel flipX flipY />
-      </div>
+      {/* ── Contenido principal ──────────────────────────────────────────── */}
+      <div style={{ position: "relative", zIndex: 1, margin: "21px" }}>
 
-      {/* ── Content ──────────────────────────────────────────────────────── */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <ItalianHero
+        {/* ── Cabecera tipo póster ────────────────────────────────────────── */}
+        <PosterHero
           logo={branding?.logo}
           logoAlt={restaurantInfo.name}
-          title={
-            (showHero && t(hero?.title, lang))
-              ? t(hero!.title, lang)
-              : restaurantInfo.name
-          }
-          subtitle={restaurantInfo.tagline}
+          name={heroTitle}
+          tagline={restaurantInfo.tagline}
           welcomeMessage={branding?.welcomeMessage?.[lang]}
           chefMessage={hero?.chefMessage?.[lang]}
           showLogo={hasLogo}
@@ -491,186 +539,98 @@ export function PizzaTrattoriaTemplate({ project, categories, design, lang }: Te
           bodyFont={typo.bodyFont}
         />
 
-        {/* ── Categories ───────────────────────────────────────────────── */}
-        <div style={{ padding: "0 4.5rem 7rem", display: "flex", flexDirection: "column" }}>
+        {/* ── Categorías ──────────────────────────────────────────────────── */}
+        <div style={{ background: CR, padding: "0 4rem 5rem" }}>
           {visible.map((cat, idx) => {
             const items = cat.items
               .filter((i) => i.available)
               .sort((a, b) => a.sortOrder - b.sortOrder);
             if (items.length === 0) return null;
 
-            const catLabel       = t(cat.name, lang)?.toUpperCase() ?? "";
-            const catDescription = layout.showDescriptions
+            const catLabel = t(cat.name, lang)?.toUpperCase() ?? "";
+            const catDesc  = layout.showDescriptions
               ? t(cat.description, lang) || undefined
               : undefined;
 
             return (
               <section key={cat.id}>
 
-                <CategoryHeader
+                {/* Separador entre categorías (no en la primera) */}
+                {idx > 0 && <BranchDivider />}
+
+                {/* Cabecera de categoría */}
+                <CategoryChapter
+                  index={idx}
                   label={catLabel}
                   title={t(cat.name, lang)}
-                  description={catDescription}
+                  description={catDesc}
                   headingFont={typo.categoryFont}
                   bodyFont={typo.bodyFont}
                 />
 
-                <div style={{ display: "flex", flexDirection: "column", marginTop: "0.5rem" }}>
-                  {items.map((item, itemIdx) => {
-                    const hasItemImage = !!item.image;
-                    const isLast = itemIdx === items.length - 1;
-
-                    return (
-                      <div key={item.id}>
-                        {hasItemImage ? (
-                          <div style={{
-                            display: "flex", gap: "1.25rem",
-                            alignItems: "flex-start", padding: "1.5rem 0",
-                          }}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={item.image!} alt={t(item.name, lang)} style={{
-                              width: "5rem", height: "5rem", objectFit: "cover",
-                              borderRadius: "2px", border: `1.5px solid ${RED}25`,
-                              flexShrink: 0,
-                            }}/>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ display: "grid", gridTemplateColumns: "1fr auto", columnGap: "1.5rem", alignItems: "baseline" }}>
-                                <span style={{
-                                  fontFamily: typo.categoryFont, fontSize: "1.28rem",
-                                  fontWeight: item.featured ? 600 : 400,
-                                  color: INK, letterSpacing: "0.01em", lineHeight: 1.2,
-                                }}>
-                                  {item.featured && <span style={{ color: RED, fontSize: "0.4rem", marginRight: "0.4rem", opacity: 0.8 }}>✦</span>}
-                                  {t(item.name, lang)}
-                                </span>
-                                {layout.showPrices && (
-                                  <span style={{
-                                    fontFamily: typo.priceFont, fontSize: "1rem",
-                                    fontWeight: 500, fontStyle: "italic", color: GOLD,
-                                    whiteSpace: "nowrap",
-                                  }}>
-                                    {formatPrice(item.price, item.currency)}
-                                  </span>
-                                )}
-                              </div>
-                              {layout.showDescriptions && item.description[lang] && (
-                                <p style={{
-                                  fontFamily: typo.bodyFont, fontStyle: "italic",
-                                  fontSize: "0.83rem", color: INK, opacity: 0.52,
-                                  margin: "0.35rem 0 0", lineHeight: 1.75,
-                                }}>
-                                  {t(item.description, lang)}
-                                </p>
-                              )}
-                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.38} marginTop="0.25rem" />
-                            </div>
-                          </div>
-                        ) : (
-                          <div style={{
-                            display: "grid", gridTemplateColumns: "1fr auto",
-                            columnGap: "1.5rem", alignItems: "baseline", padding: "1.5rem 0",
-                          }}>
-                            <div style={{ display: "flex", alignItems: "baseline", gap: "0.45rem", minWidth: 0 }}>
-                              {item.featured && (
-                                <span style={{
-                                  color: RED, fontSize: "0.4rem", flexShrink: 0,
-                                  opacity: 0.75, position: "relative", top: "-0.1em", lineHeight: 1,
-                                }}>✦</span>
-                              )}
-                              <span style={{
-                                fontFamily: typo.categoryFont, fontSize: "1.28rem",
-                                fontWeight: item.featured ? 600 : 400,
-                                color: item.featured ? INK : `${INK}e8`,
-                                letterSpacing: "0.01em", lineHeight: 1.2,
-                              }}>
-                                {t(item.name, lang)}
-                              </span>
-                            </div>
-
-                            {layout.showPrices ? (
-                              <span style={{
-                                fontFamily: typo.priceFont, fontSize: "1rem",
-                                fontWeight: 500, fontStyle: "italic", color: GOLD,
-                                whiteSpace: "nowrap", textAlign: "right",
-                              }}>
-                                {formatPrice(item.price, item.currency)}
-                              </span>
-                            ) : <span />}
-
-                            {layout.showDescriptions && item.description[lang] && (
-                              <p style={{
-                                gridColumn: "1 / -1",
-                                fontFamily: typo.bodyFont, fontStyle: "italic",
-                                fontSize: "0.83rem", color: INK, opacity: 0.52,
-                                margin: "0.3rem 0 0", lineHeight: 1.75, letterSpacing: "0.005em",
-                              }}>
-                                {t(item.description, lang)}
-                              </p>
-                            )}
-
-                            <div style={{ gridColumn: "1 / -1" }}>
-                              <AllergenBadges allergens={item.allergens.contains} fontSize="0.56rem" opacity={0.38} />
-                            </div>
-                          </div>
-                        )}
-
-                        {!isLast && (
-                          <div style={{
-                            height: "1px",
-                            background: `linear-gradient(to right, transparent, ${RED}30 20%, ${RED}28 80%, transparent)`,
-                          }}/>
-                        )}
-                      </div>
-                    );
-                  })}
+                {/* Lista de ítems */}
+                <div style={{ marginTop: "1rem" }}>
+                  {items.map((item, itemIdx) => (
+                    <MenuItem
+                      key={item.id}
+                      name={t(item.name, lang)}
+                      description={layout.showDescriptions ? t(item.description, lang) || undefined : undefined}
+                      price={item.price}
+                      currency={item.currency}
+                      featured={item.featured}
+                      allergens={item.allergens?.contains}
+                      image={item.image}
+                      showPrice={layout.showPrices}
+                      showDescription={layout.showDescriptions}
+                      showAllergens={true}
+                      categoryFont={typo.categoryFont}
+                      bodyFont={typo.bodyFont}
+                      priceFont={typo.priceFont}
+                      isLast={itemIdx === items.length - 1}
+                    />
+                  ))}
                 </div>
-
-                {/* Laurel divider between categories */}
-                {idx < visible.length - 1 && (
-                  <div style={{ padding: `${spacing.sectionGap} 0 0` }}>
-                    <LaurelDivider />
-                  </div>
-                )}
 
               </section>
             );
           })}
         </div>
 
-        {/* ── Footer ───────────────────────────────────────────────────── */}
-        {(restaurantInfo.address || restaurantInfo.phone || restaurantInfo.website ||
-          restaurantInfo.socialLinks?.instagram) && (
-          <footer style={{
-            borderTop: `2px solid ${RED}28`,
-            padding: "2.5rem 5rem 7rem",
+        {/* ── Pie de página ───────────────────────────────────────────────── */}
+        {(restaurantInfo.address || restaurantInfo.phone ||
+          restaurantInfo.website || restaurantInfo.socialLinks?.instagram) && (
+          <div style={{
+            background: `linear-gradient(to right, ${G}, ${G2} 30%, ${G2} 70%, ${G})`,
+            padding: "1.5rem 4rem",
             textAlign: "center",
+            display: "flex", flexDirection: "column", gap: "0.6rem",
           }}>
-            {/* Footer laurel */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-              <div style={{ height: "1px", width: "4rem", background: `linear-gradient(to right, transparent, ${GREEN}60)` }}/>
-              <span style={{ color: GOLD, opacity: 0.65, fontSize: "0.5rem", letterSpacing: "0.5em" }}>✦ ✦ ✦</span>
-              <div style={{ height: "1px", width: "4rem", background: `linear-gradient(to left, transparent, ${RED}60)` }}/>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
+              <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
+              <span style={{ color: AU, fontSize: "0.5rem", letterSpacing: "0.4em" }}>✦ ✦ ✦</span>
+              <div style={{ height: "1px", flex: 1, background: "rgba(255,255,255,0.3)" }}/>
             </div>
-            <div style={{
-              display: "flex", flexWrap: "wrap", justifyContent: "center",
-              gap: "0 0.2rem", fontFamily: typo.bodyFont,
-              fontSize: "0.72rem", fontStyle: "italic",
-              color: INK, opacity: 0.42, letterSpacing: "0.03em", lineHeight: 2,
+            <p style={{
+              fontFamily: typo.bodyFont, fontStyle: "italic",
+              fontSize: "0.72rem", color: "rgba(255,255,255,0.75)",
+              margin: 0, letterSpacing: "0.04em", lineHeight: 2,
             }}>
-              {restaurantInfo.address && <span>{restaurantInfo.address}</span>}
-              {restaurantInfo.address && (restaurantInfo.phone || restaurantInfo.website) &&
-                <span style={{ margin: "0 0.6rem", opacity: 0.5 }}>·</span>}
-              {restaurantInfo.phone && <span>{restaurantInfo.phone}</span>}
-              {restaurantInfo.phone && restaurantInfo.website &&
-                <span style={{ margin: "0 0.6rem", opacity: 0.5 }}>·</span>}
-              {restaurantInfo.website && <span>{restaurantInfo.website}</span>}
-              {restaurantInfo.socialLinks?.instagram && (
-                <><span style={{ margin: "0 0.6rem", opacity: 0.5 }}>·</span>
-                <span style={{ color: RED, opacity: 0.55 }}>{restaurantInfo.socialLinks.instagram}</span></>
-              )}
-            </div>
-          </footer>
+              {[
+                restaurantInfo.address,
+                restaurantInfo.phone,
+                restaurantInfo.website,
+                restaurantInfo.socialLinks?.instagram,
+              ].filter(Boolean).join("  ·  ")}
+            </p>
+          </div>
         )}
+
+        {/* ── Banda tricolor inferior ─────────────────────────────────────── */}
+        <div>
+          <div style={{ height: "28px", background: `linear-gradient(to right, ${R}, ${R2}, ${R})` }}/>
+          <div style={{ height: "12px", background: "#f0ebe0" }}/>
+          <div style={{ height: "28px", background: `linear-gradient(to right, ${G}, ${G2}, ${G})` }}/>
+        </div>
 
       </div>
     </BackgroundLayer>
